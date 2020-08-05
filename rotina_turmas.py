@@ -90,7 +90,7 @@ class Escola():
 
 
 
-db = banco('0.tcp.sa.ngrok.io','getedu','getedu00','dashboard_rs',porta=16152)
+db = banco('localhost','getedu','getedu00','dashboard_rs')
 logger = PyCsv('logs/turmas')
 def execute(e):    
     AEscola = Escola(str(e))
