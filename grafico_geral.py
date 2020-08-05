@@ -21,7 +21,7 @@ service_class = authService(
     f"getedu@{ENV_DOMINIO}"
     ).getService('classroom','v1')
 
-db = banco('0.tcp.sa.ngrok.io','getedu','getedu00','dashboard_rs',porta=16152)
+db = banco('localhost','getedu','getedu00','dashboard_rs')
 
 def carregar_professor(atv_criador):
     condicao = "id_gsuite = '{}' ".format(atv_criador)
