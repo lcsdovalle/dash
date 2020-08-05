@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "getedu-api-273121",
+  "private_key_id": "b441e58838564de5ed458a041398d6b06a3b07d8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvSd0pRnpYE+eK\nC6Xgb/vkUYmO69Hz02UZd5oykF2t9lDHVmKmil3xEc7NMMIVG4esF4Io3T/Ny5XE\n/ybCjZ6s9A7YvOmPF/kqc8Vix9Ler0Ett504e0k/gW+22385s97S1dRquRKFOTEn\n7C10yOZQJ/o9DOhgs8uLEjAoHpUhOYG0edPXpstGw1O6Yk4u4eXRjzRbSlU2dzUI\na56tsw9S2ZUI4eHz4wo4waAJ0ajuESIfavLo4oOd6Pv8GZemaSZgBf2CuwUQcgyD\njUmFuBVuhM2eNnYOXbAbhCw143a24kUHNo1rEFZ11Izqr1rO2pnxAqXO9bZzzkqf\nQqTMfqUvAgMBAAECggEAQH0NR7UtJ6BTC9+TLEomwu4YjKNHv8ujI0Z0TWv9exXm\nzB+E9b5sJ1ek3Kq2jKtvM6oGceBMK/tdY3d3nBYcLYcwux5tUv6/5ZVoJhpcAx84\n/IfT6Ma6wQluvzhryx/Yt3qBxq3GGYtcAVMLui57RTwf/Tv1djZPiR+s5eWyeeEh\nYamuhoBOthelDAAn6EB+XHYpdGLr9blp0EU3hvPVQSvqKWCzor9SBYMjqSGmUjO0\nJy4JRnIhqtF5jis+BjpXQtaqWkc9cGeafUUYhje98fuvhwahx++diFFfruMiKcjh\nhaK8M2JrcOnc7NVS7J23AJmvukeI60SA3iInmFTr4QKBgQDZcO4IBE2JaQcHR6po\nUaNfzkLtkO3gnbNcjmml/98yo0DR/VzPNXJZ0b23uozW28j+wqqkTQupujjkFAbt\nD0UKaaqowXZEgK2aLPWqFQmmYCO5UnzKmUF926U3MVHpg1KGvvs/+pH1wiwC2Ktp\nyySrv6xo8okbkLJvbOZFYs0xHwKBgQDOX1pQ/TRxpsvnq4UoViGrR+9Xh06o2Xmf\nhwDWZKMNCcqF2lc5+JUZYUey4ROVCFqmwX/M8SWkkYyFRWy2O50iNBv5XA5BWINc\ns3U2pvHlZEzpPqHTI86pcWRowdFiQRZ6FIAK1Y4+ArwWhc7QUtuYUIYhTFdWAKRz\nIJOAgKy58QKBgCCmnYekpcP5em20bDlH8QFk5pXnymCNLa67T8/2cRyYeRZPNk2D\nGA22ugdJwvZMgI0IzDjpvNOavAo7m6KjRVm/7jly+4Bj1i2tjKIikJVkIFkmssh1\nZOkyP0ffZw5qgszrBq1fweUmaBdxU6QKNhJ4MLp9mOsDuleTAazvniI/AoGBAI7S\n1wKt+hmdwgh3YBRmZ67Ofgopjnq058NL/3xg8acYW5z/Wta3/xgthx15P8Aoo/Q8\nfmIrkk2unX2uampEH5+ISMPuvb7jryX83OYR699B5yiVPBGP+nqyCzeky3Agc5nR\njjvxSBwKcHl16YerkGZ9dBafauIOV8GFjg+k/eVBAoGAf1IP9b5q4+XCqVZk0Jdo\nrNdeakWtefDVSHGRA7gtHZdxm2tqOH85dsisyzOyzlbH8baiq78ZJZ/G43YAIt/H\nSkbc8+T43ySObJOIISYOmAmdOK3hd1oHKyysyVqw88tF2LxIAgBhYXAzkzv3PVrJ\naHrxZ1Q0OYGHJlBnDQeeTQc=\n-----END PRIVATE KEY-----\n",
+  "client_email": "getedu@getedu-api-273121.iam.gserviceaccount.com",
+  "client_id": "114835647150281444937",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/getedu%40getedu-api-273121.iam.gserviceaccount.com"
+}

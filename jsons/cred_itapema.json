@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "getedu-276918",
+  "private_key_id": "279ed71512127630587087d4a8fc3ea5be2e334f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCm+j3+z+MDFwpo\nAT4XWyVr3j1e2o7GWNAlUx8Qfj0cPc7PQDzpF/EdJUCOwDzWpvoQpDruLEUufx/T\nYDSHha0eTZJnuahaOSsaB1jPkQf3fQd1/+frzLVS7FKzwTOCT15gMnJlJ6cIcQMY\nAeiyhN2jrP6vtILPWRDDPHusZIcnaj3ejVZUmJhIqizoTff3SVw0jojp92QcvzNT\nsfjGwoKkvPrVq9tJWVyoAWF8ZImmm8ySuNyHIjJIJYq3CEDzsMWOp9m8sRcdV7zX\nJVd7sLEXuSUiGjvW/k2mL9jztfOSgIxu6hSvrsro0LGigdi48AvtSXNW4wCEPVoY\nNrssnFbtAgMBAAECggEABWWQy7kKrxwMso2DumaFlZsXubFFAbp3c8AK1id2Wyt7\nkS2UKmZ4h7F0s4huuZ3+TBEQHzLgGN9z9wrPd9KFZLWAy13FSAaRUuSKOsncYOPc\nx166L2ACO51haOeQKMs0Pitd5iYQxdA9QjE276TQCGJm0uVPKwYdFBT9hvYIJj5r\n7JRShMGiq8ugBufQpOI2kYCPUtGCNGWDSHaUbPerGqQH2ULzPKDo8BZbo4Wv3aOU\nB6PKaJdYNNulvLOLiqakYNONTlAj8Qqe+vV4wnpUXuEvvnFNrzYgZf9yBazbxgZ/\nfJvHmvISiQasuv1vlNmYrzNzes8QyYJ7rkqarHyRAwKBgQDafKaqX64tl+lDVKZt\nrloBrHhyKUfKiGLXudizp/SXDPxQzVEMoztekhUo0h+pAyq3z1TtLG/cR81Aj4lm\njaJ/WTglsybgUSeqLmzBtRLPTR3z0DCojV5iuU4JlwEBM9+jRSJQuMOI5Pzd6/zt\nsMGpuJN8I2FBSqjOOCOtsRBU7wKBgQDDpY1s60nsqarq15OIL6cBSpLWMDLpIvLJ\nJILPA9dmKsgeUwedsP80p2bJGzuqWng7T6Yo9T6333LTsLJzZyQ06NcVFVmtrlP3\nJ2hO4LtPNEVEVvZudsnXsZRGwaiqZFEAUKUIbJghEaP0tTCXCmAc8BEIB5bTR0kG\n0P41amVp4wKBgFGCCScsNK17q6Dbto7aaWeQcQqdzdOH1+AEzAwRz1R+mq6GOgNN\n7fsU4mHtKbSCovAZn+QvHLf/7Vl1ctvYYNPDdAfUct9iRzrcwOPu6kp9yXvIoi5v\nNtP7r1oyhERvlrGxO+EDXKb4TkF4JU6DD2yCmDrKdCDIenscRGsq0B3vAoGAXycr\na2fb4lB6ohEK3ddfQA+G7skuWZj3v8AUJp7Vqgjwn17+e0FUPcWVBgZKtIWfqCkK\nxSzRvhfc/vwXLm1hfKIpyUVDAmegyrnNz18ZemIPtjcdT4hSjqb9WJRjdcuoYaDX\nQwudyaeMuD1PToZrTGetwNwADO3EpJ4MpOoEPMUCgYEAn5bAfeUBabkr5tciB2Ql\neUpmqvn8Baz8+qTN4bAFxyj3k3wZ0Uex6Ux05niudn3Ff3TMxjNfeE0CtLxxEOlO\noR5NXCyPtsvnb3iIToocybWmSECyS/ZlFCGJT/QKvSnbxQfHACpv9kp32+fCaV2m\nkd6XFinn+K+rvlukkX51DK8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "geteduapi@getedu-276918.iam.gserviceaccount.com",
+  "client_id": "118265693597868469254",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/geteduapi%40getedu-276918.iam.gserviceaccount.com"
+}

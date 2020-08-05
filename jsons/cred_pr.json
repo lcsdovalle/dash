@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "gothic-handbook-274915",
+  "private_key_id": "05b9bf94e5c97f3a36c5cd464aedc468c26137ac",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0yQEFtbdHRWrA\nYQbit0JAageImhc5g9ZVMgBj/IHbYwupqr6puVt/ATNWxH1+xZ2FZLFGqAhks1IT\n8+L3+mWRuDIyxo27kySsV3ecyQ1WQ4utqGd8baUWrsAvB12jjpaLqM3ca+of+nwx\nGkaNe1bvKL9xr+eibMlUxP1gB0eOajnCt2jiBqqa/ILVPMXwnC20yssetU7s9I8g\nRoHx5ReK+2XRSEQZ+19/AGADw46B9y+evTmaHZ87pmCnSNSIPKt4JdFP8bhN/nBz\nHFM0N6Pq3pW2EyzBDQ4gRsx0wQwUO1yQOyI3DSneXoh9uhDXq4gSjZZx++Z+Md+9\n5yrcqJ+XAgMBAAECggEAT5EX7hdoLuoSbdFGYoodkpQX9Ls89Ydc0epL2bXMwW36\nOBZ6C+EUr/UrT0jzotP+3DLRAzP5Xbi+qyFwB4whH91d2pMg1imQvnlQn6StRgY8\nd5Xi1hS70BvhYdFwGQgsohMNZ7HnPWPVPRc/bg2W2XOprrOo0wfmJHT+v0D08Wx5\nYgQuQqXCcWXOQ4YBKkySo8jUeNChr6YBHBOaKX9+xYsDzQtuhg1xsvj74WH10xGx\nRhlLSS7HdNUN+HM8kaPrPQLd96n+KhZQOW48BwFPfieD9n2l3vjT553dKCargA2y\naeYsmIExZzzj2KXj7YWhYrLr7CvOZFdK1Xetq27/gQKBgQDmwjqxFvQi3aUexylc\ndWaFX9gHqpdwGGr/BkPWezSyHQS0+YUuXgKuGBENNlwGXKzYR+40/qChQsgzD5RH\nUGZ+RFUXYCOyoOrxr/Rp3sUkBRtp1bEQS2MO/mO83V5nRUlpGIB75TnwB2w4wV+r\ndQrAUAqGSxoeZSb2qfd9W13oBwKBgQDIj2bPqRjyQESdGAOJbgXveSoSgBs4nE5X\nCFMPdgkKZRuiv46VEHcCRThlNN/aUnPNvOM90EKoYcUNxSLhdHfywkyHShXBDSNz\nQx3H2FQoyDLW+ZxCVYLrbNmcVhB/MDVGcBdSTLuHlW0eYBHcmpmMOJ9DbICglWOH\ncUhL9I8H8QKBgQCWjJ+IC+apnJtushctCDcjyv0BO23jpzqfOXImy2j8z2vTunsG\nXjU3aeIuEYoGaI4n6P3jO0CHFS/SCFcAE9dah7BQONvxXYUKu3YlYD6UGnThHpaP\nf++Xx6ZAgNhnXc/gLikdK9cZ323etWJ6VTj3cQD8zqCyteGuygL6mRJyHwKBgQC5\n1+e01URAdj0eNHpShpkJZoUNz5dpxazyCMyurvmBoF8TV92PU0pz2CCB55TmgTC9\nnCIVzT13OeGW+O1xbLMZR+ISGxw9XydSTwbxgAu8Hoa9nV6mOQavkJW0wCtZMBqt\nwoBZyrCa2mPambrzaG6P+IfbulcWdldb0iTj/SHsgQKBgBKe7DHZ+k7bZH5NcNM5\n/XpBDDVBQ1uQsy8YWc0XwWp02KANxuMWKz34/Fk6lZAthDpq3EH/imfvBhinNDzU\njFEBqXs2O4siWfeGl69g4kHeM3BtQ3Exj00jw/Wob5DN7K1KyakLbfwiyZNFBpqa\nqyXjKY9oK7vLd3H5WZw4OIV1\n-----END PRIVATE KEY-----\n",
+  "client_email": "pyadmin2@gothic-handbook-274915.iam.gserviceaccount.com",
+  "client_id": "117939252084100938219",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pyadmin2%40gothic-handbook-274915.iam.gserviceaccount.com"
+}
