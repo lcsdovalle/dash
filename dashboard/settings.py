@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     'dashedu',
     'engajamento',
+    'chromedash',
 ]
 
 MIDDLEWARE = [
