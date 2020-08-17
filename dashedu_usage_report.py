@@ -85,6 +85,7 @@ if __name__ == "__main__":
 
                         if 'role' in item['name']:
                             papel = item.get('stringValue','Não informado')
+                            papel = 'Aluno' if papel == 'student' else 'Professor' 
 
                         if 'classroom:last_interaction_time' == item['name']:
                             ultimo_acesso_classroom = item['datetimeValue']

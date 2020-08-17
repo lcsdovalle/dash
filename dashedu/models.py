@@ -7,12 +7,12 @@ from django.db import models
 # Create your models here.
 class InteracoesClassroomPorTipoUsuario(models.Model):
     data = models.DateField('Quando', auto_now=False, auto_now_add=False)
-    professores = models.IntegerField('Professores')
-    alunos = models.IntegerField('Alunos')
-    turmas_criadas = models.IntegerField('Número de turmas criadas',default=0)
-    alunos_posts_criados = models.IntegerField('Número de posts criados por alunos',default=0)
-    professores_posts_criados = models.IntegerField('Número de posts criados por professores',default=0)
-    outros = models.IntegerField('Outros',null=True,blank=True)
+    professores = models.BigIntegerField('Professores')
+    alunos = models.BigIntegerField('Alunos')
+    turmas_criadas = models.BigIntegerField('Número de turmas criadas',default=0)
+    alunos_posts_criados = models.BigIntegerField('Número de posts criados por alunos',default=0)
+    professores_posts_criados = models.BigIntegerField('Número de posts criados por professores',default=0)
+    outros = models.BigIntegerField('Outros',null=True,blank=True)
 
     def __str__(self):
         return 'Relatório do dia {}'.format(self.data.strftime('%d/%m/%Y'))
@@ -20,54 +20,54 @@ class InteracoesClassroomPorTipoUsuario(models.Model):
 class RelatorioUsuarios(models.Model):
     data = models.DateField('Data', auto_now=False, auto_now_add=False)
     name = models.CharField('Nome', max_length=255)
-    uso_drive = models.IntegerField('Uso do Drive')
+    uso_drive = models.BigIntegerField('Uso do Drive')
     ultimo_acesso = models.CharField('Último acesso', max_length=100)
-    turmas_criadas = models.IntegerField('Turmas criadas')
-    posts_criados = models.IntegerField('Posts criados')
+    turmas_criadas = models.BigIntegerField('Turmas criadas')
+    posts_criados = models.BigIntegerField('Posts criados')
     papel = models.CharField('Papel', max_length=50,choices=(('teacher','Professor'),('student','Aluno')))
     ultimo_acesso_classroom = models.CharField('Último acesso classroom', max_length=100)
-    codigo_usuario = models.IntegerField('Código usuário')
+    codigo_usuario = models.BigIntegerField('Código usuário')
     regiao = models.CharField('Região', max_length=200)
     municipio = models.CharField('Município', max_length=200)
-    inep = models.IntegerField('INEP')
-    codigo_escola = models.IntegerField('Código Escola')
+    inep = models.BigIntegerField('INEP')
+    codigo_escola = models.BigIntegerField('Código Escola')
     nome_escola = models.CharField('Nome Escola', max_length=254)
 class TotalTurmas(models.Model):
-    total = models.IntegerField('Total')
+    total = models.BigIntegerField('Total')
     
     def __str__(self):
         return str(self.total)
     
 class TotalUsuarios(models.Model):
-    total = models.IntegerField('Total')
+    total = models.BigIntegerField('Total')
 
     def __str__(self):
         return str(self.total)
 
 class UsoChromebooks(models.Model):
     data = models.DateField('Data', auto_now=False, auto_now_add=False)
-    quantidade = models.IntegerField('quantidade')
+    quantidade = models.BigIntegerField('quantidade')
 
 class EventosClassrom(models.Model):
     data = models.DateField('Data', auto_now=False, auto_now_add=False)
-    quantidade_estudantes = models.IntegerField('Quantidade Estudantes')
-    quantidade_estudantes = models.IntegerField('Quantidade Professores')
-    turmas_criadas = models.IntegerField('Quantidade Interações')
-    posts_criados = models.IntegerField('Quantidade Pots Criados')
+    quantidade_estudantes = models.BigIntegerField('Quantidade Estudantes')
+    quantidade_estudantes = models.BigIntegerField('Quantidade Professores')
+    turmas_criadas = models.BigIntegerField('Quantidade Interações')
+    posts_criados = models.BigIntegerField('Quantidade Pots Criados')
     def __str__(self):
         return 'Relatório do dia {}'.format(self.data.strftime('%d/%m/%Y'))
     
 
 class EventosDrive(models.Model):
     data = models.DateField('Data', auto_now=False, auto_now_add=False)
-    comentarios = models.IntegerField('Comentários')
-    visualizacoes = models.IntegerField('Visualizações')
-    criacao_arquivos = models.IntegerField('Arquivos criados')
-    compartilhamentos = models.IntegerField('Arquivos compartilhados')
+    comentarios = models.BigIntegerField('Comentários')
+    visualizacoes = models.BigIntegerField('Visualizações')
+    criacao_arquivos = models.BigIntegerField('Arquivos criados')
+    compartilhamentos = models.BigIntegerField('Arquivos compartilhados')
 
     def __str__(self):
         return 'Relatório do dia {}'.format(self.data.strftime('%d/%m/%Y'))
 class Logins(models.Model):
     data = models.DateField('Data', auto_now=False, auto_now_add=False)
-    logins = models.IntegerField('Quantidade')
+    logins = models.BigIntegerField('Quantidade')
 
