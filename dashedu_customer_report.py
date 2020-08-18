@@ -38,16 +38,21 @@ if __name__ == "__main__":
     posts_professores = 0
     if report:
         for r in report:
-            if 'teacher' in r['name']:
+            if '1day_teachers' in r['name']:
                 professor = r['intValue']
-            if 'student' in r['name']:
+            
+            if '1day_students' in r['name']:
                 aluno = r['intValue']
+            
             if 'users' in r['name']:
                 usuarios = r['intValue']
+            
             if 'courses' in r['name']:
                 turmas = r['intValue']
+            
             if 'student_posts' in r['name']:
                 posts_alunos = r['intValue']
+            
             if 'teacher_posts' in r['name']:
                 posts_professores = r['intValue']
         
