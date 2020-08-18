@@ -17,7 +17,7 @@ class Turmas(models.Model):
         verbose_name_plural = 'Turmas'
 
     def __str_(self):
-        return self.name
+        return self.turma_id
 
 class Atividade(models.Model):
     title = models.CharField('Title', max_length=100,null=True,blank=True)
@@ -34,7 +34,7 @@ class Atividade(models.Model):
         verbose_name_plural = ("Atividades")
 
     def __str_(self):
-        return self.title
+        return self.atividade_id
 
 class Professor(models.Model):
     nome = models.CharField('Name', max_length=255)
@@ -49,7 +49,7 @@ class Professor(models.Model):
         verbose_name_plural = ("Professores")
 
     def __str_(self):
-        return self.name
+        return self.nome
 
 class Aluno(models.Model):
     name = models.CharField('Name', max_length=255)
@@ -64,7 +64,6 @@ class Aluno(models.Model):
 
     def __str_(self):
         return self.name
-
 
 class Escola(models.Model):
     nome = models.CharField('Nome', max_length=255)
@@ -81,5 +80,28 @@ class Escola(models.Model):
         return self.nome
 
 
+class GraficoGeral(models.Model):
+    atividade_id = models.CharField('Atividade ID', max_length=100)
+    atividade_criacao = models.CharField('Atividade Criação', max_length=100)
+    atividade_atualizacao = models.CharField('Atividade Atualização', max_length=100)
 
+    escola_email = models.EmailField('Email Escola')
+    escola_nome = models.CharField('Nome escola', max_length=254)
+    escola_inep = models.IntegerField('Inep')
+    escola_cre = models.CharField('Cre', max_length=50,null=True,blank=True)
+    
+    municipio = models.CharField('Município', max_length=254)
+    regiao = models.CharField('Regiao', max_length=254)
+    
+    turma_id = models.CharField('Turma id', max_length=100)
+    
+    professor_nome = models.CharField('Professor nomee', max_length=254)
+    professor_email = models.EmailField('Professor email')
+    professor_id = models.CharField('Professor id', max_length=100)
 
+    def __str__(self):
+        return "{} | {} | {} ".format(
+            self.professor_nome,
+            self.escola_nome,
+            self.atividade_id
+        )

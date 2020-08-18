@@ -112,7 +112,7 @@ def execute(e):
             except Exception as err:
                 print(f"Falhou {str(err)}")
 if __name__ == "__main__":
-    pool = Pool(1)
+    pool = Pool(15)
     # gravar = banco('localhost','getedu','getedu00','dashboard_rs')
 
     escolas = Escola.objects.all()

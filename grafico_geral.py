@@ -3,7 +3,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from engajamento.models import Professor,Aluno,Atividade,Escola,Turmas
+from engajamento.models import Professor,Aluno,Atividade,Escola,Turmas,GraficoGeral
 from pylib.spreadsheet import gSheet
 from pylib.googleadmin import authService,gSheet
 from unidecode import unidecode
@@ -19,7 +19,7 @@ escopos = [
 service_admin = authService(
     escopos,
     'jsons/cred_sc.json',
-    f"getedu@{ENV_DOMINIO}"
+    f"gam@{ENV_DOMINIO}"
     ).getService('admin','directory_v1')
 service_class = authService(
     escopos,
@@ -30,15 +30,14 @@ service_class = authService(
 
 
 def carregar_professor(atv_criador):
-    condicao = "id_gsuite = '{}' ".format(atv_criador)
-    db.tabela('professores').ler(condicao)
-    db.executar()
-    prof = db.result.fetchall()
+    
+    prof = Professor.objects.filter(professor_id=atv_criador)    
     prof_obj ={}
-    if db.result.rowcount >0:
-        prof_obj['email'] = prof[0][0]
-        prof_obj['nome'] = prof[0][1]
-        prof_obj['id'] = prof[0][8]
+    
+    if len(prof) > 0:
+        prof_obj['email'] = prof.email
+        prof_obj['nome'] = prof.nome
+        prof_obj['id'] = prof.id
         return prof_obj
     else:
         try:
@@ -61,17 +60,17 @@ def obter_email_escola_no_gsuite(escola_id):
             print(e)
             return False
 def carregar_turma(atv_turma_id):
-    condicao = "turma_id = '{}' ".format(atv_turma_id)
-    db.tabela('turmas').ler(condicao)
-    db.executar()
-    turma = db.result.fetchall()
-    turma_obj={}
-    if db.result.rowcount >0:
-        turma_obj['id'] = turma[0][0]
-        turma_obj['escola_id'] = turma[0][2]
-        turma_obj['escola_email'] = turma[0][3]
-        return turma_obj
-    else:
+    try:
+        turma = Turmas.objects.get(turma_id__exact=atv_turma_id)
+        
+        turma_obj={}
+        
+        if turma is not None :        
+            turma_obj['id'] = turma.turma_id
+            turma_obj['escola_id'] = turma.owner_id
+            turma_obj['escola_email'] = turma.owner_email
+            return turma_obj
+    except:
         try:
             turma = service_class.courses().get(id=atv_turma_id).execute()
             if 'id' in turma:
@@ -88,19 +87,17 @@ def carregar_turma(atv_turma_id):
             return False
 
 def carregar_escola(escola_email):
-    condicao = "escola_email = '{}' ".format(escola_email)
-    db.tabela('escolas').ler(condicao)
-    db.executar()
-    escola= db.result.fetchall()
-    escola_obj={}
-    if db.result.rowcount >0:
-        escola_obj['escola_email'] = escola[0][0]
-        escola_obj['escola_nome'] = escola[0][1]
-        escola_obj['escola_inep'] = escola[0][2]
-        escola_obj['escola_municipio'] = escola[0][3]
-        escola_obj['escola_cre'] = escola[0][4]
+    try:
+        escola = Escola.objects.get(email=escola_email)
+        escola_obj={}    
+        escola_obj['escola_email'] = escola.email
+        escola_obj['escola_nome'] = escola.nome
+        escola_obj['escola_inep'] = escola.inep
+        escola_obj['escola_municipio'] = escola.municipio
+        escola_obj['escola_cre'] = escola.cre
+        escola_obj['escola_regiao'] = escola.regiao
         return escola_obj
-    else:
+    except:    
         return False
 
 if __name__ == "__main__":
@@ -121,23 +118,22 @@ if __name__ == "__main__":
                 escola = carregar_escola(turma.get('escola_email'))
                 if escola:
 
-                    params = {}
+                    atv = GraficoGeral.objects.create(
 
-                    params['atividade_id'] = '{}'.format(atv_id)
-                    params['atividade_criacao'] = '{}'.format(atv_criacao)
-                    params['atividade_atualizacao'] = '{}'.format(atv_atualizacao)
+                        atividade_id            = atv_id,
+                        atividade_criacao       = atv_criacao,
+                        atividade_atualizacao   = atv_atualizacao,
 
-                    params['atividade_escola'] = '{}'.format(escola.get('escola_email','Nome não identificado'))
-                    params['atividade_escola_nome'] = '{}'.format(escola.get('escola_nome','Nome não identificado'))
-                    params['atividade_inep'] = '{}'.format(escola.get('escola_inep','Nome não identificado'))
-                    params['atividade_cre'] = '{}'.format(escola.get('escola_cre','Nome não identificado'))
-                    params['atividade_municipio'] = '{}'.format(escola.get('escola_municipio','Município não identificado'))
-                    
-                    params['atividade_turma'] = '{}'.format(turma.get('id','Turma não identificada'))
+                        escola_email            = escola.get('escola_email','Não detectado'),
+                        escola_nome             = escola.get('escola_nome','Não detectado'),
+                        escola_inep             = escola.get('inep','000000'),
 
-                    params['atividade_professor_nome'] = '{}'.format(professor.get('nome','Nome não identificado'))
-                    params['atividade_professor_email'] = '{}'.format(professor.get('email','Email não identificado'))
-                    params['atividade_professor_id'] = '{}'.format(professor.get('id','Id não identificado'))
-                    
+                        municipio               = escola.get('escola_municipio'),
+                        regiao                  = escola.get('escola_regiao'),
 
-                    db.tabela('grafico_principal').inserir(params).executar()
+                        professor_nome          = professor.get('nome'),
+                        professor_email         = professor.get('email'),
+                        professor_id            = professor.get('id')
+                    )                
+
+                    print(atv)

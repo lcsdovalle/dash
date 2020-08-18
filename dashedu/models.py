@@ -24,7 +24,7 @@ class RelatorioUsuarios(models.Model):
     ultimo_acesso = models.CharField('Último acesso', max_length=100)
     turmas_criadas = models.BigIntegerField('Turmas criadas')
     posts_criados = models.BigIntegerField('Posts criados')
-    papel = models.CharField('Papel', max_length=50,choices=(('teacher','Professor'),('student','Aluno')))
+    papel = models.CharField('Papel', max_length=50,choices=(('Professor','Professor'),('Aluno','Aluno')))
     ultimo_acesso_classroom = models.CharField('Último acesso classroom', max_length=100)
     codigo_usuario = models.BigIntegerField('Código usuário')
     regiao = models.CharField('Região', max_length=200)

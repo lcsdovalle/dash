@@ -75,7 +75,7 @@ def execute(t):
                 print(f"Erro: {str(e)}")
 if __name__ == "__main__":
     
-    pool = Pool(1)    
+    pool = Pool(15)    
 
     turmas = Turmas.objects.all()
     turmas
