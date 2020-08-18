@@ -105,3 +105,23 @@ class GraficoGeral(models.Model):
             self.escola_nome,
             self.atividade_id
         )
+
+class GraficoEngajamento(models.Model):
+    inep                = models.CharField('Inep', max_length=50)
+    regiao              = models.CharField('Região', max_length=100)
+    municipio           = models.CharField('Município', max_length=100)
+    escola_nome         = models.CharField('Escola Nome', max_length=254)
+
+    total_geral         = models.BigIntegerField('Total geral',default=0)
+    jalogaram_geral     = models.BigIntegerField('Togal geral já logaram',default=0)
+    total_alunos        = models.BigIntegerField('Total alunos',default=0)
+    jalogaram_alunos    = models.BigIntegerField('Total alunos já logaram',default=0)
+    
+
+    def __str__(self):
+        return self.inep
+
+class GraficoAuxiliar(models.Model):
+    total               = models.BigIntegerField('Total')
+    jalogaram_total     = models.BigIntegerField('Total já logaram',default=0)
+    tipo_grafico        = models.CharField('Tipo indicador', max_length=50,default=0)
