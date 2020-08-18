@@ -74,26 +74,26 @@ if __name__ == "__main__":
                 break
 
 
-        for e in grafico:        
-            try:
-                grafic = GraficoEngajamento.objects.get_or_create(
-                    inep                = e,
-                    regiao              = grafico[e].get('regiao'),
-                    municipio           = grafico[e].get('municipio'),
-                    escola_nome         = grafico[e].get('escola_nome')
-               )[0]
+    for e in grafico:        
+        try:
+            grafic = GraficoEngajamento.objects.get_or_create(
+                inep                = e,
+                regiao              = grafico[e].get('regiao'),
+                municipio           = grafico[e].get('municipio'),
+                escola_nome         = grafico[e].get('escola_nome')
+            )[0]
 
-                grafic.total_geral         = grafico[e].get('total_usuarios')
-                grafic.jalogaram_total     = grafico[e].get('total_usuarios_jalogou')
+            grafic.total_geral         = grafico[e].get('total_usuarios')
+            grafic.jalogaram_total     = grafico[e].get('total_usuarios_jalogou')
 
-                grafic.total_alunos        = grafico[e].get('total_alunos')
-                grafic.jalogaram_alunos    = grafico[e].get('total_alunos_jalogou')                
-                
-                grafic.save()
-                
+            grafic.total_alunos        = grafico[e].get('total_alunos')
+            grafic.jalogaram_alunos    = grafico[e].get('total_alunos_jalogou')                
+            
+            grafic.save()
+            
 
-            except Exception as e:
-                print(e)
+        except Exception as e:
+            print(e)
     
     try:
         graf = GraficoAuxiliar.objects.get_or_create(tipo_grafico__exacts='Professores')[0]
