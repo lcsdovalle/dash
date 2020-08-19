@@ -31,15 +31,15 @@ service_class = authService(
 
 def carregar_professor(atv_criador):
     
-    prof = Professor.objects.filter(professor_id=atv_criador)    
-    prof_obj ={}
-    
-    if len(prof) > 0:
+    try:
+        prof = Professor.objects.get(professor_id__exact=atv_criador)    
+        prof_obj ={}
+        
         prof_obj['email'] = prof.email
         prof_obj['nome'] = prof.nome
         prof_obj['id'] = prof.id
         return prof_obj
-    else:
+    except:
         try:
             prof = service_admin.users().get(userKey=atv_criador).execute()
             if 'primaryEmail' in prof:                

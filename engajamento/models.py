@@ -81,7 +81,7 @@ class Escola(models.Model):
 
 
 class GraficoGeral(models.Model):
-    atividade_id = models.CharField('Atividade ID', max_length=100)
+    atividade_id = models.CharField('Atividade ID', max_length=100,unique=True)
     atividade_criacao = models.CharField('Atividade Criação', max_length=100)
     atividade_atualizacao = models.CharField('Atividade Atualização', max_length=100)
 
