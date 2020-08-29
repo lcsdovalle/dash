@@ -28,11 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'dashedu',
-    'engajamento',
-    'chromedash',
+    'dash',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -67,23 +64,23 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 # DATABASES = {
-#     'default':{
-#         'ENGINE':'django.db.backends.postgresql',
-#         # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
-#         'HOST':'127.0.0.1',
-#         'USER':'getedu',
-#         'PASSWORD':'getedu00',
-#         'NAME':'dashboardrs',
-#         'PORT':5433
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+DATABASES = {
+    'default':{
+        'ENGINE':'django.db.backends.mysql',
+        # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
+        'HOST':'0.tcp.sa.ngrok.io',
+        'USER':'getedu',
+        'PASSWORD':'getedu00',
+        'NAME':'novodash',
+        'PORT':14624
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

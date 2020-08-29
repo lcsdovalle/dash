@@ -67,8 +67,8 @@ if __name__ == "__main__":
                         grafico[inep]['total_usuarios_jalogou'] += 1 if status == "Já logou" else 0
                         grafico[inep]['total_alunos'] += 1 if "Aluno" in unidade_ou else 0
                         grafico[inep]['total_alunos_jalogou'] += 1 if status == "Já logou"  and "Aluno" in unidade_ou else 0
-                total_educador += 1 if "Prof" in unidade_ou else 0
-                total_educadores_jalogou += 1 if status == "Já logou" and "Profess" in unidade_ou else 0
+                total_educador += 1 if "profe.sed.sc.gov.br" in u['primaryEmail'] else 0
+                total_educadores_jalogou += 1 if status == "Já logou" and "profe.sed.sc.gov.br" in u['primaryEmail'] else 0
 
             if 'nextPageToken' not in retorno:
                 break
@@ -96,7 +96,7 @@ if __name__ == "__main__":
             print(e)
     
     try:
-        graf = GraficoAuxiliar.objects.get_or_create(tipo_grafico__exacts='Professores')[0]
+        graf = GraficoAuxiliar.objects.get_or_create(tipo_grafico__exact='Professores')[0]
         
         graf.total                   = total_educador
         graf.jalogaram_total         = total_educadores_jalogou
