@@ -18,7 +18,7 @@ class Escola(models.Model):
         return self.nome
 
 class IaIndicadorAluno(models.Model):
-    data = models.DateField('Data', auto_now_add=True)
+    data = models.DateField('Data')
     nome = models.CharField('Nome', max_length=255)
     inep = models.CharField('INEP', max_length=50)    
     regiao = models.CharField('Região', max_length=200,blank=True,null=True)
@@ -26,6 +26,8 @@ class IaIndicadorAluno(models.Model):
     cre = models.CharField('CRE', max_length=100,blank=True,null=True)
     total = models.IntegerField('Total')
     acessaram = models.IntegerField('Acessaram')
+    logaram_hoje = models.IntegerField('Acessaram Hoje')
+    
 
     class Meta:
         verbose_name = ("IA Aluno")
@@ -35,7 +37,7 @@ class IaIndicadorAluno(models.Model):
         return self.nome
 
 class IaIndicadorProfessor(models.Model):
-    data = models.DateField('Data', auto_now_add=True)
+    data = models.DateField('Data')
     nome = models.CharField('Nome', max_length=255)
     inep = models.CharField('INEP', max_length=50)    
     regiao = models.CharField('Região', max_length=200,blank=True,null=True)
@@ -43,10 +45,11 @@ class IaIndicadorProfessor(models.Model):
     cre = models.CharField('CRE', max_length=100,blank=True,null=True)
     total = models.IntegerField('Total')
     acessaram = models.IntegerField('Acessaram')
+    logaram_hoje = models.IntegerField('Acessaram Hoje')
 
     class Meta:
-        verbose_name = ("IA Aluno")
-        verbose_name_plural = ("IA Alunos")
+        verbose_name = ("IA Professor")
+        verbose_name_plural = ("IA Professores")
 
     def __str_(self):
         return self.nome

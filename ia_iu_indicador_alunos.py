@@ -22,6 +22,8 @@ admin_service = authService(escopos,'jsons/cred_rs2.json',email='getedu@educar.r
 if __name__ == "__main__":
     E = {}
     escolas = Escola.objects.all()
+    dias = datetime.timedelta(days=1)    
+    odia = datetime.date.today() - dias    
     for escola in escolas:
         E[escola.inep] = {}    
         E[escola.inep]['inep'] = escola.inep    
@@ -30,6 +32,9 @@ if __name__ == "__main__":
         E[escola.inep]['cre'] = escola.cre        
         E[escola.inep]['total'] = 0 
         E[escola.inep]['logaram'] = 0    
+        E[escola.inep]['hoje'] = odia.strftime('%Y-%m-%d')                        
+        E[escola.inep]['logaram_hoje'] = 0    
+        
 
     
     try:
@@ -57,6 +62,7 @@ if __name__ == "__main__":
                     if inep:
                         E[inep]['total'] += 1    
                         E[inep]['logaram'] += 1 if '1970' not in usuario['lastLoginTime'] else 0
+                        E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
                     
                         
             del todos
@@ -69,15 +75,17 @@ if __name__ == "__main__":
                 dados = E[item]
                 dados
                 IaIndicadorAluno.objects.create(
+                    data = odia.strftime('%Y-%m-%d'),
                     cre = dados['cre'],
                     municipio = dados['municipio'],
                     nome = dados['nome'],
                     inep = dados['inep'],                        
                     total = dados['total'],
-                    acessaram = dados['acessaram']
+                    acessaram = dados['logaram'],
+                    logaram_hoje = dados['logaram_hoje'],                    
                 )
-        except:
-            pass           
+        except Exception as er:
+            print(er)     
         
     except Exception as e:
         print(e)
