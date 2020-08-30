@@ -64,26 +64,27 @@ if __name__ == "__main__":
                         E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
                     
                                     
-
-            if 'nextPageToken' not in usuarios or len(usuarios) <500:
+            del todos
+            if 'nextPageToken' not in usuarios or len(usuarios['users']) <500:
                 break
-        
-        try:
-            for item in E:
-                dados = E[item]
-                dados
-                IaIndicadorProfessor.objects.create(
-                    data = odia.strftime('%Y-%m-%d'),
-                    nome = dados['nome'],
-                    inep = dados['inep'],                        
-                    municipio = dados['municipio'],
-                    cre = dados['cre'],
-                    total = dados['total'],
-                    acessaram = dados['logaram'],
-                    logaram_hoje = dados['logaram_hoje'],                    
-                )
-        except Exception as er:
-            print(er)
         
     except Exception as e:
         print(e)
+    
+    try:
+        for item in E:
+            dados = E[item]
+            dados
+            IaIndicadorProfessor.objects.create(
+                data = odia.strftime('%Y-%m-%d'),
+                nome = dados['nome'],
+                inep = dados['inep'],                        
+                municipio = dados['municipio'],
+                cre = dados['cre'],
+                total = dados['total'],
+                acessaram = dados['logaram'],
+                logaram_hoje = dados['logaram_hoje'],                    
+            )
+    except Exception as er:
+        print(er)
+        

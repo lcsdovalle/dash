@@ -50,10 +50,11 @@ if __name__ == "__main__":
 
             pagetoken = usuarios.get('nextPageToken',False)
 
-            if len(u['users']) == 1:
+            if u:
                 todos = u['users'] + usuarios['users']
             else:
                 todos = usuarios['users']
+                del u
             
             for usuario in todos:
                 usuario
@@ -66,26 +67,26 @@ if __name__ == "__main__":
                         E[inep]['logaram'] += 1 if '1970' not in usuario['lastLoginTime'] else 0
                         E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
                                                         
-
-            if 'nextPageToken' not in usuario or len(usuarios) <500:
+            del todos
+            if 'nextPageToken' not in usuarios or len(usuarios['users']) <500:
                 break
-        
-        try:
-            for item in E:
-                dados = E[item]
-                dados
-                IaIndicadorAluno.objects.create(
-                    data = odia.strftime('%Y-%m-%d'),
-                    cre = dados['cre'],
-                    municipio = dados['municipio'],
-                    nome = dados['nome'],
-                    inep = dados['inep'],                        
-                    total = dados['total'],
-                    acessaram = dados['logaram'],
-                    logaram_hoje = dados['logaram_hoje'],                    
-                )
-        except Exception as er:
-            print(er)     
-        
     except Exception as e:
         print(e)
+    
+    try:
+        for item in E:
+            dados = E[item]
+            dados
+            IaIndicadorAluno.objects.create(
+                data = odia.strftime('%Y-%m-%d'),
+                cre = dados['cre'],
+                municipio = dados['municipio'],
+                nome = dados['nome'],
+                inep = dados['inep'],                        
+                total = dados['total'],
+                acessaram = dados['logaram'],
+                logaram_hoje = dados['logaram_hoje'],                    
+            )
+    except Exception as er:
+        print(er)     
+        
