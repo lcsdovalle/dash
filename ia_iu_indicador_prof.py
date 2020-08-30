@@ -63,8 +63,7 @@ if __name__ == "__main__":
                         E[inep]['logaram'] += 1 if '1970' not in usuario['lastLoginTime'] else 0
                         E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
                     
-                        
-            del todos
+                                    
 
             if 'nextPageToken' not in usuarios or len(usuarios) <500:
                 break

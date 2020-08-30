@@ -45,6 +45,8 @@ if __name__ == "__main__":
         while(True):
             todos = []
             usuarios = admin_service.users().list(customer='my_customer',query=f"orgUnitPath=/Alunos",maxResults=500,pageToken=pagetoken,projection='full').execute()
+            
+            del pagetoken
 
             pagetoken = usuarios.get('nextPageToken',False)
 
@@ -63,9 +65,7 @@ if __name__ == "__main__":
                         E[inep]['total'] += 1    
                         E[inep]['logaram'] += 1 if '1970' not in usuario['lastLoginTime'] else 0
                         E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
-                    
-                        
-            del todos
+                                                        
 
             if 'nextPageToken' not in usuario or len(usuarios) <500:
                 break
