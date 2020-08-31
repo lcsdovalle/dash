@@ -159,3 +159,11 @@ class IndicadorDeFinalDeSemana(models.Model):
     a_tres_dias = models.IntegerField('Aluno cinco dias')
     a_quatro_dias = models.IntegerField('Aluno cinco dias')
     a_cinco_dias = models.IntegerField('Aluno cinco dias')
+
+class Municipios(models.Model):
+    codigo_ibge = models.BigIntegerField('Código Ibge') 
+    nome = models.CharField('Nome', max_length=254)   
+    latitude = models.CharField('Latitude', max_length=50)
+    longitude = models.CharField('Longitude', max_length=50)
+    capital = models.BooleanField("Capital")
+    codigo_uf  = models.IntegerField('Código uf')
