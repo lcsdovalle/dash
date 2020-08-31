@@ -3,7 +3,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade,IaIndicadorAluno, Acessos
+from dash.models import Turmas, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -76,7 +76,25 @@ if __name__ == "__main__":
 
     
     data_corrente = datetime.date.today().strftime('%Y-%m-%d')
-    
+    try:
+        IndicadorDeFinalDeSemana.objects.create(
+            data            = data_corrente,    
+
+            p_um_dia        = p_um_dia,
+            p_dois_dias     = p_dois_dias,
+            p_tres_dias     = p_tres_dias,
+            p_quatro_dias   = p_quatro_dias,
+            p_cinco_dias    = p_cinco_dias,
+            
+            a_um_dia        = a_um_dia,
+            a_dois_dias     = a_dois_dias,
+            a_tres_dias     = a_tres_dias,
+            a_quatro_dias   = a_quatro_dias,
+            a_cinco_dias    = a_cinco_dias
+        )
+
+    except Exception as e:
+        print(e)
 
 
      

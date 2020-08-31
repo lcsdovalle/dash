@@ -41,7 +41,7 @@ if __name__ == "__main__":
                         nome = usuario.get('name').get('fullName'),
                         email = usuario.get('primaryEmail'),
                         ultimo_acesso = usuario.get('lastLoginTime'),
-                        professor_id = usuario.get('id')                        
+                        aluno_id = usuario.get('id')                        
                     )
                     print(p)
                 except Exception as e:
