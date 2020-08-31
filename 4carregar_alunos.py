@@ -15,7 +15,7 @@ escopos = [
     ]
 service_admin = authService(
     escopos,
-    'jsons/educar.rs.json',
+    'jsons/cred_rs2.json',
     f"getedu@{ENV_DOMINIO}"
     ).getService('admin','directory_v1')
 
