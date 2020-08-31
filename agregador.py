@@ -39,20 +39,47 @@ if __name__ == "__main__":
     ]
     intervalo = list(map(toStr,intervalo))        
 
-    
-    
-    um_dia = 0
-    dois_dias = 0
-    tres_dias = 0
-    quatro_dias = 0
-    cinco_dias = 0
-
     contabilizador = {}    
     for dia in intervalo:                
         dados = Acessos.objects.filter(data=dia)
         for item in dados:            
+            contabilizador[item.usuario] = {}
             contabilizador[item.usuario]['total_acessos'] = 0
-            contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0            
+            contabilizador[item.usuario]['papel'] = item.papel
+            contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0 
+
+    p_um_dia = 0
+    p_dois_dias = 0
+    p_tres_dias = 0
+    p_quatro_dias = 0
+    p_cinco_dias = 0
+    a_um_dia = 0
+    a_dois_dias = 0
+    a_tres_dias = 0
+    a_quatro_dias = 0
+    a_cinco_dias = 0
+
+    for linha in contabilizador:
+        indicador = contabilizador[linha]
+        
+        p_um_dia += 1 if indicador['total_acessos'] == 1 and 'Professor' ==  indicador['papel']  else 0 
+        p_dois_dias += 1 if indicador['total_acessos'] == 2 and 'Professor' ==  indicador['papel']  else 0
+        p_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Professor' ==  indicador['papel']  else 0 
+        p_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Professor' ==  indicador['papel']  else 0 
+        p_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Professor' ==  indicador['papel']  else 0 
+        
+        a_um_dia += 1 if indicador['total_acessos'] == 1 and 'Aluno' ==  indicador['papel']  else 0 
+        a_dois_dias += 1 if indicador['total_acessos'] == 2 and 'Aluno' ==  indicador['papel']  else 0
+        a_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Aluno' ==  indicador['papel']  else 0 
+        a_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Aluno' ==  indicador['papel']  else 0 
+        a_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Aluno' ==  indicador['papel']  else 0 
+
+    
+    data_corrente = datetime.date.today().strftime('%Y-%m-%d')
+    
+
+
+     
 
 
 

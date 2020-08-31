@@ -141,3 +141,19 @@ class Acessos(models.Model):
     data = models.DateField('Data')
     acesso = models.IntegerField('Acesso')
     papel = models.CharField('Papel', max_length=50)
+
+class IndicadorDeFinalDeSemana(models.Model):
+
+    data = models.DateField('Data')
+    
+    p_um_dia = models.IntegerField('Professor um dia')
+    p_dois_dias = models.IntegerField('Professor dois dias')
+    p_tres_dias = models.IntegerField('Professor tres dias')
+    p_quatro_dias = models.IntegerField('Professor quatro dias')
+    p_cinco_dias = models.IntegerField('Professor cinco dias')
+    
+    a_um_dia = models.IntegerField('Aluno cinco dias')
+    a_dois_dias = models.IntegerField('Aluno cinco dias')
+    a_tres_dias = models.IntegerField('Aluno cinco dias')
+    a_quatro_dias = models.IntegerField('Aluno cinco dias')
+    a_cinco_dias = models.IntegerField('Aluno cinco dias')
