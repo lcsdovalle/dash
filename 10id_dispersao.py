@@ -27,7 +27,9 @@ if __name__ == "__main__":
             'classroom:num_courses_created',        
             'classroom:num_student_posts_created',        
             'classroom:num_teacher_posts_created',        
-            'accounts:num_users',
+            'accounts:num_users',            
+            'accounts:num_30day_logins',            
+            'accounts:num_7day_logins',            
             'meet:num_meetings',
             'meet:num_meetings_web',
             'meet:num_meetings_ios',            
@@ -55,6 +57,8 @@ if __name__ == "__main__":
         total_meets_android = 0
         total_meets_ios = 0
         total_meets_web = 0
+        total_7dias = 0
+        total_30dias = 0
 
         if report:
             for r in report:
@@ -90,6 +94,12 @@ if __name__ == "__main__":
                 
                 if 'meet:total_meeting_minutes' == r['name']:
                     total_minutos_meets = r['intValue']
+                
+                if 'accounts:num_30day_logins' == r['name']:
+                    total_30dias = r['intValue']
+                
+                if 'accounts:num_7day_logins' == r['name']:
+                    total_7dias = r['intValue']
             
             IndicadoresGeraisTodaOrganizacao.objects.create(
                 data=odia,
