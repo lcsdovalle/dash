@@ -68,7 +68,10 @@ def execute(t):
                     creator_id = a.get('creatorUserId'),
                     criado = a.get('creationTime'),
                     atualizado = a.get('updateTime'),
-                    turma_id = a.get('courseId')
+                    turma_id = a.get('courseId'),
+                    inep=t.inep,
+                    municipio=t.municipio,
+                    cre=t.cre
                 )
                 print(a)                
             except Exception as e:

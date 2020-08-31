@@ -60,6 +60,10 @@ class Turmas(models.Model):
     owner_id = models.CharField('Owner', max_length=100)    
     section = models.CharField('Section', max_length=255,null=True,blank=True)
     owner_email = models.EmailField('Email')
+    inep = models.CharField('INEP', max_length=50)    
+    regiao = models.CharField('Região', max_length=200,blank=True,null=True)
+    municipio = models.CharField('Município', max_length=50)
+    cre = models.CharField('CRE', max_length=100,blank=True,null=True)
     class Meta:
         verbose_name = 'Turma'
         verbose_name_plural = 'Turmas'
@@ -76,6 +80,10 @@ class Atividade(models.Model):
     criado = models.CharField('Data criação', max_length=100)
     atualizado = models.CharField('Data atualização', max_length=100)
     turma_id = models.CharField('ID', max_length=200,default='00000')
+    inep = models.CharField('INEP', max_length=50)    
+    regiao = models.CharField('Região', max_length=200,blank=True,null=True)
+    municipio = models.CharField('Município', max_length=50)
+    cre = models.CharField('CRE', max_length=100,blank=True,null=True)
 
     class Meta:
         verbose_name = ("Atividade")
@@ -98,3 +106,38 @@ class Professor(models.Model):
 
     def __str_(self):
         return self.nome
+
+class Aluno(models.Model):
+    nome = models.CharField('Name', max_length=255)
+    email = models.EmailField('Email', max_length=254,unique=True)
+    aluno_id = models.CharField('Id', max_length=200,unique=True)
+    matricula = models.CharField('Matricula', max_length=50,null=True,blank=False)
+    cpf = models.CharField('Cpf', max_length=50,null=True,blank=False)
+    ultimo_acesso = models.CharField('Ultimo acesso', max_length=100)
+
+    class Meta:
+        verbose_name = ("Aluno")
+        verbose_name_plural = ("Alunos")
+
+    def __str_(self):
+        return self.nome
+
+class IndicadoresGeraisTodaOrganizacao(models.Model):
+    data = models.DateField('Quando', auto_now=False, auto_now_add=False)
+    professores = models.BigIntegerField('Professores')
+    alunos = models.BigIntegerField('Alunos')
+    turmas_criadas = models.BigIntegerField('Número de turmas criadas',default=0)
+    alunos_posts_criados = models.BigIntegerField('Número de posts criados por alunos',default=0)
+    professores_posts_criados = models.BigIntegerField('Número de posts criados por professores',default=0)
+    outros = models.BigIntegerField('Outros',null=True,blank=True)
+    total_meets = models.BigIntegerField('Total de meets',null=True,blank=True)
+    total_meets_web = models.BigIntegerField('Total meets web',null=True,blank=True)
+    total_meets_ios = models.BigIntegerField('Total meets ios',null=True,blank=True)
+    total_meets_android = models.BigIntegerField('Total meets android',null=True,blank=True)
+    total_minutos_meets = models.BigIntegerField('Total em minutos',null=True,blank=True)
+    
+class Acessos(models.Model):
+    usuario = models.CharField('Nome', max_length=255)
+    data = models.DateField('Data')
+    acesso = models.IntegerField('Acesso')
+    papel = models.CharField('Papel', max_length=50)

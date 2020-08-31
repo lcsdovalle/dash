@@ -78,7 +78,7 @@ DATABASES = {
         'USER':'getedu',
         'PASSWORD':'getedu00',
         'NAME':'novodash',
-        'PORT':14624
+        'PORT':18464
     }
 }
 

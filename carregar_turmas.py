@@ -99,7 +99,10 @@ def execute(e):
                 t = Turmas.objects.create(
                     turma_id=turma.get('id'),
                     owner_id=turma.get('ownerId'),                    
-                    owner_email=e.email
+                    owner_email=e.email,
+                    inep=e.inep,
+                    municipio=e.municipio,
+                    cre=e.cre
                 )
                 # print(t)
             except Exception as err:
