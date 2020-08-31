@@ -135,6 +135,8 @@ class IndicadoresGeraisTodaOrganizacao(models.Model):
     total_meets_ios = models.BigIntegerField('Total meets ios',null=True,blank=True)
     total_meets_android = models.BigIntegerField('Total meets android',null=True,blank=True)
     total_minutos_meets = models.BigIntegerField('Total em minutos',null=True,blank=True)
+    total_sete_dias = models.BigIntegerField('Total 7 dias',null=True,blank=True)
+    total_trinta_dias = models.BigIntegerField('Total 30 dias',null=True,blank=True)
     
 class Acessos(models.Model):
     usuario = models.CharField('Nome', max_length=255)
