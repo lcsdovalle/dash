@@ -9,7 +9,7 @@ __pycache__/
 logs/*
 *.csv
 jsons/*
-
+dashboard/*
 # Distribution / packaging
 .Python
 build/

@@ -41,9 +41,18 @@ if __name__ == "__main__":
 
     
     
+    um_dia = 0
+    dois_dias = 0
+    tres_dias = 0
+    quatro_dias = 0
+    cinco_dias = 0
 
-    for dia in intervalo:
+    contabilizador = {}    
+    for dia in intervalo:                
         dados = Acessos.objects.filter(data=dia)
+        for item in dados:            
+            contabilizador[item.usuario]['total_acessos'] = 0
+            contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0            
 
 
 
