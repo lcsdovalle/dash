@@ -53,11 +53,16 @@ if __name__ == "__main__":
     p_tres_dias = 0
     p_quatro_dias = 0
     p_cinco_dias = 0
+    p_seis_dias = 0
+    p_sete_dias = 0
+
     a_um_dia = 0
     a_dois_dias = 0
     a_tres_dias = 0
     a_quatro_dias = 0
     a_cinco_dias = 0
+    a_seis_dias = 0
+    a_sete_dias = 0
 
     for linha in contabilizador:
         indicador = contabilizador[linha]
@@ -67,12 +72,16 @@ if __name__ == "__main__":
         p_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Professor' ==  indicador['papel']  else 0 
         p_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Professor' ==  indicador['papel']  else 0 
         p_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Professor' ==  indicador['papel']  else 0 
+        p_seis_dias += 1 if indicador['total_acessos'] == 6 and 'Professor' ==  indicador['papel']  else 0 
+        p_sete_dias += 1 if indicador['total_acessos'] == 7 and 'Professor' ==  indicador['papel']  else 0 
         
         a_um_dia += 1 if indicador['total_acessos'] == 1 and 'Aluno' ==  indicador['papel']  else 0 
         a_dois_dias += 1 if indicador['total_acessos'] == 2 and 'Aluno' ==  indicador['papel']  else 0
         a_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Aluno' ==  indicador['papel']  else 0 
         a_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Aluno' ==  indicador['papel']  else 0 
         a_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Aluno' ==  indicador['papel']  else 0 
+        a_seis_dias += 1 if indicador['total_acessos'] == 6 and 'Aluno' ==  indicador['papel']  else 0 
+        a_sete_dias += 1 if indicador['total_acessos'] == 7 and 'Aluno' ==  indicador['papel']  else 0 
 
     
     data_corrente = datetime.date.today().strftime('%Y-%m-%d')
@@ -85,12 +94,16 @@ if __name__ == "__main__":
             p_tres_dias     = p_tres_dias,
             p_quatro_dias   = p_quatro_dias,
             p_cinco_dias    = p_cinco_dias,
+            p_seis_dias     = p_seis_dias,
+            p_sete_dias     = p_sete_dias,
             
             a_um_dia        = a_um_dia,
             a_dois_dias     = a_dois_dias,
             a_tres_dias     = a_tres_dias,
             a_quatro_dias   = a_quatro_dias,
-            a_cinco_dias    = a_cinco_dias
+            a_cinco_dias    = a_cinco_dias,
+            a_seis_dias     = a_seis_dias,
+            a_sete_dias     = a_sete_dias
         )
 
     except Exception as e:
