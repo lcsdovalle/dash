@@ -10,18 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Municipios',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('codigo_ibge', models.BigIntegerField(verbose_name='Código Ibge')),
-                ('nome', models.CharField(max_length=254, verbose_name='Nome')),
-                ('latitude', models.CharField(max_length=50, verbose_name='Latitude')),
-                ('longitude', models.CharField(max_length=50, verbose_name='Longitude')),
-                ('capital', models.BooleanField(verbose_name='Capital')),
-                ('codigo_uf', models.IntegerField(verbose_name='Código uf')),
-            ],
-        ),
         migrations.AddField(
             model_name='indicadordefinaldesemana',
             name='a_seis_dias',

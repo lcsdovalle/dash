@@ -155,14 +155,16 @@ class IndicadorDeFinalDeSemana(models.Model):
     p_cinco_dias = models.IntegerField('Professor cinco dias')
     p_seis_dias = models.IntegerField('Professor seis dias')
     p_sete_dias = models.IntegerField('Professor sete dias')
+    p_nenhum_dia = models.IntegerField('Professor nenhum dia')
     
     a_um_dia = models.IntegerField('Aluno cinco dias')
     a_dois_dias = models.IntegerField('Aluno cinco dias')
     a_tres_dias = models.IntegerField('Aluno cinco dias')
     a_quatro_dias = models.IntegerField('Aluno cinco dias')
     a_cinco_dias = models.IntegerField('Aluno cinco dias')
-    a_seis_dias = models.IntegerField('Aluno seis dias')
+    a_seis_dias = models.IntegerField('Aluno seois dias')
     a_sete_dias = models.IntegerField('Aluno sete dias')
+    a_nenhum_dia = models.IntegerField('Aluno nenhum dia')
 
 class Municipios(models.Model):
     codigo_ibge = models.BigIntegerField('Código Ibge') 
