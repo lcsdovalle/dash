@@ -74,11 +74,11 @@ DATABASES = {
     'default':{
         'ENGINE':'django.db.backends.mysql',
         # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
-        'HOST':'0.tcp.sa.ngrok.io',
+        'HOST':'localhost',
         'USER':'getedu',
         'PASSWORD':'getedu00',
         'NAME':'novodash',
-        'PORT':19176
+        'PORT':3306
     }
 }
 

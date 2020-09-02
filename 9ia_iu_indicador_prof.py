@@ -1,3 +1,5 @@
+#pylint: disable=no-member
+
 import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')

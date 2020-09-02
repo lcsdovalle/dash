@@ -99,6 +99,7 @@ class Professor(models.Model):
     matricula = models.CharField('Matricula', max_length=50,null=True,blank=False)
     cpf = models.CharField('Cpf', max_length=50,null=True,blank=False)
     ultimo_acesso = models.CharField('Ultimo acesso', max_length=100)
+    inep = models.CharField("Inep",max_length=100)
 
     class Meta:
         verbose_name = ("Professor")
@@ -114,6 +115,7 @@ class Aluno(models.Model):
     matricula = models.CharField('Matricula', max_length=50,null=True,blank=False)
     cpf = models.CharField('Cpf', max_length=50,null=True,blank=False)
     ultimo_acesso = models.CharField('Ultimo acesso', max_length=100)
+    inep = models.CharField("Inep", max_length=100)
 
     class Meta:
         verbose_name = ("Aluno")
@@ -143,11 +145,15 @@ class Acessos(models.Model):
     data = models.DateField('Data')
     acesso = models.IntegerField('Acesso')
     papel = models.CharField('Papel', max_length=50)
+    inep = models.CharField("Inep",max_length=100)
 
 class IndicadorDeFinalDeSemana(models.Model):
 
     data = models.DateField('Data')
-    
+    inep = models.CharField("Inep",max_length=100)
+    escola = models.CharField("Escola",max_length=100)
+    municipio = models.CharField("Município",max_length=100)
+    cre = models.CharField("Cre",max_length=100)
     p_um_dia = models.IntegerField('Professor um dia')
     p_dois_dias = models.IntegerField('Professor dois dias')
     p_tres_dias = models.IntegerField('Professor tres dias')

@@ -3,7 +3,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana
+from dash.models import Turmas, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -42,74 +42,89 @@ if __name__ == "__main__":
     contabilizador = {}    
     for dia in intervalo:                
         dados = Acessos.objects.filter(data=dia)
-        for item in dados:            
-            contabilizador[item.usuario] = {}
-            contabilizador[item.usuario]['total_acessos'] = 0
-            contabilizador[item.usuario]['papel'] = item.papel
-            contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0 
+        for item in dados:
+            if item.usuario not in contabilizador:            
+                contabilizador[item.usuario] = {}
+                contabilizador[item.usuario]['total_acessos'] = 0
+                contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0
+                contabilizador[item.usuario]['inep'] = item.inep
+                contabilizador[item.usuario]['papel'] = item.papel
+            else:
+                contabilizador[item.usuario]['papel'] = item.papel
+                contabilizador[item.usuario]['total_acessos'] += 1 if item.acesso == 1 else 0
 
-    p_um_dia = 0
-    p_dois_dias = 0
-    p_tres_dias = 0
-    p_quatro_dias = 0
-    p_cinco_dias = 0
-    p_seis_dias = 0
-    p_sete_dias = 0
-    p_nenhum_dia = 0
-
-    a_um_dia = 0
-    a_dois_dias = 0
-    a_tres_dias = 0
-    a_quatro_dias = 0
-    a_cinco_dias = 0
-    a_seis_dias = 0
-    a_sete_dias = 0
-    a_nenhum_dia = 0
-
+    ineps = {}
     for linha in contabilizador:
         indicador = contabilizador[linha]
-        
-        p_um_dia += 1 if indicador['total_acessos'] == 1 and 'Professor' ==  indicador['papel']  else 0 
-        p_dois_dias += 1 if indicador['total_acessos'] == 2 and 'Professor' ==  indicador['papel']  else 0
-        p_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Professor' ==  indicador['papel']  else 0 
-        p_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Professor' ==  indicador['papel']  else 0 
-        p_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Professor' ==  indicador['papel']  else 0 
-        p_seis_dias += 1 if indicador['total_acessos'] == 6 and 'Professor' ==  indicador['papel']  else 0 
-        p_sete_dias += 1 if indicador['total_acessos'] == 7 and 'Professor' ==  indicador['papel']  else 0         
-        p_nenhum_dia += 1 if indicador['total_acessos'] == 0 and 'Professor' ==  indicador['papel']  else 0         
-        
-        a_um_dia += 1 if indicador['total_acessos'] == 1 and 'Aluno' ==  indicador['papel']  else 0 
-        a_dois_dias += 1 if indicador['total_acessos'] == 2 and 'Aluno' ==  indicador['papel']  else 0
-        a_tres_dias += 1 if indicador['total_acessos'] == 3 and 'Aluno' ==  indicador['papel']  else 0 
-        a_quatro_dias += 1 if indicador['total_acessos'] == 4 and 'Aluno' ==  indicador['papel']  else 0 
-        a_cinco_dias += 1 if indicador['total_acessos'] == 5 and 'Aluno' ==  indicador['papel']  else 0 
-        a_seis_dias += 1 if indicador['total_acessos'] == 6 and 'Aluno' ==  indicador['papel']  else 0 
-        a_sete_dias += 1 if indicador['total_acessos'] == 7 and 'Aluno' ==  indicador['papel']  else 0 
-        a_nenhum_dia += 1 if indicador['total_acessos'] == 0 and 'Aluno' ==  indicador['papel']  else 0         
+        for inep in indicador['inep'].split(","):
+            if inep not in ineps:
+                ineps[inep] = {}
+                ineps[inep]['p_um_dia'] = 0
+                ineps[inep]['p_dois_dias'] = 0
+                ineps[inep]['p_tres_dias'] = 0
+                ineps[inep]['p_quatro_dias'] = 0
+                ineps[inep]['p_cinco_dias'] = 0
+                ineps[inep]['p_seis_dias'] = 0
+                ineps[inep]['p_sete_dias'] = 0
+                ineps[inep]['p_nenhum_dia'] = 0
+
+                ineps[inep]['a_um_dia'] = 0
+                ineps[inep]['a_dois_dias'] = 0
+                ineps[inep]['a_tres_dias'] = 0
+                ineps[inep]['a_quatro_dias'] = 0
+                ineps[inep]['a_cinco_dias'] = 0
+                ineps[inep]['a_seis_dias'] = 0
+                ineps[inep]['a_sete_dias'] = 0
+                ineps[inep]['a_nenhum_dia'] = 0
+            else:
+                ineps[inep]['p_um_dia'] += 1 if indicador['total_acessos'] == 1 and 'Professor' ==  indicador['papel']  else 0 
+                ineps[inep]['p_dois_dias'] += 1 if indicador['total_acessos'] == 2 and 'Professor' ==  indicador['papel']  else 0
+                ineps[inep]['p_tres_dias'] += 1 if indicador['total_acessos'] == 3 and 'Professor' ==  indicador['papel']  else 0 
+                ineps[inep]['p_quatro_dias'] += 1 if indicador['total_acessos'] == 4 and 'Professor' ==  indicador['papel']  else 0 
+                ineps[inep]['p_cinco_dias'] += 1 if indicador['total_acessos'] == 5 and 'Professor' ==  indicador['papel']  else 0 
+                ineps[inep]['p_seis_dias'] += 1 if indicador['total_acessos'] == 6 and 'Professor' ==  indicador['papel']  else 0 
+                ineps[inep]['p_sete_dias'] += 1 if indicador['total_acessos'] == 7 and 'Professor' ==  indicador['papel']  else 0         
+                ineps[inep]['p_nenhum_dia'] += 1 if indicador['total_acessos'] == 0 and 'Professor' ==  indicador['papel']  else 0         
+                
+                ineps[inep]['a_um_dia'] += 1 if indicador['total_acessos'] == 1 and 'Aluno' ==  indicador['papel']  else 0 
+                ineps[inep]['a_dois_dias'] += 1 if indicador['total_acessos'] == 2 and 'Aluno' ==  indicador['papel']  else 0
+                ineps[inep]['a_tres_dias'] += 1 if indicador['total_acessos'] == 3 and 'Aluno' ==  indicador['papel']  else 0 
+                ineps[inep]['a_quatro_dias'] += 1 if indicador['total_acessos'] == 4 and 'Aluno' ==  indicador['papel']  else 0 
+                ineps[inep]['a_cinco_dias'] += 1 if indicador['total_acessos'] == 5 and 'Aluno' ==  indicador['papel']  else 0 
+                ineps[inep]['a_seis_dias'] += 1 if indicador['total_acessos'] == 6 and 'Aluno' ==  indicador['papel']  else 0 
+                ineps[inep]['a_sete_dias'] += 1 if indicador['total_acessos'] == 7 and 'Aluno' ==  indicador['papel']  else 0         
+                ineps[inep]['a_nenhum_dia'] += 1 if indicador['total_acessos'] == 0 and 'Aluno' ==  indicador['papel']  else 0           
 
     
     data_corrente = datetime.date.today().strftime('%Y-%m-%d')
     try:
-        IndicadorDeFinalDeSemana.objects.create(
-            data            = data_corrente,    
+        for inep in ineps:
+            escola = Escola.objects.get(inep=inep)
+            IndicadorDeFinalDeSemana.objects.create(
+                inep            = inep,
+                escola          = escola.nome,
+                cre             = escola.cre,
+                municipio       = escola.municipio,
 
-            p_um_dia        = p_um_dia,
-            p_dois_dias     = p_dois_dias,
-            p_tres_dias     = p_tres_dias,
-            p_quatro_dias   = p_quatro_dias,
-            p_cinco_dias    = p_cinco_dias,
-            p_seis_dias     = p_seis_dias,
-            p_sete_dias     = p_sete_dias,
-            p_nenhum_dia    = p_nenhum_dia,
-            
-            a_um_dia        = a_um_dia,
-            a_dois_dias     = a_dois_dias,
-            a_tres_dias     = a_tres_dias,
-            a_quatro_dias   = a_quatro_dias,
-            a_cinco_dias    = a_cinco_dias,
-            a_seis_dias     = a_seis_dias,
-            a_sete_dias     = a_sete_dias,
-            a_nenhum_dia    = a_nenhum_dia
+                data            = data_corrente,    
+
+                p_um_dia        = ineps[inep]['p_um_dia'],
+                p_dois_dias     = ineps[inep]['p_dois_dias'],
+                p_tres_dias     = ineps[inep]['p_tres_dias'],
+                p_quatro_dias   = ineps[inep]['p_quatro_dias'],
+                p_cinco_dias    = ineps[inep]['p_cinco_dias'],
+                p_seis_dias     = ineps[inep]['p_seis_dias'],
+                p_sete_dias     = ineps[inep]['p_sete_dias'],
+                p_nenhum_dia    = ineps[inep]['p_nenhum_dia'],
+                
+                a_um_dia        = ineps[inep]['a_um_dia'],
+                a_dois_dias     = ineps[inep]['a_dois_dias'],
+                a_tres_dias     = ineps[inep]['a_tres_dias'],
+                a_quatro_dias   = ineps[inep]['a_quatro_dias'],
+                a_cinco_dias    = ineps[inep]['a_cinco_dias'],
+                a_seis_dias     = ineps[inep]['a_seis_dias'],
+                a_sete_dias     = ineps[inep]['a_sete_dias'],
+                a_nenhum_dia    = ineps[inep]['a_nenhum_dia']
         )
 
     except Exception as e:
