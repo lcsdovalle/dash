@@ -49,14 +49,15 @@ if __name__ == "__main__":
                             ineps.append(inep.get('value'))
                         try:
                             p = Professor.objects.get_or_create(
-                                professor_id = usuario.get('id'),
+                                professor_id = usuario.get('id')
                             )[0]
-                            p.email = usuario.get('primaryEmail'),
-                            p.nome =usuario.get('name').get('fullName'), 
-                            p.ultimo_acesso = usuario.get('lastLoginTime'),
+                            p.email = usuario.get('primaryEmail')
+                            p.nome =usuario.get('name').get('fullName')
+                            p.ultimo_acesso = usuario.get('lastLoginTime')
                             p.inep = ",".join(ineps)
+                            p.status = 1 if "1970" not in usuario.get("lastLoginTime") else 0
                             p.save()
-
+                            
                             a = Acessos.objects.create(
                                 usuario=usuario.get('id'),
                                 acesso= (1 if odia in usuario['lastLoginTime'] else 0),

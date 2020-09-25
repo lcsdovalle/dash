@@ -48,12 +48,13 @@ if __name__ == "__main__":
                         inep = organization['department'] if 'department' in organization else False
                         if inep:
                             p = Aluno.objects.get_or_create(
-                                aluno_id = usuario.get('id'),
+                                aluno_id = usuario.get('id')
                             )[0]
-                            p.email = usuario.get('primaryEmail'),
-                            p.nome =usuario.get('name').get('fullName'), 
-                            p.ultimo_acesso = usuario.get('lastLoginTime'),
+                            p.email = usuario.get('primaryEmail')
+                            p.nome = usuario.get('name').get('fullName')
+                            p.ultimo_acesso = usuario.get('lastLoginTime').split("T")[0]
                             p.inep = '{}'.format(inep)
+                            p.status = 1 if "1970" not in usuario.get("lastLoginTime") else 0
                             p.save()                       
 
                             a = Acessos.objects.create(

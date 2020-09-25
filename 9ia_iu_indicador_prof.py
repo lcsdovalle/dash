@@ -10,7 +10,7 @@ from pylib.googleadmin import authService
 from pylib.pycsv import PyCsv
 import datetime
 from pytz import timezone
-from dash.models import Escola, IaIndicadorProfessor
+from dash.models import Escola, IaIndicadorProfessor,Professor
 escopos = [
     # 'https://www.googleapis.com/auth/admin.reports.usage.readonly'
     'https://www.googleapis.com/auth/admin.directory.user',
@@ -24,8 +24,8 @@ admin_service = authService(escopos,'jsons/cred_rs2.json',email='getedu@educar.r
 if __name__ == "__main__":
     E = {}
     escolas = Escola.objects.all()
-    dias = datetime.timedelta(days=1)    
-    odia = datetime.date.today() - dias  
+ 
+    odia = datetime.date.today() 
     for escola in escolas:
         E[escola.inep] = {}    
         E[escola.inep]['inep'] = escola.inep    
@@ -38,45 +38,22 @@ if __name__ == "__main__":
         E[escola.inep]['logaram_hoje'] = 0    
 
     
-    try:
-        u = admin_service.users().list(customer='my_customer',query=f"orgUnitPath=/Professores",maxResults=1,projection='full').execute()
-
-        pagetoken = u.get('nextPageToken',False)
-
-        while(True):
-            todos = []
-            usuarios = admin_service.users().list(customer='my_customer',query=f"orgUnitPath=/Professores",maxResults=500,pageToken=pagetoken,projection='full').execute()
-
-            pagetoken = usuarios.get('nextPageToken',False)
-
-            if len(u['users']) == 1:
-                todos = u['users'] + usuarios['users']
-            else:
-                todos = usuarios['users']
-            
-            for usuario in todos:
-                usuario
-                organizations = usuario.get('organizations',False)
-                if organizations:
-                    organization = organizations[0]
-                    inep = organization['department'] if 'department' in organization else False
-                    if inep:
-                        E[inep]['total'] += 1    
-                        E[inep]['logaram'] += 1 if '1970' not in usuario['lastLoginTime'] else 0
-                        E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario['lastLoginTime'] else 0
-                    
-                                    
-            del todos
-            if 'nextPageToken' not in usuarios or len(usuarios['users']) <500:
-                break
+    try:        
+        todos = Professor.objects.all()
+        for usuario in todos:
+            for inep in usuario.inep.split(','):   
+                E[inep]['total'] += 1    
+                E[inep]['logaram'] += 1 if '1970' not in usuario.ultimo_acesso else 0
+                E[inep]['logaram_hoje'] +=1 if E[inep]['hoje'] in usuario.ultimo_acesso else 0
+                                            
         
     except Exception as e:
         print(e)
     
-    try:
-        for item in E:
+    for item in E:
+        try:
             dados = E[item]
-            dados
+            ia = ( (dados['logaram'] / dados['total'] ) *100 ) if dados['total'] > 0 else 0
             IaIndicadorProfessor.objects.create(
                 data = odia.strftime('%Y-%m-%d'),
                 nome = dados['nome'],
@@ -85,8 +62,9 @@ if __name__ == "__main__":
                 cre = dados['cre'],
                 total = dados['total'],
                 acessaram = dados['logaram'],
-                logaram_hoje = dados['logaram_hoje'],                    
+                logaram_hoje = dados['logaram_hoje'],
+                ia = ( (dados['logaram'] / dados['total'] ) *100 ) if dados['total'] > 0 else 0
             )
-    except Exception as er:
-        print(er)
+        except Exception as er:
+            print(er)
         

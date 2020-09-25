@@ -1,5 +1,8 @@
+#pylint: disable=no-member
+
 import os
 import django
+import signal
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
@@ -21,7 +24,6 @@ escopos = [
         'https://www.googleapis.com/auth/classroom.coursework.students.readonly',
     ]
 service_class = authService(escopos,'jsons/cred_rs2.json','getedu@educar.rs.gov.br').getService('classroom','v1')
-
 
 def carregar_atividades(turma_id):
     aa = service_class.courses().courseWork().list(
@@ -52,10 +54,8 @@ def carregar_atividades(turma_id):
                 return todas_atividades
                 break
 
-def execute(t):    
-    t
-    atividades = carregar_atividades(t)
-    
+def execute(t):
+    atividades = carregar_atividades(t.turma_id)    
     if atividades is not None:
         param = {}
         for a in atividades:
@@ -76,16 +76,22 @@ def execute(t):
                 print(a)                
             except Exception as e:
                 print(f"Erro: {str(e)}")
+
+def init_worker():
+  signal.signal(signal.SIGINT, signal.SIG_IGN)
+
 if __name__ == "__main__":
     
-    pool = Pool(15)    
-
-    turmas = Turmas.objects.all()
-    turmas
-    proc = []
-    for t in turmas:  
-        t      
-        proc.append(pool.apply_async(execute,(t.turma_id,)))
+    pool = Pool(20, init_worker)    
     
-    pool.close()
+    try:
+        turmas = Turmas.objects.all()
+        turmas
+        proc = []
+        for t in turmas:  
+            t      
+            proc.append(pool.apply_async(execute,(t,)))
+        pool.close()
+    except KeyboardInterrupt:
+        pool.terminate()
     pool.join()
