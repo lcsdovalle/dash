@@ -111,7 +111,7 @@ if __name__ == "__main__":
     trava = {} 
     agregacao = {}
     quants = {}
-    for intervalo in intervalos:
+    for intervalo in intervalos: #por intervalo
         label = labels[i]
         grupo = labels[i]
         agregacao[label] = {}
@@ -188,70 +188,74 @@ if __name__ == "__main__":
                     quants[dados['inep']][label] += 1
                     quants[dados['inep']]['total'] = 0
                     quants[dados['inep']]['total'] += 1
-                    quants[dados['inep']]['total_geral'] = 0
+                    
 
                 else:
                     if label not in quants[dados['inep']]:
-                        quants[dados['inep']][label] = 0  
-                        quants[dados['inep']]['total_geral'] = 0  
+                        quants[dados['inep']][label] = 0   
                     quants[dados['inep']][label] += 1
                     quants[dados['inep']]['total'] += 1
 
-            
-            for inep in quants:
-                data = quants[inep]
-                try:
-                    total_alunos_inep = alunos.filter(inep=inep)
-                    quants[inep]['total_geral'] = len(total_alunos_inep)
-                    
-                except Exception as e:
-                    pass
 
             started=False
             reports = []
+        
+    ########################
+    # GRAVA TOTAL GERAL NO BANCO
+    ########################
+    for inep in quants:
+        data = quants[inep]
+        try:
+            quants[dados['inep']]['total_geral'] = 0
+            total_alunos_inep = alunos.filter(inep=inep)
+            quants[inep]['total_geral'] = len(total_alunos_inep)
+            
+        except Exception as e:
+            pass
     
-            ########################
-            # GRAVA NO BANCO DE DADOS
-            ########################
-            for inep in quants:
-                data = quants[inep]
-                try:
-                    escola = escolas.get(inep=inep)
-                    NovoDispersaoAluno.objects.create(
-                        data = datetime.date.today().strftime('%Y-%m-%d'),
-                        menor_sete = data['menor_sete'],
-                        maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
-                        maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
-                        maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
-                        maior_sessenta = data['maior_sessenta'] ,
+    
+    ########################
+    # GRAVA NO BANCO DE DADOS
+    ########################
+    for inep in quants:
+        data = quants[inep]
+        try:
+            escola = escolas.get(inep=inep)
+            NovoDispersaoAluno.objects.create(
+                data = datetime.date.today().strftime('%Y-%m-%d'),
+                menor_sete = data['menor_sete'],
+                maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
+                maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
+                maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
+                maior_sessenta = data['maior_sessenta'] ,
 
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio'] 
-                    )
-                    
-                    novo_ia =NovoIaAluno(
-                        data = datetime.date.today().strftime('%Y-%m-%d'),
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio'] ,
-                        total_alunos = data['total'],
-                        total_logaram = data['total_geral']
-                    )
-                    novo_ia.save()
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio'] 
+            )
+            
+            novo_ia =NovoIaAluno(
+                data = datetime.date.today().strftime('%Y-%m-%d'),
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio'] ,
+                total_alunos = data['total_geral'],
+                total_logaram = data['total']
+            )
+            novo_ia.save()
 
 
-                    status = NovoStatusAluno.objects.get_or_create(
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio']
-                    )[0]
-                    status.total_alunos = data['total']
-                    status.total_logaram = data['total_geral']
-                    status.save()
+            status = NovoStatusAluno.objects.get_or_create(
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio']
+            )[0]
+            status.total_alunos = data['total_geral']
+            status.total_logaram = data['total']
+            status.save()
 
-                except Exception as e:
-                    print(e)
+        except Exception as e:
+            print(e)
                         
 
         

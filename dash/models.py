@@ -22,6 +22,7 @@ class DispersaoAluno(models.Model):
     class Meta:
         verbose_name = ("Dispersão Aluno")
         verbose_name_plural = ("Dispersão Alunos")
+
 class NovoDispersaoAluno(models.Model):
     data = models.DateField("Data",default=timezone.now)
     menor_sete = models.BigIntegerField("Sete dias")
@@ -336,14 +337,14 @@ class NovoIuProfessor(models.Model):
     escola = models.CharField("Escola",max_length=100)
     municipio = models.CharField("Município",max_length=100)
     cre = models.CharField("Cre",max_length=100)    
-    a_um_dia = models.IntegerField('Aluno um dia')
-    a_dois_dias = models.IntegerField('Aluno dois dias')
-    a_tres_dias = models.IntegerField('Aluno tres dias')
-    a_quatro_dias = models.IntegerField('Aluno quatro dias')
-    a_cinco_dias = models.IntegerField('Aluno cinco dias')
-    a_seis_dias = models.IntegerField('Aluno seis dias')
-    a_sete_dias = models.IntegerField('Aluno sete dias')
-    a_nenhum_dia = models.IntegerField('Aluno nenhum dia')
+    p_um_dia = models.IntegerField('Aluno um dia')
+    p_dois_dias = models.IntegerField('Aluno dois dias')
+    p_tres_dias = models.IntegerField('Aluno tres dias')
+    p_quatro_dias = models.IntegerField('Aluno quatro dias')
+    p_cinco_dias = models.IntegerField('Aluno cinco dias')
+    p_seis_dias = models.IntegerField('Aluno seis dias')
+    p_sete_dias = models.IntegerField('Aluno sete dias')
+    p_nenhum_dia = models.IntegerField('Aluno nenhum dia')
 
 class Municipios(models.Model):
     
@@ -417,3 +418,21 @@ class NovoStatusProfessor(models.Model):
     cre = models.CharField("Cre",max_length=100)    
     total_alunos = models.IntegerField('Aluno um dia',null=True,blank=True)
     total_logaram = models.IntegerField('Aluno dois dias',null=True,blank=True)
+
+class NovoDispersaoProfessor(models.Model):
+    data = models.DateField("Data",default=timezone.now)
+    menor_sete = models.BigIntegerField("Sete dias")
+    maior_sete_menor_quatorze = models.BigIntegerField("Maior sete")
+    maior_quatorze_menor_trinta = models.BigIntegerField("Maior quatorzer")
+    maior_trinta_menor_sessenta = models.BigIntegerField("Maior trinta")
+    maior_sessenta = models.BigIntegerField("Maior sessenta")
+    
+    inep = models.CharField('INEP', max_length=50)
+    regiao = models.CharField('Região', max_length=200,blank=True,null=True)
+    cre = models.CharField('CRE', max_length=100,blank=True,null=True)
+    municipio = models.CharField('Município', max_length=50)
+
+
+    class Meta:
+        verbose_name = ("Dispersão Aluno")
+        verbose_name_plural = ("Dispersão Alunos")

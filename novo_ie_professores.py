@@ -5,7 +5,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas,NovoDispersaoAluno, NovoIaAluno, NovoStatusAluno, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas,NovoDispersaoProfessor, NovoIaPRofessor, NovoStatusProfessor, NovoIuProfessor, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -142,116 +142,126 @@ if __name__ == "__main__":
         
 
         
-            ########################
-            # CONTABILIZA OS DADOS POR USUÁRIOS
-            ########################
-            reports
-            contabilizador = {}  
-            for r in reports:
-                user = False
-                identificacao_unica_usuario = r.get('actor').get('email') #pega o email
-                data_acesso_usuario = r.get('id').get('time') # pega o time
-                adata_acesso = data_acesso_usuario.split('T')[0] # monta a data para comparação
-                
+        ########################
+        # CONTABILIZA OS DADOS POR USUÁRIOS
+        ########################
+        reports
+        contabilizador = {}  
+        for r in reports:
+            user = False
+            identificacao_unica_usuario = r.get('actor').get('email') #pega o email
+            data_acesso_usuario = r.get('id').get('time') # pega o time
+            adata_acesso = data_acesso_usuario.split('T')[0] # monta a data para comparação
+            
 
-                #verifica se é aluno ou professor
-                if identificacao_unica_usuario in todos_professores:    
-                    user = todos_professores.get(identificacao_unica_usuario)
-                    role='Professor'
+            #verifica se é aluno ou professor
+            if identificacao_unica_usuario in todos_professores:    
+                user = todos_professores.get(identificacao_unica_usuario)
+                role='Professor'
+            else:
+                continue
+            
+            # só processa se for aluno
+            # agrega o as datas por email
+            if user and role == 'Professor' and user['email'] not in contabilizador and user['email'] not in trava:
+                contabilizador[user['email']] = {
+                        'inep':user['inep'],
+                        'cre':user['cre'],
+                        'municipio':user['municipio']
+                    }
+                trava[user['email']] = 'processado'
+            
+        
+        ########################
+        # CONTABILIZA OS DADOS POR INEP
+        ########################
+        for email in contabilizador:
+            dados = contabilizador[email]
+            for inep in dados['inep'].split(','):
+                if inep not in quants:
+                
+                        quants[inep] = {}
+                        quants[inep][label] = 0
+                        quants[inep]['cre'] = dados['cre']
+                        quants[inep]['municipio'] = dados['municipio']
+                        quants[inep][label] += 1
+                        quants[inep]['total'] = 0
+                        quants[inep]['total'] += 1
+                        quants[inep]['total_geral'] = 0
+
                 else:
-                    continue
-                
-                # só processa se for aluno
-                # agrega o as datas por email
-                if user and role == 'Professor' and user['email'] not in contabilizador and user['email'] not in trava:
-                    contabilizador[user['email']] = {
-                            'inep':user['inep'],
-                            'cre':user['cre'],
-                            'municipio':user['municipio']
-                        }
-                    trava[user['email']] = 'processado'
-                
+
+                    if label not in quants[inep]:
+                        quants[inep][label] = 0  
+                        quants[inep]['total_geral'] = 0  
+                quants[inep][label] += 1
+                quants[inep]['total'] += 1
+
+
+        started=False
+        reports = []
+    ########################
+    # GRAVA TOTAL GERAL NO BANCO
+    ########################
+    for inep in quants:
+        data = quants[inep]
+        try:
+            quants[dados['inep']]['total_geral'] = 0
+            total_alunos_inep = alunos.filter(inep=inep)
+            quants[inep]['total_geral'] = len(total_alunos_inep)
             
-            ########################
-            # CONTABILIZA OS DADOS POR INEP
-            ########################
-            for email in contabilizador:
-                dados = contabilizador[email]
-                for inep in dados['inep'].split(','):
-                    if inep not in quants:
-                    
-                            quants[inep] = {}
-                            quants[inep][label] = 0
-                            quants[inep]['cre'] = dados['cre']
-                            quants[inep]['municipio'] = dados['municipio']
-                            quants[inep][label] += 1
-                            quants[inep]['total'] = 0
-                            quants[inep]['total'] += 1
-                            quants[inep]['total_geral'] = 0
+        except Exception as e:
+            pass
+    for inep in quants:
+        data = quants[inep]
+        try:
+            total_alunos_inep = alunos.filter(inep=inep)
+            data['total_geral'] = len(total_alunos_inep)
+            data
+        except Exception as e:
+            pass
+    ########################
+    # GRAVA NO BANCO DE DADOS
+    ########################
+    for inep in quants:
+        data = quants[inep]
+        try:
+            escola = escolas.get(inep=inep)
+            NovoDispersaoProfessor.objects.create(
+                data = datetime.date.today().strftime('%Y-%m-%d'),
+                menor_sete = data['menor_sete'],
+                maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
+                maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
+                maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
+                maior_sessenta = data['maior_sessenta'] ,
 
-                    else:
-
-                        if label not in quants[inep]:
-                            quants[inep][label] = 0  
-                            quants[inep]['total_geral'] = 0  
-                    quants[inep][label] += 1
-                    quants[inep]['total'] += 1
-
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio'] 
+            )
             
-            for inep in quants:
-                data = quants[inep]
-                try:
-                    total_alunos_inep = alunos.filter(inep=inep)
-                    data['total_geral'] = len(total_alunos_inep)
-                    data
-                except Exception as e:
-                    pass
-
-            started=False
-            reports = []
-    
-            ########################
-            # GRAVA NO BANCO DE DADOS
-            ########################
-            for inep in quants:
-                data = quants[inep]
-                try:
-                    escola = escolas.get(inep=inep)
-                    NovoDispersaoAluno.objects.create(
-                        data = datetime.date.today().strftime('%Y-%m-%d'),
-                        menor_sete = data['menor_sete'],
-                        maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
-                        maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
-                        maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
-                        maior_sessenta = data['maior_sessenta'] ,
-
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio'] 
-                    )
-                    
-                    novo_ia =NovoIaAluno(
-                        data = datetime.date.today().strftime('%Y-%m-%d'),
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio'] ,
-                        total_alunos = data['total'],
-                        total_logaram = data['total_geral']
-                    )
-                    novo_ia.save()
+            novo_ia =NovoIaPRofessor(
+                data = datetime.date.today().strftime('%Y-%m-%d'),
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio'] ,
+                total_alunos = data['total_geral'],
+                total_logaram = data['total']
+            )
+            novo_ia.save()
 
 
-                    status = NovoStatusAluno.objects.get_or_create(
-                        inep = inep ,
-                        cre = escola.cre ,
-                        municipio = data['municipio']
-                    )[0]
-                    status.total_alunos = data['total']
-                    status.total_logaram = data['total_geral']
-                    status.save()
+            status = NovoStatusProfessor.objects.get_or_create(
+                inep = inep ,
+                cre = escola.cre ,
+                municipio = data['municipio']
+            )[0]
+            status.total_alunos = data['total_geral']
+            status.total_logaram = data['total']
+            status.save()
 
-                except Exception as e:
-                    print(e)
+        except Exception as e:
+            print(e)
                         
 
         
