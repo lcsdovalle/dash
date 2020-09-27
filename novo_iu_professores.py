@@ -163,12 +163,12 @@ if __name__ == "__main__":
                 municipio = escola.municipio,
                 cre = escola.cre,
                 p_um_dia = item.get('p_um_dia',0),
-                p_dois_dias = item.get('p_dois_dias',0),
-                p_tres_dias = item.get('p_tres_dias',0),
-                p_quatro_dias = item.get('p_quatro_dias',0),
-                p_cinco_dias = item.get('p_cinco_dias',0),
-                p_seis_dias = item.get('p_seis_dias',0),
-                p_sete_dias = item.get('p_sete_dias',0),
+                p_dois_dias = item.get('p_dois_dia',0),
+                p_tres_dias = item.get('p_tres_dia',0),
+                p_quatro_dias = item.get('p_quatro_dia',0),
+                p_cinco_dias = item.get('p_cinco_dia',0),
+                p_seis_dias = item.get('p_seis_dia',0),
+                p_sete_dias = item.get('p_sete_dia',0),
                 p_nenhum_dia = item.get('p_nenhum_dia',0)
             )
             iu

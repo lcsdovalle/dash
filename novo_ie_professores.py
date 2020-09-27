@@ -121,23 +121,29 @@ if __name__ == "__main__":
             fim = ""
             if 'ultimo' not in intervalo:
                 inicio = "{}T00:00:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
-                fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
+                fim = "2020-09-22T23:59:00Z" #.format(intervalo['fim'].strftime('%Y-%m-%d'))
             else:
                 inicio = "2020-06-01T00:00:00Z"
                 fim = "{}T23:59:00Z".format(intervalo['ultimo'].strftime('%Y-%m-%d'))
  
 
             if not started:
-                report = report_service.activities().list(userKey='all',applicationName='login',startTime=inicio,endTime=fim).execute()
+                report = report_service.activities().list(
+                    userKey='all',
+                    applicationName='login',
+                    orgUnitID='id:02zfhnk73768f3m',
+                    startTime=inicio,
+                    endTime=fim
+                    ).execute()
                 pageToken = report.get("nextPageToken")
                 reports += report.get("items")
                 started = True  
             else:
-                report = report_service.activities().list(userKey='all',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
+                report = report_service.activities().list(userKey='all',applicationName='login',orgUnitID='id:02zfhnk73768f3m', maxResults=1000,pageToken=pageToken).execute()
                 pageToken = report.get("nextPageToken")
                 reports += report.get("items")  
 
-            if len(report['items']) < 1000 or 'nextPageToken' not in report or 'items' not in report:
+            if 'nextPageToken' not in report or 'items' not in report:
                 break
         
 
@@ -194,8 +200,8 @@ if __name__ == "__main__":
                     if label not in quants[inep]:
                         quants[inep][label] = 0  
                         quants[inep]['total_geral'] = 0  
-                quants[inep][label] += 1
-                quants[inep]['total'] += 1
+                    quants[inep][label] += 1
+                    quants[inep]['total'] += 1
 
 
         started=False
@@ -203,15 +209,6 @@ if __name__ == "__main__":
     ########################
     # GRAVA TOTAL GERAL NO BANCO
     ########################
-    for inep in quants:
-        data = quants[inep]
-        try:
-            quants[dados['inep']]['total_geral'] = 0
-            total_alunos_inep = alunos.filter(inep=inep)
-            quants[inep]['total_geral'] = len(total_alunos_inep)
-            
-        except Exception as e:
-            pass
     for inep in quants:
         data = quants[inep]
         try:
@@ -229,17 +226,20 @@ if __name__ == "__main__":
             escola = escolas.get(inep=inep)
             NovoDispersaoProfessor.objects.create(
                 data = datetime.date.today().strftime('%Y-%m-%d'),
-                menor_sete = data['menor_sete'],
-                maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
-                maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
-                maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
-                maior_sessenta = data['maior_sessenta'] ,
+                menor_sete = data.get('menor_sete',0),
+                maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0),
+                maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0) ,
+                maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0) ,
+                maior_sessenta = data.get('maior_sessenta',0) ,
 
                 inep = inep ,
                 cre = escola.cre ,
                 municipio = data['municipio'] 
             )
-            
+        except Exception as e:
+            print(e)
+        
+        try:
             novo_ia =NovoIaPRofessor(
                 data = datetime.date.today().strftime('%Y-%m-%d'),
                 inep = inep ,
@@ -249,8 +249,10 @@ if __name__ == "__main__":
                 total_logaram = data['total']
             )
             novo_ia.save()
-
-
+        except Exception as e:
+            print(e)
+        
+        try:
             status = NovoStatusProfessor.objects.get_or_create(
                 inep = inep ,
                 cre = escola.cre ,
@@ -262,12 +264,12 @@ if __name__ == "__main__":
 
         except Exception as e:
             print(e)
-                        
-
-        
+                
 
 
 
-    
 
-    
+
+
+
+

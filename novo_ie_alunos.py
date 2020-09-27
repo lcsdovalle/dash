@@ -128,77 +128,77 @@ if __name__ == "__main__":
  
 
             if not started:
-                report = report_service.activities().list(userKey='all',applicationName='login',startTime=inicio,endTime=fim).execute()
+                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',startTime=inicio,endTime=fim).execute()
                 pageToken = report.get("nextPageToken")
                 reports += report.get("items")
                 started = True  
             else:
-                report = report_service.activities().list(userKey='all',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
+                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
                 pageToken = report.get("nextPageToken")
                 reports += report.get("items")  
 
-            if len(report['items']) < 1000 or 'nextPageToken' not in report or 'items' not in report:
+            if 'nextPageToken' not in report or 'items' not in report:
                 break
         
 
         
-            ########################
-            # CONTABILIZA OS DADOS POR USUÁRIOS
-            ########################
-            reports
-            contabilizador = {}  
-            for r in reports:
-                user = False
-                identificacao_unica_usuario = r.get('actor').get('email') #pega o email
-                data_acesso_usuario = r.get('id').get('time') # pega o time
-                adata_acesso = data_acesso_usuario.split('T')[0] # monta a data para comparação
-                
+        ########################
+        # CONTABILIZA OS DADOS POR USUÁRIOS
+        ########################
+        reports
+        contabilizador = {}  
+        for r in reports:
+            user = False
+            identificacao_unica_usuario = r.get('actor').get('email') #pega o email
+            data_acesso_usuario = r.get('id').get('time') # pega o time
+            adata_acesso = data_acesso_usuario.split('T')[0] # monta a data para comparação
+            
 
-                #verifica se é aluno ou professor
-                if identificacao_unica_usuario in todos_alunos:
-                    user = todos_alunos.get(identificacao_unica_usuario)
-                    role = 'Aluno'
-                elif identificacao_unica_usuario in todos_professores:    
-                    user = todos_professores.get(identificacao_unica_usuario)
-                    role='Professor'
-                else:
-                    continue
-                
-                # só processa se for aluno
-                # agrega o as datas por email
-                if user and role == 'Aluno' and user['email'] not in contabilizador and user['email'] not in trava:
-                    contabilizador[user['email']] = {
-                            'inep':user['inep'],
-                            'cre':user['cre'],
-                            'municipio':user['municipio']
-                        }
-                    trava[user['email']] = 'processado'
+            #verifica se é aluno ou professor
+            if identificacao_unica_usuario in todos_alunos:
+                user = todos_alunos.get(identificacao_unica_usuario)
+                role = 'Aluno'
+            elif identificacao_unica_usuario in todos_professores:    
+                user = todos_professores.get(identificacao_unica_usuario)
+                role='Professor'
+            else:
+                continue
+            
+            # só processa se for aluno
+            # agrega o as datas por email
+            if user and role == 'Aluno' and user['email'] not in contabilizador and user['email'] not in trava:
+                contabilizador[user['email']] = {
+                        'inep':user['inep'],
+                        'cre':user['cre'],
+                        'municipio':user['municipio']
+                    }
+                trava[user['email']] = 'processado'
                 
             
-            ########################
-            # CONTABILIZA OS DADOS POR INEP
-            ########################
-            for email in contabilizador:
-                dados = contabilizador[email]
-                if dados['inep'] not in quants:
-                    quants[dados['inep']] = {}
-                    quants[dados['inep']][label] = 0
-                    quants[dados['inep']]['cre'] = dados['cre']
-                    quants[dados['inep']]['municipio'] = dados['municipio']
-                    quants[dados['inep']][label] += 1
-                    quants[dados['inep']]['total'] = 0
-                    quants[dados['inep']]['total'] += 1
-                    
+        ########################
+        # CONTABILIZA OS DADOS POR INEP
+        ########################
+        for email in contabilizador:
+            dados = contabilizador[email]
+            if dados['inep'] not in quants:
+                quants[dados['inep']] = {}
+                quants[dados['inep']][label] = 0
+                quants[dados['inep']]['cre'] = dados['cre']
+                quants[dados['inep']]['municipio'] = dados['municipio']
+                quants[dados['inep']][label] += 1
+                quants[dados['inep']]['total'] = 0
+                quants[dados['inep']]['total'] += 1
+                
 
-                else:
-                    if label not in quants[dados['inep']]:
-                        quants[dados['inep']][label] = 0   
-                    quants[dados['inep']][label] += 1
-                    quants[dados['inep']]['total'] += 1
+            else:
+                if label not in quants[dados['inep']]:
+                    quants[dados['inep']][label] = 0   
+                quants[dados['inep']][label] += 1
+                quants[dados['inep']]['total'] += 1
 
 
-            started=False
-            reports = []
+        started=False
+        reports = []
         
     ########################
     # GRAVA TOTAL GERAL NO BANCO
@@ -206,7 +206,6 @@ if __name__ == "__main__":
     for inep in quants:
         data = quants[inep]
         try:
-            quants[dados['inep']]['total_geral'] = 0
             total_alunos_inep = alunos.filter(inep=inep)
             quants[inep]['total_geral'] = len(total_alunos_inep)
             
@@ -223,17 +222,20 @@ if __name__ == "__main__":
             escola = escolas.get(inep=inep)
             NovoDispersaoAluno.objects.create(
                 data = datetime.date.today().strftime('%Y-%m-%d'),
-                menor_sete = data['menor_sete'],
-                maior_sete_menor_quatorze = data['maior_sete_menor_quatorze'],
-                maior_quatorze_menor_trinta = data['maior_quatorze_menor_trinta'] ,
-                maior_trinta_menor_sessenta = data['maior_trinta_menor_sessenta'] ,
-                maior_sessenta = data['maior_sessenta'] ,
+                menor_sete = data.get('menor_sete',0),
+                maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0),
+                maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0),
+                maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0),
+                maior_sessenta = data.get('maior_sessenta',0),
 
                 inep = inep ,
                 cre = escola.cre ,
                 municipio = data['municipio'] 
             )
-            
+        except Exception as e:
+            print(e)
+        
+        try:            
             novo_ia =NovoIaAluno(
                 data = datetime.date.today().strftime('%Y-%m-%d'),
                 inep = inep ,
@@ -243,8 +245,11 @@ if __name__ == "__main__":
                 total_logaram = data['total']
             )
             novo_ia.save()
-
-
+        except Exception as e:
+            print(e)
+        
+        
+        try:   
             status = NovoStatusAluno.objects.get_or_create(
                 inep = inep ,
                 cre = escola.cre ,

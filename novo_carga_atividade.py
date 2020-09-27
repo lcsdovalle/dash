@@ -60,6 +60,21 @@ def execute(t):
         param = {}
         for a in atividades:
             try:
+                atividade_id = a.get('id')
+                turma_id = a.get('courseId')
+                try:
+                    alunos_atividade = service_class.courses().courseWork().studentSubmissions().list(
+                        courseId=turma_id,
+                        courseWorkId=atividade_id
+                    ).execute()
+                    alunos_atividade
+
+                    
+
+                except Exception as e:
+                    print(e)
+                    pass
+
 
                 a = Atividade.objects.create(
                     # title = a.get('title'),
