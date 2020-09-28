@@ -121,7 +121,7 @@ if __name__ == "__main__":
             fim = ""
             if 'ultimo' not in intervalo:
                 inicio = "{}T00:00:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
-                fim = "2020-09-22T23:59:00Z" #.format(intervalo['fim'].strftime('%Y-%m-%d'))
+                fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
             else:
                 inicio = "2020-06-01T00:00:00Z"
                 fim = "{}T23:59:00Z".format(intervalo['ultimo'].strftime('%Y-%m-%d'))
@@ -199,22 +199,22 @@ if __name__ == "__main__":
 
                     if label not in quants[inep]:
                         quants[inep][label] = 0  
-                        quants[inep]['total_geral'] = 0  
                     quants[inep][label] += 1
                     quants[inep]['total'] += 1
 
 
         started=False
         reports = []
+
+
     ########################
     # GRAVA TOTAL GERAL NO BANCO
     ########################
     for inep in quants:
         data = quants[inep]
         try:
-            total_alunos_inep = alunos.filter(inep=inep)
-            data['total_geral'] = len(total_alunos_inep)
-            data
+            total_profs_inep = professores.filter(inep__icontains=inep)
+            quants[inep]['total_geral'] = len(total_profs_inep)
         except Exception as e:
             pass
     ########################
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         except Exception as e:
             print(e)
-                
+                        
 
 
 
