@@ -38,16 +38,20 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas, Atividade,NovaConsolidacaoGeralProfessor, IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
 from pylib.pycsv import PyCsv
 from pylib.removeBarraN import removeBarraN
 import datetime
+from unidecode import unidecode
 
 if __name__ == "__main__":
     professores = Professor.objects.all()
 
-    prof = professores.get(email='luciane-amartins@educar.rs.gov.br')
-    print(prof.nome)
+    professores = NovaConsolidacaoGeralProfessor.objects.all()
+    for prof in professores:
+        prof.municipio = unidecode(prof.municipio)
+        prof.municipio
+        prof.save()

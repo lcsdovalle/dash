@@ -19,15 +19,20 @@ escopos = [
         # 'https://www.googleapis.com/auth/classroom.courses',
         # 'https://www.googleapis.com/auth/classroom.courses.readonly',
         # 'https://www.googleapis.com/auth/classroom.rosters',
-        # 'https://www.googleapis.com/auth/classroom.profile.emails',
-        # 'https://www.googleapis.com/auth/classroom.profile.photos',
-        # 'https://www.googleapis.com/auth/admin.reports.usage.readonly',
+        'https://www.googleapis.com/auth/admin.directory.user',
+        'https://www.googleapis.com/auth/classroom.courses',
+        'https://www.googleapis.com/auth/classroom.courses.readonly', 
         'https://www.googleapis.com/auth/admin.reports.audit.readonly',
         # 'https://www.googleapis.com/auth/classroom.coursework.students',
         # 'https://www.googleapis.com/auth/classroom.coursework.me.readonly',
         # 'https://www.googleapis.com/auth/classroom.coursework.me',
         # 'https://www.googleapis.com/auth/classroom.coursework.students.readonly',
     ]
+service_class = authService(
+    escopos,
+    'jsons/cred_rs2.json',
+    f"getedu@educar.rs.gov.br"
+    ).getService('classroom','v1')
 # service_class = authService(escopos,'jsons/cred_rs2.json','getedu@educar.rs.gov.br').getService('classroom','v1')
 report_service = authService(escopos,'jsons/cred_rs2.json',email='getedu@educar.rs.gov.br').getService('admin','reports_v1')
 def toStr(valor):
@@ -86,37 +91,29 @@ if __name__ == "__main__":
         "ultimo": datetime.date.today() - datetime.timedelta(days=61),
     }
   
-    intervalos = []
-    intervalos.append((intervalo_menor_sete_dias))
-    intervalos.append((intervalo_maior_sete_menor_quartorze))
-    intervalos.append((intervalo_maior_quatorze_menor_trinta))
-    intervalos.append((intervalo_maior_trinta_menor_sessenta))
-    intervalos.append((intervalo_maior_sessenta))
+  
+    intervalos = {}
+    intervalos['menor_sete'] = intervalo_menor_sete_dias
+    intervalos['maior_sete_menor_quatorze'] = intervalo_maior_sete_menor_quartorze
+    intervalos['maior_quatorze_menor_trinta'] = intervalo_maior_quatorze_menor_trinta
+    intervalos['maior_trinta_menor_sessenta'] = intervalo_maior_trinta_menor_sessenta
+    intervalos['maior_sessenta'] = intervalo_maior_sessenta
     # print(intervalos)
 
     reports = []
-    started = False
-    labels =[]
-    labels.append('menor_sete')
-    labels.append('maior_sete_menor_quatorze')
-    labels.append('maior_quatorze_menor_trinta')
-    labels.append('maior_trinta_menor_sessenta')
-    labels.append('maior_sessenta')
-
+ 
 
     ########################
     # PEGA OS DADOS DO GSUITE
     ########################
-    i = 0
     trava = {} 
-    agregacao = {}
     quants = {}
-    for intervalo in intervalos: #por intervalo
-        label = labels[i]
-        grupo = labels[i]
-        agregacao[label] = {}
-        i += 1
-        while True:
+
+    for label in intervalos: #por intervalo
+        pageToken = True
+        intervalo = intervalos[label]
+        started = False
+        while pageToken is not None:
             inicio = ""
             fim = ""
             if 'ultimo' not in intervalo:
@@ -128,20 +125,20 @@ if __name__ == "__main__":
  
 
             if not started:
-                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',startTime=inicio,endTime=fim).execute()
-                pageToken = report.get("nextPageToken")
-                reports += report.get("items")
-                started = True  
+                try:
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',startTime=inicio,endTime=fim).execute()
+                    pageToken = report.get("nextPageToken",None)
+                    reports += report.get("items")
+                    started = True
+                except Exception as e:
+                    continue  
             else:
-                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
-                pageToken = report.get("nextPageToken")
-                reports += report.get("items")  
-
-            if 'nextPageToken' not in report or 'items' not in report:
-                break
-        
-
-        
+                try:
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
+                    pageToken = report.get("nextPageToken",None)
+                    reports += report.get("items")  
+                except Exception as e:
+                    continue  
         ########################
         # CONTABILIZA OS DADOS POR USUÁRIOS
         ########################
@@ -180,6 +177,8 @@ if __name__ == "__main__":
         ########################
         for email in contabilizador:
             dados = contabilizador[email]
+ 
+
             if dados['inep'] not in quants:
                 quants[dados['inep']] = {}
                 quants[dados['inep']][label] = 0
@@ -195,7 +194,7 @@ if __name__ == "__main__":
                     quants[dados['inep']][label] = 0   
                 quants[dados['inep']][label] += 1
                 quants[dados['inep']]['total'] += 1
-
+   
 
         started=False
         reports = []
@@ -206,9 +205,19 @@ if __name__ == "__main__":
     for inep in quants:
         data = quants[inep]
         try:
+   
             total_alunos_inep = alunos.filter(inep=inep)
-            quants[inep]['total_geral'] = len(total_alunos_inep)
+            quants[inep]['total_geral'] =0
             
+            for al in total_alunos_inep:
+                try:
+                    salas = service_class.courses().list(
+                        studentId = al.email
+                    ).execute() 
+                    
+                    quants[inep]['total_geral'] += 1
+                except Exception as e:
+                    pass    
         except Exception as e:
             pass
     

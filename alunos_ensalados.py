@@ -37,30 +37,30 @@ def execute(usuario):
         ).execute()                                
     
         if len( salas.get('courses') ) > 0:
-            p = AlunoEnsalado.objects.get_or_create(
-                aluno_id = usuario.aluno_id
-            )[0]
 
             try:
-                escola = Escola.objects.get(inep = p.inep)
+                p = AlunoEnsalado.objects.get_or_create(
+                    aluno_id = usuario.aluno_id
+                )[0]
+                p.cre = usuario.cre
+                p.municipio = usuario.municipio
+                p.email = usuario.email
+                p.nome = usuario.nome
+                p.ultimo_acesso = usuario.ultimo_acesso
+                p.inep = '{}'.format(usuario.inep)
+                p.status = 1 if "1970" not in usuario.ultimo_acesso else 0
+                p.save() 
+                print("Aluno {} cadastrado pois está em {} turmas".format(p.nome,len(salas.get('courses')) ) )       
             except Exception as e:
                 print(e)
-            p.cre = escola.cre
-            p.escola = escola.nome
-            p.municipio = escola.municipio
-            p.email = usuario.email
-            p.nome = usuario.nome
-            p.ultimo_acesso = usuario.ultimo_acesso
-            p.inep = '{}'.format(usuario.inep)
-            p.status = 1 if "1970" not in usuario.ultimo_acesso else 0
-            p.save() 
-            print("Aluno {} cadastrado pois está em {} turmas".format(p.nome,len(salas.get('courses')) ) )
+                e
 
     except Exception as e:
         print(e)
 
+
 if __name__ == "__main__":
-    pool = Pool(4)
+    pool = Pool(3)
     todos_usuarios = Aluno.objects.all()
     print(len(todos_usuarios))
     resultados = []

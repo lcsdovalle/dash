@@ -68,28 +68,33 @@ if __name__ == "__main__":
     domingo = datetime.datetime.today() - datetime.timedelta(days=1)
     domingo = "{}T23:59:00Z".format(domingo.strftime('%Y-%m-%d'))
     sete_dias = "{}T00:00:00Z".format(sete_dias.strftime('%Y-%m-%d'))
+    
     reports = []
+    pageToken = True 
     started = False
+   
     print(sete_dias)
     print(domingo)
     print(datetime.date.today())
-    while True:
+    
+    while pageToken is not None:
         if not started:
-            report = report_service.activities().list(userKey='all',applicationName='login',startTime=sete_dias,endTime=domingo).execute()
-            pageToken = report.get("nextPageToken")
-            reports += report.get("items")
-            started = True  
+            try:
+                report = report_service.activities().list(userKey='all',applicationName='login',startTime=sete_dias,endTime=domingo).execute()
+                pageToken = report.get("nextPageToken",None)
+                reports += report.get("items")
+                started = True  
+            except Exception as e:
+                continue 
         else:
-            report = report_service.activities().list(userKey='all',applicationName='login', maxResults=1000,startTime=sete_dias,endTime=domingo,pageToken=pageToken).execute()
-            pageToken = report.get("nextPageToken")
-            reports += report.get("items")  
-        if len(report['items']) < 1000 or 'nextPageToken' not in report or 'items' not in report:
-            break
-            
+            try:
+                report = report_service.activities().list(userKey='all',applicationName='login', maxResults=1000,startTime=sete_dias,endTime=domingo,pageToken=pageToken).execute()
+                pageToken = report.get("nextPageToken",None)
+                reports += report.get("items")
+            except Exception as e:
+                continue  
 
-  
-    
-    
+        
     reports
     contabilizador = {}    
 

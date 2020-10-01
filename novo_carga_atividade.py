@@ -6,29 +6,27 @@ import signal
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade
+from dash.models import Turmas, Atividade, NovoCadastroAtividades
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
 from pylib.pycsv import PyCsv
 from pylib.removeBarraN import removeBarraN
+import datetime
 escopos = [
         'https://www.googleapis.com/auth/classroom.courses',
-        # 'https://www.googleapis.com/auth/classroom.courses.readonly',
-        # 'https://www.googleapis.com/auth/classroom.rosters',
-        # 'https://www.googleapis.com/auth/classroom.profile.emails',
-        # 'https://www.googleapis.com/auth/classroom.profile.photos',
         'https://www.googleapis.com/auth/classroom.coursework.students',
         'https://www.googleapis.com/auth/classroom.coursework.me.readonly',
         'https://www.googleapis.com/auth/classroom.coursework.me',
         'https://www.googleapis.com/auth/classroom.coursework.students.readonly',
     ]
 service_class = authService(escopos,'jsons/cred_rs2.json','getedu@educar.rs.gov.br').getService('classroom','v1')
-
+data_processamento = datetime.datetime.today().strftime('%Y-%m-%d')
 def carregar_atividades(turma_id):
     aa = service_class.courses().courseWork().list(
         courseId=turma_id,
-        pageSize=1
+        pageSize=1,
+        orderBy='updateTime desc'
     ).execute()
     
     pagetoken = aa.get('nextPageToken',False) 
@@ -39,19 +37,32 @@ def carregar_atividades(turma_id):
             atividades = service_class.courses().courseWork().list(
                 courseId=turma_id,
                 pageSize=500,
-                pageToken=pagetoken
+                pageToken=pagetoken,
+                orderBy='updateTime desc'
             ).execute()
             
             pagetoken = atividades.get('nextPageToken',False)
 
+
+
             if len(aa) == 1:
-                todas_atividades = aa.get('courseWokr') + atividades.get('courseWork')
+                todas_atividades = aa.get('courseWork') + atividades.get('courseWork')
                 aa['courseWork'] = 0
             else:
                 todas_atividades += atividades.get('courseWork')
             
-            if 'nextPageToken' not in atividades or not pagetoken or len(atividades) <500:
-                return todas_atividades
+            if 'nextPageToken' not in atividades or not pagetoken :
+                retornar = []
+                data_ref = datetime.datetime.now() - datetime.timedelta(days=30)
+                
+                for atv in todas_atividades:
+                    data =  atv.get('creationTime').split('T')[0]
+                    data = datetime.datetime.strptime(data,'%Y-%m-%d')
+
+                    if data.timestamp() > data_ref.timestamp():
+                        retornar.append(atv)
+
+                return retornar
                 break
 
 def execute(t):
@@ -65,30 +76,47 @@ def execute(t):
                 try:
                     alunos_atividade = service_class.courses().courseWork().studentSubmissions().list(
                         courseId=turma_id,
-                        courseWorkId=atividade_id
+                        courseWorkId=atividade_id,
+                        pageSize=500
                     ).execute()
                     alunos_atividade
-
                     
+                    qtd_vinculos = 0
+                    qtd_atrasos = 0
+                    qtd_corrigida = 0
+                    qtd_nao_iniciada = 0
+                    qtd_iniciada = 0
 
+                    if 'studentSubmissions' in alunos_atividade:
+                        for atv in alunos_atividade.get('studentSubmissions'):
+                           
+                            qtd_nao_iniciada += 1 if 'NEW' in atv['state'] or 'CREATED' in atv['state'] else 0
+                            qtd_atrasos += 1 if 'late' in atv else 0
+                            qtd_corrigida += 1 if 'assignedGrade' in atv or 'RETURNED' == atv['state']  else 0
+                            qtd_vinculos = len(alunos_atividade.get('studentSubmissions'))
+                            qtd_iniciada += 1 if 'NEW' not in atv['state'] and 'CREATED' not in atv['state'] else 0
+                        
+                        novo = NovoCadastroAtividades(
+                            data = data_processamento,
+                            data_publicacao = a.get('creationTime').split('T')[0],
+                            inep = t.inep,
+                            
+                            cre = t.cre,
+                            municipio = t.municipio,
+                            criador = a.get('creatorUserId'),
+                            atividade_id = a.get('id'),
+                            turma_id = t.turma_id,
+                            qtd_iniciada =qtd_iniciada,
+                            qtd_corrigida = qtd_corrigida,
+                            qtd_nao_iniciada = qtd_nao_iniciada,
+                            qtd_atrasos = qtd_atrasos,
+                            qtd_vinculos = qtd_vinculos
+                        )
+                        novo
+                        novo.save()
                 except Exception as e:
                     print(e)
                     pass
-
-
-                a = Atividade.objects.create(
-                    # title = a.get('title'),
-                    atividade_id = a.get('id'),
-                    state = a.get('state'),
-                    creator_id = a.get('creatorUserId'),
-                    criado = a.get('creationTime'),
-                    atualizado = a.get('updateTime'),
-                    turma_id = a.get('courseId'),
-                    inep=t.inep,
-                    municipio=t.municipio,
-                    cre=t.cre
-                )
-                print(a)                
             except Exception as e:
                 print(f"Erro: {str(e)}")
 
