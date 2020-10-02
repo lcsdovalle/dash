@@ -119,15 +119,20 @@ if __name__ == "__main__":
                 fim = "{}T23:59:00Z".format(intervalo['ultimo'].strftime('%Y-%m-%d'))
  
             if not started:
-                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk73768f3m',applicationName='login',startTime=inicio,endTime=fim).execute()
-                pageToken = report.get("nextPageToken",None)
-                reports += report.get("items")
-                started = True  
+                try:
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk73768f3m',applicationName='login',startTime=inicio,endTime=fim).execute()
+                    pageToken = report.get("nextPageToken",None)
+                    reports += report.get("items")
+                    started = True 
+                except Exception as e:
+                    continue 
             else:
-                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk73768f3m',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
-                pageToken = report.get("nextPageToken",None)
-                reports += report.get("items")  
-        
+                try:
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk73768f3m',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
+                    pageToken = report.get("nextPageToken",None)
+                    reports += report.get("items")  
+                except Exception as e:
+                    continue 
         ########################
         # CONTABILIZA OS DADOS POR USUÁRIOS
         ########################
@@ -173,14 +178,11 @@ if __name__ == "__main__":
                     quants[inep]['total'] = 0
                     quants[inep]['total'] += 1
                     
-
                 else:
                     if label not in quants[inep]:
                         quants[inep][label] = 0   
                     quants[inep][label] += 1
                     quants[inep]['total'] += 1
-
-
 
         started=False
         reports = []

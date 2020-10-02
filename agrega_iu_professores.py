@@ -130,10 +130,6 @@ if __name__ == "__main__":
     quants = {}
     for email in contabilizador:
         usuario = contabilizador[email]
-        quantitativos.add_row_csv([
-            email,
-            len(usuario['dias'])
-            ])
         for inep in usuario['inep'].split(','):
             if inep not in ineps:
                 ineps[inep] = {}
@@ -187,36 +183,36 @@ if __name__ == "__main__":
         #         email,
         #         dia,
         #         ])     
-    um = 0
-    dois = 0
-    tres = 0
-    quatro = 0
-    cinco = 0
-    seis = 0
-    sete = 0
-    for item in quants:
-        itemr = quants[item]
-        um += 1 if itemr == 1 else 0
-        dois += 1 if itemr == 2 else 0
-        tres += 1 if itemr == 3 else 0
-        quatro += 1 if itemr == 4 else 0
-        cinco += 1 if itemr == 5 else 0
-        seis += 1 if itemr == 6 else 0
-        sete += 1 if itemr == 7 else 0
+    # um = 0
+    # dois = 0
+    # tres = 0
+    # quatro = 0
+    # cinco = 0
+    # seis = 0
+    # sete = 0
+    # for item in quants:
+    #     itemr = quants[item]
+    #     um += 1 if itemr == 1 else 0
+    #     dois += 1 if itemr == 2 else 0
+    #     tres += 1 if itemr == 3 else 0
+    #     quatro += 1 if itemr == 4 else 0
+    #     cinco += 1 if itemr == 5 else 0
+    #     seis += 1 if itemr == 6 else 0
+    #     sete += 1 if itemr == 7 else 0
     
 
     
-    totais.add_row_csv([
-        'um','dois','tres','quatro','cinco','seis','sete'
-    ])
-    totais.add_row_csv([
-      um,dois,tres,quatro,cinco,seis,sete
-    ])
+    # totais.add_row_csv([
+    #     'um','dois','tres','quatro','cinco','seis','sete'
+    # ])
+    # totais.add_row_csv([
+    #   um,dois,tres,quatro,cinco,seis,sete
+    # ])
                 
-    desconto = datetime.timedelta(days=1)
+    # desconto = datetime.timedelta(days=1)
 
-    data_corrente = datetime.date.today() - desconto
-    data_corrente = data_corrente.strftime('%Y-%m-%d')    
+    # data_corrente = datetime.date.today() - desconto
+    # data_corrente = data_corrente.strftime('%Y-%m-%d')    
 
 
 

@@ -57,14 +57,14 @@ if __name__ == "__main__":
                             p.status = 1 if "1970" not in usuario.get("lastLoginTime") else 0
                             p.save()                       
 
-                            a = Acessos.objects.create(
-                                usuario=usuario.get('id'),
-                                acesso= (1 if odia in usuario['lastLoginTime'] else 0),
-                                data=odia,
-                                papel='Aluno',
-                                inep= inep
-                            )
-                            print(p)
+                            # a = Acessos.objects.create(
+                            #     usuario=usuario.get('id'),
+                            #     acesso= (1 if odia in usuario['lastLoginTime'] else 0),
+                            #     data=odia,
+                            #     papel='Aluno',
+                            #     inep= inep
+                            # )
+                            # print(p)
                 except Exception as e:
                     print(f"Falhou: {e}")
         except Exception as e:

@@ -5,7 +5,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas,NovoDispersaoAluno, NovoIaAluno, NovoStatusAluno, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas,NovoDispersaoAluno, AlunoEnsalado, NovoIaAluno, NovoStatusAluno, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -70,7 +70,9 @@ if __name__ == "__main__":
     ########################
     # CONSTRÓI OS INTERVALOS 
     ########################
-    hoje = datetime.datetime.today()   
+    hoje = datetime.datetime.today() 
+    hoje = hoje - datetime.timedelta(days=1)
+    hoje = hoje.strftime('%Y-%m-%d')
     intervalo_menor_sete_dias = {
         "inicio": datetime.date.today() - datetime.timedelta(days=7),
         "fim": datetime.date.today() - datetime.timedelta(days=1),
@@ -98,10 +100,8 @@ if __name__ == "__main__":
     intervalos['maior_quatorze_menor_trinta'] = intervalo_maior_quatorze_menor_trinta
     intervalos['maior_trinta_menor_sessenta'] = intervalo_maior_trinta_menor_sessenta
     intervalos['maior_sessenta'] = intervalo_maior_sessenta
-    # print(intervalos)
 
     reports = []
- 
 
     ########################
     # PEGA OS DADOS DO GSUITE
@@ -116,6 +116,7 @@ if __name__ == "__main__":
         while pageToken is not None:
             inicio = ""
             fim = ""
+            
             if 'ultimo' not in intervalo:
                 inicio = "{}T00:00:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
                 fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
@@ -155,9 +156,6 @@ if __name__ == "__main__":
             if identificacao_unica_usuario in todos_alunos:
                 user = todos_alunos.get(identificacao_unica_usuario)
                 role = 'Aluno'
-            elif identificacao_unica_usuario in todos_professores:    
-                user = todos_professores.get(identificacao_unica_usuario)
-                role='Professor'
             else:
                 continue
             
@@ -205,19 +203,8 @@ if __name__ == "__main__":
     for inep in quants:
         data = quants[inep]
         try:
-   
-            total_alunos_inep = alunos.filter(inep=inep)
-            quants[inep]['total_geral'] =0
-            
-            for al in total_alunos_inep:
-                try:
-                    salas = service_class.courses().list(
-                        studentId = al.email
-                    ).execute() 
-                    
-                    quants[inep]['total_geral'] += 1
-                except Exception as e:
-                    pass    
+            total_alunos_inep = AlunoEnsalado.objects.filter(inep=inep)
+            quants[inep]['total_geral'] = len(total_alunos_inep)
         except Exception as e:
             pass
     
@@ -228,9 +215,11 @@ if __name__ == "__main__":
     for inep in quants:
         data = quants[inep]
         try:
+            hoje = datetime.datetime.today() - datetime.timedelta(days=1)
+            hoje = hoje.strftime('%Y-%m-%d')
             escola = escolas.get(inep=inep)
             NovoDispersaoAluno.objects.create(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data = hoje,
                 menor_sete = data.get('menor_sete',0),
                 maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0),
                 maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0),
@@ -246,7 +235,7 @@ if __name__ == "__main__":
         
         try:            
             novo_ia =NovoIaAluno(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data =hoje,
                 inep = inep ,
                 cre = escola.cre ,
                 municipio = data['municipio'] ,

@@ -49,8 +49,10 @@ for escola in escolas:
     todas_escolas[inep]['municipio'] = escola.municipio
 
 meets = {}
-inicio = "2020-09-29T00:00:00Z"
-fim = "2020-09-29T23:59:00Z"
+dia = datetime.date.today() - datetime.timedelta(days=1)
+dia = dia.strftime('%Y-%m-%d')
+inicio = "{}T00:00:00Z".format(dia)
+fim = "{}T23:59:00Z".format(dia)
 result = report_service.activities().list(applicationName="meet", userKey="all", startTime=inicio, endTime=fim, maxResults=1000).execute()
 nextPageToken = result.get("nextPageToken")
 for x in result['items']:

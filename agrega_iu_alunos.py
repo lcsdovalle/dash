@@ -58,10 +58,10 @@ if __name__ == "__main__":
         todos_alunos[aluno.email]['email'] = aluno.email
         todos_alunos[aluno.email]['inep'] = aluno.inep
 
-    for professor in professores:
-        todos_professores[professor.email] = {}
-        todos_professores[professor.email]['email'] = professor.email
-        todos_professores[professor.email]['inep'] = professor.inep
+    # for professor in professores:
+    #     todos_professores[professor.email] = {}
+    #     todos_professores[professor.email]['email'] = professor.email
+    #     todos_professores[professor.email]['inep'] = professor.inep
 
     sete_dias = datetime.datetime.today() - datetime.timedelta(days=7)
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     while pageToken is not None:
         if not started:
             try:
-                report = report_service.activities().list(userKey='all',applicationName='login',startTime=sete_dias,endTime=domingo).execute()
+                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',startTime=sete_dias,endTime=domingo).execute()
                 pageToken = report.get("nextPageToken",None)
                 reports += report.get("items")
                 started = True
@@ -85,7 +85,7 @@ if __name__ == "__main__":
                 continue  
         else:
             try:
-                report = report_service.activities().list(userKey='all',applicationName='login', maxResults=1000,startTime=sete_dias,endTime=domingo,pageToken=pageToken).execute()
+                report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login', maxResults=1000,startTime=sete_dias,endTime=domingo,pageToken=pageToken).execute()
                 pageToken = report.get("nextPageToken",None)
                 reports += report.get("items")  
             except Exception as e:
@@ -108,9 +108,7 @@ if __name__ == "__main__":
         if identificacao_unica_usuario in todos_alunos:
             user = todos_alunos.get(identificacao_unica_usuario)
             role = 'Aluno'
-        elif identificacao_unica_usuario in todos_professores:    
-            user = todos_professores.get(identificacao_unica_usuario)
-            role='Professor'
+
         else:
             continue
 
@@ -131,10 +129,6 @@ if __name__ == "__main__":
     quants = {}
     for email in contabilizador:
         usuario = contabilizador[email]
-        quantitativos.add_row_csv([
-            email,
-            len(usuario['dias'])
-            ])
         
         if usuario['inep'] not in ineps:
             ineps[usuario['inep']] = {}
@@ -188,36 +182,36 @@ if __name__ == "__main__":
         #         email,
         #         dia,
         #         ])     
-    um = 0
-    dois = 0
-    tres = 0
-    quatro = 0
-    cinco = 0
-    seis = 0
-    sete = 0
-    for item in quants:
-        itemr = quants[item]
-        um += 1 if itemr == 1 else 0
-        dois += 1 if itemr == 2 else 0
-        tres += 1 if itemr == 3 else 0
-        quatro += 1 if itemr == 4 else 0
-        cinco += 1 if itemr == 5 else 0
-        seis += 1 if itemr == 6 else 0
-        sete += 1 if itemr == 7 else 0
+    # um = 0
+    # dois = 0
+    # tres = 0
+    # quatro = 0
+    # cinco = 0
+    # seis = 0
+    # sete = 0
+    # for item in quants:
+    #     itemr = quants[item]
+    #     um += 1 if itemr == 1 else 0
+    #     dois += 1 if itemr == 2 else 0
+    #     tres += 1 if itemr == 3 else 0
+    #     quatro += 1 if itemr == 4 else 0
+    #     cinco += 1 if itemr == 5 else 0
+    #     seis += 1 if itemr == 6 else 0
+    #     sete += 1 if itemr == 7 else 0
     
 
     
-    totais.add_row_csv([
-        'um','dois','tres','quatro','cinco','seis','sete'
-    ])
-    totais.add_row_csv([
-      um,dois,tres,quatro,cinco,seis,sete
-    ])
+    # totais.add_row_csv([
+    #     'um','dois','tres','quatro','cinco','seis','sete'
+    # ])
+    # totais.add_row_csv([
+    #   um,dois,tres,quatro,cinco,seis,sete
+    # ])
                 
-    desconto = datetime.timedelta(days=1)
+    # desconto = datetime.timedelta(days=1)
 
-    data_corrente = datetime.date.today() - desconto
-    data_corrente = data_corrente.strftime('%Y-%m-%d')    
+    # data_corrente = datetime.date.today() - desconto
+    # data_corrente = data_corrente.strftime('%Y-%m-%d')    
 
 
 
