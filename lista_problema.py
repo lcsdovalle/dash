@@ -5,7 +5,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas,NovoDispersaoAluno, UltimoStatusAlunos,NovaConsolidacaoGeralAluno, NovoIaAluno,NovoIuAluno, NovaAgrecacaoIaAluno, NovoStatusAluno, AlunoEnsalado, NovoIaAluno, NovoStatusAluno, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas,NovoDispersaoAluno, NovaConsolidacaoGeralProfessor, UltimoStatusAlunos,NovaConsolidacaoGeralAluno, NovoIaAluno,NovoIuAluno, NovaAgrecacaoIaAluno, NovoStatusAluno, AlunoEnsalado, NovoIaAluno, NovoStatusAluno, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -18,10 +18,10 @@ if __name__ == "__main__":
     # MONTA OS CSVS
     resultado = PyCsv("resultado")
     quantitativos = PyCsv("quantitativos")
-    consolidado = PyCsv("lista-ticket")
+    consolidado = PyCsv("lista-ticket-professor")
 
     # CARREGA NA MEMÓRIA O CADASTRO DOS ALUNOS PROFESSORES E ESCOLAS PARA AGILIZAR
-    dados = NovaConsolidacaoGeralAluno.objects.filter(data='2020-09-30')
+    dados = NovaConsolidacaoGeralProfessor.objects.filter(data='2020-10-04')
 
     for item in dados:
         try:
@@ -39,14 +39,15 @@ if __name__ == "__main__":
                 item.ie,
                 item.total_alunos,
                 item.total_logaram,
-                item.a_um_dia,
-                item.a_dois_dias,
-                item.a_tres_dias,
-                item.a_quatro_dias,
-                item.a_cinco_dias,
-                item.a_seis_dias,
-                item.a_sete_dias,
-                item.a_nenhum_dia
+                item.p_um_dia,
+                item.p_dois_dias,
+                item.p_tres_dias,
+                item.p_quatro_dias,
+                item.p_cinco_dias,
+                item.p_seis_dias,
+                item.p_sete_dias,
+                item.p_nenhum_dia,
+                item.status_professor
             ])
         except Exception as e:
             print(e)

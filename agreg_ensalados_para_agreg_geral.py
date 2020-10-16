@@ -29,11 +29,11 @@ if __name__ == "__main__":
         try:
             alunos_inep = alunos.filter(inep=item.inep)
 
-            dt = datetime.date.today()
+            dt = datetime.date.today() #- datetime.timedelta(days=1)
             n = NovaAgrecacaoIaAluno.objects.get_or_create(inep = item.inep)[0]
             n.cre = item.cre
             n.municipio = item.municipio
-            n.total_ensalados = len(alunos_inep)
+            n.total_ensalados = len(alunos_inep) if alunos_inep is not None and len(alunos_inep) > 0 else 0
             n.data = dt.strftime('%Y-%m-%d')
             n.total_logados = item.total_logaram
             n.save()

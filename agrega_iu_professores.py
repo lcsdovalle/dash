@@ -119,12 +119,9 @@ if __name__ == "__main__":
                 contabilizador[user['email']] = {}
                 contabilizador[user['email']]['dias'] = []
                 contabilizador[user['email']]['inep'] = user['inep']
-
     
             if adata_acesso not in contabilizador[user['email']]['dias'] and adata_acesso in intervalo:
                 contabilizador[user['email']]['dias'].append(str(adata_acesso))
-
-
 
     ineps = {}
     quants = {}
@@ -176,47 +173,7 @@ if __name__ == "__main__":
             iu.save()
         except Exception as e:
             print(e)
-        # quants[email] = len(usuario['dias'])
-
-        # for dia in usuario['dias']:
-        #     resultado.add_row_csv([
-        #         email,
-        #         dia,
-        #         ])     
-    # um = 0
-    # dois = 0
-    # tres = 0
-    # quatro = 0
-    # cinco = 0
-    # seis = 0
-    # sete = 0
-    # for item in quants:
-    #     itemr = quants[item]
-    #     um += 1 if itemr == 1 else 0
-    #     dois += 1 if itemr == 2 else 0
-    #     tres += 1 if itemr == 3 else 0
-    #     quatro += 1 if itemr == 4 else 0
-    #     cinco += 1 if itemr == 5 else 0
-    #     seis += 1 if itemr == 6 else 0
-    #     sete += 1 if itemr == 7 else 0
-    
-
-    
-    # totais.add_row_csv([
-    #     'um','dois','tres','quatro','cinco','seis','sete'
-    # ])
-    # totais.add_row_csv([
-    #   um,dois,tres,quatro,cinco,seis,sete
-    # ])
-                
-    # desconto = datetime.timedelta(days=1)
-
-    # data_corrente = datetime.date.today() - desconto
-    # data_corrente = data_corrente.strftime('%Y-%m-%d')    
-
-
-
-     
+ 
 
 
 

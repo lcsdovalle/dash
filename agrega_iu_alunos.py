@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     sete_dias = datetime.datetime.today() - datetime.timedelta(days=7)
 
-    domingo = datetime.datetime.today() - datetime.timedelta(days=1)
+    domingo = datetime.datetime.today() 
     domingo = "{}T23:59:00Z".format(domingo.strftime('%Y-%m-%d'))
     sete_dias = "{}T00:00:00Z".format(sete_dias.strftime('%Y-%m-%d'))
     reports = []

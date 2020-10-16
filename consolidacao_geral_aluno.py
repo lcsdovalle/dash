@@ -27,9 +27,11 @@ if __name__ == "__main__":
     ie_aluno = {}
     ia_aluno = {}
     iu_aluno = {}
-
+    
+    hoje = datetime.datetime.today() # - datetime.timedelta(days=1)
+    hoje = hoje.strftime('%Y-%m-%d')
     #IE
-    aluno_ie_inep = NovoDispersaoAluno.objects.filter(data='2020-09-28')   
+    aluno_ie_inep = NovoDispersaoAluno.objects.filter(data=hoje)   
     for item in aluno_ie_inep:
         ie_aluno[item.inep] = {}
         ie_aluno[item.inep]['menor_sete'] = item.menor_sete
@@ -48,15 +50,17 @@ if __name__ == "__main__":
                 item.maior_sessenta 
             ) * 100 or 0
     #IA
-    aluno_ia_inep = NovoIaAluno.objects.filter(data='2020-09-28')
+    aluno_ia_inep = NovoIaAluno.objects.filter(data=hoje)
     for item in aluno_ia_inep:
         ia_aluno[item.inep] = {}
         ia_aluno[item.inep]['total_logaram'] = item.total_logaram
         ia_aluno[item.inep]['total_alunos'] = item.total_alunos
-        ia_aluno[item.inep]['ia'] =  ( item.total_logaram / item.total_alunos ) * 100
+        r = item.total_alunos if item.total_logaram > item.total_logaram else item.total_logaram
+      
+        ia_aluno[item.inep]['ia'] =  r * 100
 
 
-    aluno_iu_inep = NovoIuAluno.objects.filter(data='2020-09-28') 
+    aluno_iu_inep = NovoIuAluno.objects.filter(data=hoje) 
     for item in aluno_iu_inep:
         iu_aluno[item.inep] = {}
         iu_aluno[item.inep]['a_um_dia'] = item.a_um_dia
@@ -85,7 +89,7 @@ if __name__ == "__main__":
                     item.a_sete_dias
                 ) * 100
         )
-    d = datetime.date.today() - datetime.timedelta(days=1)
+    d = datetime.date.today() #- datetime.timedelta(days=1)
     d = d.strftime('%Y-%m-%d')
     for escola in escolas:
         Gravar = NovaConsolidacaoGeralAluno()
@@ -162,7 +166,7 @@ if __name__ == "__main__":
         Gravar.save()
 
 
-    hoje = datetime.date.today() - datetime.timedelta(days=1)
+    hoje = datetime.date.today() #- datetime.timedelta(days=1)
     hoje = hoje.strftime('%Y-%m-%d')
     
     dados = NovaConsolidacaoGeralAluno.objects.filter(data=hoje)

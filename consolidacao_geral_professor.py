@@ -23,7 +23,7 @@ if __name__ == "__main__":
     ie_aluno = {}
     ia_aluno = {}
     iu_aluno = {}
-    ontem = datetime.datetime.today()
+    ontem = datetime.datetime.today() #- datetime.timedelta(days=1)
     ontem = ontem.strftime('%Y-%m-%d')
     #IE
     aluno_ie_inep = NovoDispersaoProfessor.objects.filter(data=ontem)   
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                     item.p_sete_dias
                 ) * 100
         )
-    d = datetime.date.today()
+    d = datetime.date.today() # - datetime.timedelta(days=1)
     d = d.strftime('%Y-%m-%d')
     for escola in escolas:
         Gravar = NovaConsolidacaoGeralProfessor()
@@ -106,17 +106,16 @@ if __name__ == "__main__":
             Gravar.ie = int(dados_ie.get('ie',0))
         except Exception as e:
             print(e)
+           
             Gravar.menor_sete = 0
             Gravar.maior_sete_menor_quatorze = 0
             Gravar.maior_quatorze_menor_trinta = 0
             Gravar.maior_trinta_menor_sessenta = 0
             Gravar.maior_sessenta = 0
-            Gravar.ie = int(dados_ie.get('ie',0))
+            Gravar.ie = 0
             
         #IA
         try:
-
-
             dados_ia = ia_aluno[escola.inep]
             ia = dados_ia.get('ia',0)
             Gravar.total_alunos = dados_ia.get('total_alunos',0)
@@ -124,9 +123,10 @@ if __name__ == "__main__":
             Gravar.ia = int(dados_ia.get('ia',0))
         except Exception as e:
             print(e)   
+           
             Gravar.total_alunos = 0
             Gravar.total_logaram = 0
-            Gravar.ia = int(dados_ia.get('ia',0))
+            Gravar.ia = 0
        
         
         #IU
@@ -144,6 +144,7 @@ if __name__ == "__main__":
             Gravar.iu = int(dados_iu.get('iu',0))
         except Exception as e:
             print(e)    
+          
             Gravar.p_um_dia = 0
             Gravar.p_dois_dias =0
             Gravar.p_tres_dias = 0
@@ -152,14 +153,14 @@ if __name__ == "__main__":
             Gravar.p_seis_dias = 0
             Gravar.p_sete_dias = 0
             Gravar.p_nenhum_dia = 0
-            Gravar.iu = int(dados_iu.get('iu',0))
+            Gravar.iu = 0
         
 
         Gravar.status_professor = 0
         Gravar.save()
 
 
-    hoje = datetime.date.today()
+    hoje = datetime.date.today()# - datetime.timedelta(days=1)
     hoje = hoje.strftime('%Y-%m-%d')
     
     dados = NovaConsolidacaoGeralProfessor.objects.filter(data=hoje)
@@ -191,21 +192,22 @@ if __name__ == "__main__":
         indicadores.append(status.get('ie',0) / total) 
         indicadores.append(status.get('iu',0) / total) 
         indicadores.sort()
-        
-        fator_determinante = indicadores[0]
-        
-        if fator_determinante < 40:
-            cor = '1'
-        elif fator_determinante > 40 and fator_determinante <70:
-            cor = '2'
-        elif fator_determinante >= 70:
-            cor = '3' 
 
-        cor
-        for item in todos:
-            item.status_professor = str(cor)
-            item.save()
+        try:
+            fator_determinante = indicadores[0]
+            if fator_determinante < 40:
+                cor = '1'
+            elif fator_determinante > 40 and fator_determinante <70:
+                cor = '2'
+            elif fator_determinante >= 70:
+                cor = '3' 
 
+            cor
+            for item in todos:
+                item.status_professor = str(cor)
+                item.save()
+        except:
+            pass
     Ultimo = NovaConsolidacaoGeralProfessor.objects.filter(data=hoje)
 
     for linha in Ultimo:

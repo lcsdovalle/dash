@@ -70,8 +70,8 @@ if __name__ == "__main__":
     ########################
     # CONSTRÓI OS INTERVALOS 
     ########################
-    hoje = datetime.datetime.today() 
-    hoje = hoje - datetime.timedelta(days=1)
+    hoje = datetime.datetime.today() - datetime.timedelta(days=1)
+    hoje = hoje #- datetime.timedelta(days=1)
     hoje = hoje.strftime('%Y-%m-%d')
     intervalo_menor_sete_dias = {
         "inicio": datetime.date.today() - datetime.timedelta(days=7),
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     for inep in quants:
         data = quants[inep]
         try:
-            hoje = datetime.datetime.today() - datetime.timedelta(days=1)
+            hoje = datetime.datetime.today()
             hoje = hoje.strftime('%Y-%m-%d')
             escola = escolas.get(inep=inep)
             NovoDispersaoAluno.objects.create(

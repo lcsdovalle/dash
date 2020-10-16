@@ -63,7 +63,7 @@ if __name__ == "__main__":
     ########################
     # CONSTRÓI OS INTERVALOS 
     ########################
-    hoje = datetime.datetime.today()   
+    hoje = datetime.datetime.today()   - datetime.timedelta(days=1)
     intervalo_menor_sete_dias = {
         "inicio": datetime.date.today() - datetime.timedelta(days=7),
         "fim": datetime.date.today() - datetime.timedelta(days=1),

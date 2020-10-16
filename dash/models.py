@@ -650,3 +650,24 @@ class UltimoStatusProfessor(models.Model):
     #IA
     total_alunos = models.IntegerField('Aluno um dia',blank=True,null=True)
     total_logaram = models.IntegerField('Aluno dois dias',blank=True,null=True)
+
+
+class FuncaoDocente(models.Model):
+    cre = models.CharField("Cre",null=True,blank=True,max_length=254)
+    municipio = models.CharField("Município",null=True,blank=True,max_length=254)
+    inep = models.CharField("Inep",max_length=100, null=True, blank=True)
+    nome = models.CharField('Name', max_length=255, null=True, blank=True)
+    email = models.EmailField('Email', max_length=254, null=True, blank=True)
+    professor_id = models.CharField('Id', max_length=200)
+
+    ultimo_acesso = models.DateField("Último acesso",default=timezone.now)
+    primeiro_acesso = models.DateField("Primeiro acesso",default=timezone.now)
+    
+    acessos_ultima_semana = models.BigIntegerField("Acessos na última semana",null=True, blank=True)
+    acessos_desde_inicio = models.BigIntegerField("Acessos desde inicio",null=True, blank=True) 
+    total_atividades = models.BigIntegerField("Total atividades",null=True, blank=True) 
+    atividades_ultima_semana = models.BigIntegerField("Atividades última semana",null=True, blank=True) 
+    meets_totais = models.BigIntegerField("Meets totais",null=True, blank=True) 
+    meets_ultima_semana = models.BigIntegerField("Meets última semana",null=True, blank=True) 
+ 
+
