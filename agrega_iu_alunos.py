@@ -5,7 +5,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade,IaIndicadorAluno, NovoIuAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas, Atividade,IaIndicadorAluno, AlunoEnsalado, NovoIuAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -37,19 +37,23 @@ if __name__ == "__main__":
     resultado = PyCsv("resultado")
     quantitativos = PyCsv("quantitativos")
     totais = PyCsv("totais")
-    hoje = datetime.datetime.today()   
+    hoje = datetime.datetime.today() - datetime.timedelta(days=12)
+    sete_dias = hoje - datetime.timedelta(days=7)
     intervalo = [
-        datetime.date.today() - datetime.timedelta(days=7),
-        datetime.date.today() - datetime.timedelta(days=6),
-        datetime.date.today() - datetime.timedelta(days=5),
-        datetime.date.today() - datetime.timedelta(days=4),
-        datetime.date.today() - datetime.timedelta(days=3),
-        datetime.date.today() - datetime.timedelta(days=2),
-        datetime.date.today() - datetime.timedelta(days=1)
+        hoje - datetime.timedelta(days=7),
+        hoje - datetime.timedelta(days=8),
+        hoje - datetime.timedelta(days=6),
+        hoje - datetime.timedelta(days=5),
+        hoje - datetime.timedelta(days=4),
+        hoje - datetime.timedelta(days=3),
+        hoje - datetime.timedelta(days=2),
+        hoje - datetime.timedelta(days=1)
+        
     ]
-    intervalo = list(map(toStr,intervalo))     
+    intervalo = list(map(toStr,intervalo))
+    print(hoje)     
     print(intervalo)
-    alunos = Aluno.objects.all()
+    alunos = AlunoEnsalado.objects.all()
     professores = Professor.objects.all()
     todos_alunos = {}
     todos_professores = {}
@@ -58,14 +62,8 @@ if __name__ == "__main__":
         todos_alunos[aluno.email]['email'] = aluno.email
         todos_alunos[aluno.email]['inep'] = aluno.inep
 
-    # for professor in professores:
-    #     todos_professores[professor.email] = {}
-    #     todos_professores[professor.email]['email'] = professor.email
-    #     todos_professores[professor.email]['inep'] = professor.inep
 
-    sete_dias = datetime.datetime.today() - datetime.timedelta(days=7)
-
-    domingo = datetime.datetime.today() 
+    domingo = hoje #- datetime.timedelta(days=1) # - datetime.timedelta(days=1)
     domingo = "{}T23:59:00Z".format(domingo.strftime('%Y-%m-%d'))
     sete_dias = "{}T00:00:00Z".format(sete_dias.strftime('%Y-%m-%d'))
     reports = []
@@ -91,10 +89,6 @@ if __name__ == "__main__":
             except Exception as e:
                 continue  
 
-            
-
-  
-    
     
     reports
     contabilizador = {}    
@@ -152,12 +146,14 @@ if __name__ == "__main__":
    
    
     escolas = Escola.objects.all()
+    
+    print(hoje)
     for inep in ineps:
         item = ineps[inep]
         try:
             escola = escolas.get(inep=inep)
             iu =  NovoIuAluno(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data = '2020-11-01', #datetime.datetime.today().strftime('%Y-%m-%d'),
                 inep = inep,
                 escola = escola.nome,
                 municipio = escola.municipio,
@@ -175,43 +171,6 @@ if __name__ == "__main__":
             iu.save()
         except Exception as e:
             print(e)
-        # quants[email] = len(usuario['dias'])
-
-        # for dia in usuario['dias']:
-        #     resultado.add_row_csv([
-        #         email,
-        #         dia,
-        #         ])     
-    # um = 0
-    # dois = 0
-    # tres = 0
-    # quatro = 0
-    # cinco = 0
-    # seis = 0
-    # sete = 0
-    # for item in quants:
-    #     itemr = quants[item]
-    #     um += 1 if itemr == 1 else 0
-    #     dois += 1 if itemr == 2 else 0
-    #     tres += 1 if itemr == 3 else 0
-    #     quatro += 1 if itemr == 4 else 0
-    #     cinco += 1 if itemr == 5 else 0
-    #     seis += 1 if itemr == 6 else 0
-    #     sete += 1 if itemr == 7 else 0
-    
-
-    
-    # totais.add_row_csv([
-    #     'um','dois','tres','quatro','cinco','seis','sete'
-    # ])
-    # totais.add_row_csv([
-    #   um,dois,tres,quatro,cinco,seis,sete
-    # ])
-                
-    # desconto = datetime.timedelta(days=1)
-
-    # data_corrente = datetime.date.today() - desconto
-    # data_corrente = data_corrente.strftime('%Y-%m-%d')    
 
 
 

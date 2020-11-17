@@ -96,24 +96,27 @@ def execute(t):
                             qtd_vinculos = len(alunos_atividade.get('studentSubmissions'))
                             qtd_iniciada += 1 if 'NEW' not in atv['state'] and 'CREATED' not in atv['state'] else 0
                         
-                        novo = NovoCadastroAtividades(
-                            data = data_processamento,
-                            data_publicacao = a.get('creationTime').split('T')[0],
-                            inep = t.inep,
-                            
-                            cre = t.cre,
-                            municipio = t.municipio,
-                            criador = a.get('creatorUserId'),
-                            atividade_id = a.get('id'),
-                            turma_id = t.turma_id,
-                            qtd_iniciada =qtd_iniciada,
-                            qtd_corrigida = qtd_corrigida,
-                            qtd_nao_iniciada = qtd_nao_iniciada,
-                            qtd_atrasos = qtd_atrasos,
-                            qtd_vinculos = qtd_vinculos
-                        )
+                        novo = NovoCadastroAtividades.objects.get_or_create(
+                            atividade_id = a.get('id')
+
+                        )[0]
+                        novo.data = data_processamento
+                        novo.data_publicacao = a.get('creationTime').split('T')[0]
+                        novo.inep = t.inep
+                        
+                        novo.cre = t.cre
+                        novo.municipio = t.municipio
+                        novo.criador = a.get('creatorUserId')
+                        novo.turma_id = t.turma_id
+                        novo.qtd_iniciada =qtd_iniciada
+                        novo.qtd_corrigida = qtd_corrigida
+                        novo.qtd_nao_iniciada = qtd_nao_iniciada
+                        novo.qtd_atrasos = qtd_atrasos
+                        novo.qtd_vinculos = qtd_vinculos
+                        
                         novo
                         novo.save()
+                        print(f"Atividade {a.get('id')} atualizada/criada com sucesso!")
                 except Exception as e:
                     print(e)
                     pass

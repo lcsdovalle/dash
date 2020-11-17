@@ -4,7 +4,7 @@ import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
-from dash.models import Turmas, AlunoEnsalado, NovoDispersaoProfessor,FuncaoDocente, Meet,Atividade, NovoIaPRofessor, NovoStatusProfessor, NovoIuProfessor, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno, NovaConsolidacaoGeralProfessor
+from dash.models import Turmas, AlunoEnsalado,NovaConsolidacaoGeralAluno, NovaConsolidacaoGeralProfessor, NovoDispersaoProfessor,FuncaoDocente, Meet,Atividade, NovoIaPRofessor, NovoStatusProfessor, NovoIuProfessor, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno, NovaConsolidacaoGeralProfessor
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -28,9 +28,9 @@ def toStr(valor):
 
 if __name__ == "__main__":
 
-    relatorio = PyCsv('relatorio_prof_emedio')
+    relatorio = PyCsv('lista_consolidada_novembro_alunos')
     escolas = PyCsv("escolas_ensino_medio").get_content()
-    consolidado = NovaConsolidacaoGeralProfessor.objects.all()
+    consolidado = NovaConsolidacaoGeralAluno.objects.all()
     ineps_ok = {}
     for e in escolas:
         if e[0] not in ineps_ok:
@@ -57,14 +57,14 @@ if __name__ == "__main__":
                 dados.maior_quatorze_menor_trinta,
                 dados.maior_trinta_menor_sessenta,
                 dados.maior_sessenta,
-                dados.status_professor,
-                dados.p_um_dia,
-                dados.p_dois_dias,
-                dados.p_tres_dias,
-                dados.p_quatro_dias,
-                dados.p_cinco_dias,
-                dados.p_seis_dias,
-                dados.p_sete_dias,
+                dados.status_aluno,
+                dados.a_um_dia,
+                dados.a_dois_dias,
+                dados.a_tres_dias,
+                dados.a_quatro_dias,
+                dados.a_cinco_dias,
+                dados.a_seis_dias,
+                dados.a_sete_dias,
 
                 #IA
                 dados.total_alunos,

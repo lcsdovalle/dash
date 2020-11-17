@@ -38,7 +38,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
 
-from dash.models import Turmas, Atividade,NovaConsolidacaoGeralProfessor, IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import UltimoStatusAlunos, UltimoStatusProfessor
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
@@ -48,10 +48,22 @@ import datetime
 from unidecode import unidecode
 
 if __name__ == "__main__":
-    professores = Professor.objects.all()
+    localizacao = PyCsv('listas/localescolas').get_content()
+    for local in localizacao:
+        try:
+            infor = UltimoStatusProfessor.objects.get(inep__exact=local[1])
+            lat = local[8].replace(".","")
+            lon = local[9].replace(".","")
 
-    professores = NovaConsolidacaoGeralProfessor.objects.all()
-    for prof in professores:
-        prof.municipio = unidecode(prof.municipio)
-        prof.municipio
-        prof.save()
+            lat1 = lat[:3]
+            lat2 = lat[3:]
+
+            lon1 = lon[:3]
+            lon2 = lon[3:]
+            
+            lat = ".".join([lat1,lat2])
+            lon = ".".join([lon1,lon2])
+            infor.lat_lon = "{},{}".format(lat,lon)
+            infor.save()
+        except Exception as e:
+            print(e)

@@ -4,15 +4,13 @@ import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dashboard.settings')
 django.setup()
-from dash.models import Turmas,NovoDispersaoProfessor, NovoIaPRofessor, NovoStatusProfessor, NovoIuProfessor, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
+from dash.models import Turmas,NovoDispersaoProfessor,NovaConsolidacaoGeralProfessor, NovoIaPRofessor, NovoStatusProfessor, NovoIuProfessor, Atividade,IaIndicadorAluno, Acessos, IndicadorDeFinalDeSemana,Escola, Professor, Aluno
 from pylib.googleadmin import authService
 from pylib.mysql_banco import banco
 from multiprocessing import Pool
 from pylib.pycsv import PyCsv
 from pylib.removeBarraN import removeBarraN
 import datetime
-
-
 
 escopos = [
         # 'https://www.googleapis.com/auth/classroom.courses',
@@ -49,39 +47,57 @@ if __name__ == "__main__":
     escolas = Escola.objects.all()
 
     todos_professores = {}
-
+    todos_professores_inep = {}
 
     for professor in professores:
+        for inep in professor.inep.split(','):
+            if inep not in todos_professores_inep:
+                todos_professores_inep[inep] = 1
+            else:
+                todos_professores_inep[inep] += 1
+
         todos_professores[professor.email] = {}
         todos_professores[professor.email]['email'] = professor.email
         todos_professores[professor.email]['inep'] = professor.inep
         todos_professores[professor.email]['municipio'] = professor.municipio
         todos_professores[professor.email]['cre'] = professor.cre
 
-
-
     ########################
     # CONSTRÓI OS INTERVALOS 
     ########################
-    hoje = datetime.datetime.today()   - datetime.timedelta(days=1)
+
+    hoje = datetime.datetime.today() - datetime.timedelta(days=8)
+
+    interval = [
+        hoje - datetime.timedelta(days=6),
+        hoje - datetime.timedelta(days=5),
+        hoje - datetime.timedelta(days=4),
+        hoje - datetime.timedelta(days=3),
+        hoje - datetime.timedelta(days=2),
+        hoje - datetime.timedelta(days=1),
+        hoje,
+        
+    ]
+    intervals = list(map(toStr,interval))
+
     intervalo_menor_sete_dias = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=7),
-        "fim": datetime.date.today() - datetime.timedelta(days=1),
+        "inicio": hoje - datetime.timedelta(days=6),
+        "fim": hoje,
     }
     intervalo_maior_sete_menor_quartorze = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=15),
-        "fim": datetime.date.today() - datetime.timedelta(days=8),
+        "inicio": hoje - datetime.timedelta(days=14),
+        "fim": hoje - datetime.timedelta(days=7),
     }
     intervalo_maior_quatorze_menor_trinta = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=30),
-        "fim": datetime.date.today() - datetime.timedelta(days=16),
+        "inicio": hoje - datetime.timedelta(days=29),
+        "fim": hoje - datetime.timedelta(days=15),
     }
     intervalo_maior_trinta_menor_sessenta = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=60),
-        "fim": datetime.date.today() - datetime.timedelta(days=31),
+        "inicio": hoje - datetime.timedelta(days=59),
+        "fim": hoje - datetime.timedelta(days=30),
     }
     intervalo_maior_sessenta = {
-        "ultimo": datetime.date.today() - datetime.timedelta(days=61),
+        "ultimo": datetime.date.today() - datetime.timedelta(days=59),
     }
   
     intervalos = {}
@@ -92,16 +108,13 @@ if __name__ == "__main__":
     intervalos['maior_sessenta'] = intervalo_maior_sessenta
     # print(intervalos)
 
-    reports = []
- 
-
     ########################
     # PEGA OS DADOS DO GSUITE
     ########################
 
     trava = {} 
     quants = {}
-
+    reports = []
 
     for label in intervalos: #por intervalo
         pageToken = True
@@ -158,11 +171,15 @@ if __name__ == "__main__":
                 contabilizador[user['email']] = {
                         'inep':user['inep'],
                         'cre':user['cre'],
-                        'municipio':user['municipio']
+                        'municipio':user['municipio'],
+                        'dias':[]
                     }
                 trava[user['email']] = 'processado'
+
+            if user['email'] in contabilizador:
+                if adata_acesso not in contabilizador[user['email']]['dias'] and adata_acesso in intervals:
+                    contabilizador[user['email']]['dias'].append(str(adata_acesso))     
                 
-            
         ########################
         # CONTABILIZA OS DADOS POR INEP
         ########################
@@ -171,44 +188,124 @@ if __name__ == "__main__":
             for inep in dados['inep'].split(','):
                 if inep not in quants:
                     quants[inep] = {}
-                    quants[inep][label] = 0
+                    if label not in quants[inep]:
+                        quants[inep][label] = 0
+                        quants[inep][label] += 1
+                    else:
+                        quants[inep][label] += 1
                     quants[inep]['cre'] = dados['cre']
                     quants[inep]['municipio'] = dados['municipio']
-                    quants[inep][label] += 1
                     quants[inep]['total'] = 0
                     quants[inep]['total'] += 1
+                    quants[inep]['total_geral'] = todos_professores_inep[inep]
                     
+                    quants[inep]['p_um_dia'] = 1 if len(dados['dias']) == 1 else 0
+                    quants[inep]['p_dois_dia'] = 1 if len(dados['dias']) == 2 else 0
+                    quants[inep]['p_tres_dia'] = 1 if len(dados['dias']) == 3 else 0
+                    quants[inep]['p_quatro_dia'] = 1 if len(dados['dias']) == 4 else 0
+                    quants[inep]['p_cinco_dia'] = 1 if len(dados['dias']) == 5 else 0
+                    quants[inep]['p_seis_dia'] = 1 if len(dados['dias']) == 6 else 0
+                    quants[inep]['p_sete_dia'] = 1 if len(dados['dias']) == 7 else 0
+                    quants[inep]['p_nenhum_dia'] = 1 if len(dados['dias']) == 0 else 0
+
                 else:
                     if label not in quants[inep]:
-                        quants[inep][label] = 0   
-                    quants[inep][label] += 1
+                        quants[inep][label] = 0 
+                        quants[inep][label] += 1
+                    else:  
+                        quants[inep][label] += 1
+                        
                     quants[inep]['total'] += 1
+
+                    if label == 'menor_sete':
+                        quants[inep]['p_um_dia'] += 1 if len(dados['dias']) == 1 else 0
+                        quants[inep]['p_dois_dia'] += 1 if len(dados['dias']) == 2 else 0
+                        quants[inep]['p_tres_dia'] += 1 if len(dados['dias']) == 3 else 0
+                        quants[inep]['p_quatro_dia'] += 1 if len(dados['dias']) == 4 else 0
+                        quants[inep]['p_cinco_dia'] += 1 if len(dados['dias']) == 5 else 0
+                        quants[inep]['p_seis_dia'] += 1 if len(dados['dias']) == 6 else 0
+                        quants[inep]['p_sete_dia'] += 1 if len(dados['dias']) == 7 else 0
+                        quants[inep]['p_nenhum_dia'] += 1 if len(dados['dias']) == 0 else 0
 
         started=False
         reports = []
-    
-    ########################
-    # GRAVA TOTAL GERAL NO BANCO
-    ########################
-    for inep in quants:
-        data = quants[inep]
-        try:
-            total_alunos_inep = professores.filter(inep__icontains=inep)
-            quants[inep]['total_geral'] = len(total_alunos_inep)
-            
-        except Exception as e:
-            pass
-    
+
     
     ########################
     # GRAVA NO BANCO DE DADOS
     ########################
+    hoje = datetime.date.today() 
+    hoje = hoje.strftime('%Y-%m-%d')
+    hoje = '2020-11-17'
     for inep in quants:
         data = quants[inep]
+        escola = escolas.get(inep=inep)
         try:
-            escola = escolas.get(inep=inep)
+            Gravar = NovaConsolidacaoGeralProfessor()
+            Gravar.data = hoje
+            Gravar.nome = escola.nome
+            Gravar.nome_cre = escola.nome_cre
+            Gravar.inep = escola.inep
+            Gravar.cre = escola.cre
+            Gravar.municipio = escola.municipio
+
+            # ia = models.BigIntegerField('Ia',default=0,null=True,blank=True)
+            # ie = models.BigIntegerField('Ie',default=0,null=True,blank=True)
+            # iu = models.BigIntegerField('Iu',default=0,null=True,blank=True)
+            #IE
+
+
+            Gravar.menor_sete = data.get('menor_sete',0)
+            Gravar.maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0)
+            Gravar.maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0)
+            Gravar.maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0)
+            Gravar.maior_sessenta = data.get('maior_sessenta',0)
+
+            #IU
+            Gravar.p_um_dia = data.get('p_um_dia',0)
+            Gravar.p_dois_dias = data.get('p_dois_dia',0)
+            Gravar.p_tres_dias = data.get('p_tres_dia',0)
+            Gravar.p_quatro_dias = data.get('p_quatro_dia',0)
+            Gravar.p_cinco_dias = data.get('p_cinco_dia',0)
+            Gravar.p_seis_dias = data.get('p_seis_dia',0)
+            Gravar.p_sete_dias = data.get('p_sete_dia',0)
+            Gravar.p_nenhum_dia = data.get('p_sete_dia',0)
+            
+            
+            #IA
+            Gravar.total_alunos = data['total_geral']
+            Gravar.total_logaram = total_logaram = data['total']
+            Gravar.save()
+
+
+        except Exception as e:
+            print(e) 
+
+
+        try:
+            iu =  NovoIuProfessor(
+                data = hoje, #'2020-11-01', #datetime.datetime.today().strftime('%Y-%m-%d'),
+                inep = inep,
+                # escola = escola.nome,
+                municipio = escola.municipio,
+                cre = escola.cre,
+                p_um_dia = data.get('p_um_dia',0),
+                p_dois_dias = data.get('p_dois_dia',0),
+                p_tres_dias = data.get('p_tres_dia',0),
+                p_quatro_dias = data.get('p_quatro_dia',0),
+                p_cinco_dias = data.get('p_cinco_dia',0),
+                p_seis_dias = data.get('p_seis_dia',0),
+                p_sete_dias = data.get('p_sete_dia',0),
+                p_nenhum_dia = data.get('p_nenhum_dia',0)
+            )
+            iu
+            iu.save()
+        except Exception as e:
+            print(e)
+
+        try:
             NovoDispersaoProfessor.objects.create(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data = hoje,
                 menor_sete = data.get('menor_sete',0),
                 maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0),
                 maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0),
@@ -224,7 +321,7 @@ if __name__ == "__main__":
         
         try:
             novo_ia =NovoIaPRofessor(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data = hoje,
                 inep = inep ,
                 cre = escola.cre ,
                 municipio = data['municipio'] ,
@@ -234,7 +331,7 @@ if __name__ == "__main__":
             novo_ia.save()
         except Exception as e:
             print(e)
-        
+
         try:
             status = NovoStatusProfessor.objects.get_or_create(
                 inep = inep ,
@@ -247,13 +344,5 @@ if __name__ == "__main__":
 
         except Exception as e:
             print(e)
-                        
-                        
 
-
-
-
-
-    
-
-    
+        

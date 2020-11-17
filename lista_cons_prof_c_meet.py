@@ -34,18 +34,6 @@ if __name__ == "__main__":
     totais = PyCsv("totais")
 
     # CARREGA NA MEMÓRIA O CADASTRO DOS ALUNOS PROFESSORES E ESCOLAS PARA AGILIZAR
-
-    atividades = Atividade.objects.all()
-    todas_atividades_por_professor = {}
-    for atv in atividades:
-        if atv.creator_id not in todas_atividades_por_professor:
-            todas_atividades_por_professor[atv.creator_id] =[]
-            todas_atividades_por_professor[atv.creator_id].append(atv.criado)
-        else:
-            todas_atividades_por_professor[atv.creator_id].append(atv.criado)
-
-
-
     professores = Professor.objects.all()
     todos_professores = {}
     for professor in professores:
@@ -160,10 +148,6 @@ if __name__ == "__main__":
         acessou_ultima_semana = 0
         usuario = contabilizador[email]
 
-
-
-
-
         os_dias = usuario.get('dias',False)
         os_dias.sort()
         if os_dias:
@@ -174,12 +158,11 @@ if __name__ == "__main__":
                     acessou_ultima_semana +=1
             for inep in usuario.get('inep').split(','):
                 try:
-                    # atividades = Atividade.objects.filter(creator_id=usuario.get('id'))
-                    atividades = todas_atividades_por_professor[usuario.get('id')]
+                    atividades = Atividade.objects.filter(creator_id=usuario.get('id'))
                     total_atividades = len(atividades)
                     atv_ultimos_sete_dias = 0
-                    for data in atividades:
-                        if data.split("T")[0] in intervaloss:
+                    for atv in atividades:
+                        if atv.criado.split("T")[0] in intervaloss:
                             atv_ultimos_sete_dias += 1
 
 
@@ -201,31 +184,6 @@ if __name__ == "__main__":
                     ])
                 except Exception as e:
                     print(e)
-                # try:
-                #     f= FuncaoDocente()
-                #     f.cre = usuario.get('cre','Sem cre')
-                #     f.municipio = usuario.get('municipio','Sem município')
-                #     f.inep = inep
-                #     f.nome = usuario.get('nome','Sem nome')
-                #     f.professor_id = usuario.get('id','Sem id')
-
-                #     f.ultimo_acesso = os_dias[0]
-                #     f.primeiro_acesso =  os_dias[-1]
-
-                #     f.acessos_ultima_semana = acessou_ultima_semana
-                #     f.acessos_desde_inicio = len(os_dias) 
-                #     f.total_atividades = total_atividades
-                #     f.atividades_ultima_semana = atv_ultimos_sete_dias 
-
-                #     f.save()
-
-                # except Exception as e:
-                #     print(e)
-                        
-
-
-
-
 
     
 

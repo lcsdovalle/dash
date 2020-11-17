@@ -37,15 +37,16 @@ if __name__ == "__main__":
     resultado = PyCsv("resultado")
     quantitativos = PyCsv("quantitativos")
     totais = PyCsv("totais")
-    hoje = datetime.datetime.today()   
+    hoje = datetime.datetime.today()  - datetime.timedelta(days=1) 
     intervalo = [
-        datetime.date.today() - datetime.timedelta(days=7),
-        datetime.date.today() - datetime.timedelta(days=6),
-        datetime.date.today() - datetime.timedelta(days=5),
-        datetime.date.today() - datetime.timedelta(days=4),
-        datetime.date.today() - datetime.timedelta(days=3),
-        datetime.date.today() - datetime.timedelta(days=2),
-        datetime.date.today() - datetime.timedelta(days=1)
+        hoje - datetime.timedelta(days=6),
+        hoje - datetime.timedelta(days=5),
+        hoje - datetime.timedelta(days=4),
+        hoje - datetime.timedelta(days=3),
+        hoje - datetime.timedelta(days=2),
+        hoje - datetime.timedelta(days=1),
+        hoje,
+       
     ]
     intervalo = list(map(toStr,intervalo))     
     print(intervalo)
@@ -63,9 +64,9 @@ if __name__ == "__main__":
         todos_professores[professor.email]['email'] = professor.email
         todos_professores[professor.email]['inep'] = professor.inep
 
-    sete_dias = datetime.datetime.today() - datetime.timedelta(days=7)
+    sete_dias = hoje - datetime.timedelta(days=6)
 
-    domingo = datetime.datetime.today() - datetime.timedelta(days=1)
+    domingo = hoje
     domingo = "{}T23:59:00Z".format(domingo.strftime('%Y-%m-%d'))
     sete_dias = "{}T00:00:00Z".format(sete_dias.strftime('%Y-%m-%d'))
     
@@ -155,9 +156,9 @@ if __name__ == "__main__":
         try:
             escola = escolas.get(inep=inep)
             iu =  NovoIuProfessor(
-                data = datetime.date.today().strftime('%Y-%m-%d'),
+                data = '2020-11-08',#hoje,
                 inep = inep,
-                escola = escola.nome,
+                # escola = escola.nome,
                 municipio = escola.municipio,
                 cre = escola.cre,
                 p_um_dia = item.get('p_um_dia',0),

@@ -14,6 +14,15 @@ from pylib.removeBarraN import removeBarraN
 import datetime
 
 
+# alunosensalados = AlunoEnsalado.objects.all()
+# todosalunosensaladosporinep = {}
+# for aensalado in alunosensalados:
+#     if aensalado.inep not in todosalunosensaladosporinep:
+#         todosalunosensaladosporinep[aensalado.inep] = 1
+#     else:
+#         todosalunosensaladosporinep[aensalado.inep] += 1 
+# print("Alunos ensalados carregados na memória")
+
 
 escopos = [
         # 'https://www.googleapis.com/auth/classroom.courses',
@@ -47,23 +56,32 @@ if __name__ == "__main__":
 
     # CARREGA NA MEMÓRIA O CADASTRO DOS ALUNOS PROFESSORES E ESCOLAS PARA AGILIZAR
     alunos = Aluno.objects.all()
-    professores = Professor.objects.all()
+
     escolas = Escola.objects.all()
+    escolastodas = {}
+    for es in escolas:
+        if es.inep not in escolastodas:
+            escolastodas[es.inep] = {}
+            escolastodas[es.inep]['cre'] = es.cre
+
+
     todos_alunos = {}
-    todos_professores = {}
+    todos_alunos_por_inep = {}
     for aluno in alunos:
+        if aluno.inep not in todos_alunos_por_inep:
+            todos_alunos_por_inep[aluno.inep] = 1
+        else:
+            todos_alunos_por_inep[aluno.inep] += 1
+
+
         todos_alunos[aluno.email] = {}
         todos_alunos[aluno.email]['email'] = aluno.email
         todos_alunos[aluno.email]['inep'] = aluno.inep
         todos_alunos[aluno.email]['municipio'] = aluno.municipio
         todos_alunos[aluno.email]['cre'] = aluno.cre
+        todos_alunos[aluno.email]['ultimo_acesso'] = aluno.ultimo_acesso
+    print("Alunos carregados na memória")
 
-    for professor in professores:
-        todos_professores[professor.email] = {}
-        todos_professores[professor.email]['email'] = professor.email
-        todos_professores[professor.email]['inep'] = professor.inep
-        todos_professores[professor.email]['municipio'] = professor.municipio
-        todos_professores[professor.email]['cre'] = professor.cre
 
 
 
@@ -71,31 +89,39 @@ if __name__ == "__main__":
     # CONSTRÓI OS INTERVALOS 
     ########################
     hoje = datetime.datetime.today() - datetime.timedelta(days=1)
-    hoje = hoje #- datetime.timedelta(days=1)
-    hoje = hoje.strftime('%Y-%m-%d')
+    # hoje = datetime.datetime.today()   - datetime.timedelta(days=1)
     intervalo_menor_sete_dias = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=7),
-        "fim": datetime.date.today() - datetime.timedelta(days=1),
+        "inicio": hoje - datetime.timedelta(days=7),
+        "fim": hoje,
+        # "inicio": datetime.date.today() - datetime.timedelta(days=7),
+        # "fim": datetime.date.today() - datetime.timedelta(days=1),
     }
     intervalo_maior_sete_menor_quartorze = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=15),
-        "fim": datetime.date.today() - datetime.timedelta(days=8),
+        # "inicio": datetime.date.today() - datetime.timedelta(days=15),
+        # "fim": datetime.date.today() - datetime.timedelta(days=8),
+        "inicio": hoje - datetime.timedelta(days=15),
+        "fim": hoje - datetime.timedelta(days=8),
     }
     intervalo_maior_quatorze_menor_trinta = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=30),
-        "fim": datetime.date.today() - datetime.timedelta(days=16),
+        "inicio": hoje - datetime.timedelta(days=30),
+        "fim": hoje - datetime.timedelta(days=16),
+        # "inicio": datetime.date.today() - datetime.timedelta(days=30),
+        # "fim": datetime.date.today() - datetime.timedelta(days=16),
     }
     intervalo_maior_trinta_menor_sessenta = {
-        "inicio": datetime.date.today() - datetime.timedelta(days=60),
-        "fim": datetime.date.today() - datetime.timedelta(days=31),
+        "inicio": hoje - datetime.timedelta(days=60),
+        "fim": hoje - datetime.timedelta(days=31),
+        # "inicio": datetime.date.today() - datetime.timedelta(days=60),
+        # "fim": datetime.date.today() - datetime.timedelta(days=31),
     }
     intervalo_maior_sessenta = {
-        "ultimo": datetime.date.today() - datetime.timedelta(days=61),
+        # "ultimo": datetime.date.today() - datetime.timedelta(days=61),
+        "ultimo": datetime.date.today() - datetime.timedelta(days=60),
     }
   
   
     intervalos = {}
-    intervalos['menor_sete'] = intervalo_menor_sete_dias
+    intervalos['menor_sete']                    = intervalo_menor_sete_dias
     intervalos['maior_sete_menor_quatorze'] = intervalo_maior_sete_menor_quartorze
     intervalos['maior_quatorze_menor_trinta'] = intervalo_maior_quatorze_menor_trinta
     intervalos['maior_trinta_menor_sessenta'] = intervalo_maior_trinta_menor_sessenta
@@ -108,7 +134,8 @@ if __name__ == "__main__":
     ########################
     trava = {} 
     quants = {}
-
+    print(intervalos)
+    print("Começou a carregar reports do gsuite ")
     for label in intervalos: #por intervalo
         pageToken = True
         intervalo = intervalos[label]
@@ -140,9 +167,13 @@ if __name__ == "__main__":
                     reports += report.get("items")  
                 except Exception as e:
                     continue  
+        
+        
+        
         ########################
         # CONTABILIZA OS DADOS POR USUÁRIOS
         ########################
+        print("{} carregados do gsuite".format(len(reports)))
         reports
         contabilizador = {}  
         for r in reports:
@@ -175,7 +206,7 @@ if __name__ == "__main__":
         ########################
         for email in contabilizador:
             dados = contabilizador[email]
- 
+
 
             if dados['inep'] not in quants:
                 quants[dados['inep']] = {}
@@ -183,41 +214,37 @@ if __name__ == "__main__":
                 quants[dados['inep']]['cre'] = dados['cre']
                 quants[dados['inep']]['municipio'] = dados['municipio']
                 quants[dados['inep']][label] += 1
-                quants[dados['inep']]['total'] = 0
-                quants[dados['inep']]['total'] += 1
+                quants[dados['inep']]['total_logaram'] = 0
+                quants[dados['inep']]['total_logaram'] += 1
+                quants[dados['inep']]['total_geral'] = todos_alunos_por_inep[dados['inep']]
+                # quants[dados['inep']]['total_logaram'] = 1 if '1970' not in dados['ultimo_acesso'] else 0
+
                 
 
             else:
                 if label not in quants[dados['inep']]:
                     quants[dados['inep']][label] = 0   
                 quants[dados['inep']][label] += 1
-                quants[dados['inep']]['total'] += 1
-   
+                quants[dados['inep']]['total_logaram'] += 1
+                quants[dados['inep']]['total_geral'] = todos_alunos_por_inep[dados['inep']]
+                # quants[dados['inep']]['total_logaram'] = 1 if '1970' not in dados['ultimo_acesso'] else 0
+
 
         started=False
         reports = []
         
-    ########################
-    # GRAVA TOTAL GERAL NO BANCO
-    ########################
-    for inep in quants:
-        data = quants[inep]
-        try:
-            total_alunos_inep = AlunoEnsalado.objects.filter(inep=inep)
-            quants[inep]['total_geral'] = len(total_alunos_inep)
-        except Exception as e:
-            pass
-    
-    
+
     ########################
     # GRAVA NO BANCO DE DADOS
     ########################
+    print("Agora vai gravar no banco")
     for inep in quants:
         data = quants[inep]
+        cre = escolastodas[inep]["cre"]
         try:
             hoje = datetime.datetime.today()
             hoje = hoje.strftime('%Y-%m-%d')
-            escola = escolas.get(inep=inep)
+            # escola = escolastodas.get(inep=inep)
             NovoDispersaoAluno.objects.create(
                 data = hoje,
                 menor_sete = data.get('menor_sete',0),
@@ -227,7 +254,7 @@ if __name__ == "__main__":
                 maior_sessenta = data.get('maior_sessenta',0),
 
                 inep = inep ,
-                cre = escola.cre ,
+                cre = cre ,
                 municipio = data['municipio'] 
             )
         except Exception as e:
@@ -237,10 +264,10 @@ if __name__ == "__main__":
             novo_ia =NovoIaAluno(
                 data =hoje,
                 inep = inep ,
-                cre = escola.cre ,
+                cre = cre ,
                 municipio = data['municipio'] ,
                 total_alunos = data['total_geral'],
-                total_logaram = data['total']
+                total_logaram = data['total_logaram']
             )
             novo_ia.save()
         except Exception as e:
@@ -250,21 +277,12 @@ if __name__ == "__main__":
         try:   
             status = NovoStatusAluno.objects.get_or_create(
                 inep = inep ,
-                cre = escola.cre ,
+                cre = cre ,
                 municipio = data['municipio']
             )[0]
             status.total_alunos = data['total_geral']
-            status.total_logaram = data['total']
+            status.total_logaram = data['total_logaram']
             status.save()
 
         except Exception as e:
             print(e)
-                        
-
-        
-
-
-
-    
-
-    
