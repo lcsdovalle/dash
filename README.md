@@ -1,3 +1,1 @@
-# dash
-1 iniciar a instância ./cloud_sql_proxy -instances=getedu-rest:southamerica-east1:dashboardsbr:dashboardbr=tcp:5433
-
+# NOVO DIRETÓRIO DO DASHBOARD DO RIO GRANDE DO SUL
