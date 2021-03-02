@@ -25,7 +25,7 @@ if __name__ == "__main__":
     iu_aluno = {}
     ontem = datetime.datetime.today() #- datetime.timedelta(days=1)
     ontem = ontem.strftime('%Y-%m-%d')
-    ontem = '2020-11-16'
+    # ontem = '2020-11-22'
     #IE
     aluno_ie_inep = NovoDispersaoProfessor.objects.filter(data=ontem)   
     for item in aluno_ie_inep:
@@ -112,7 +112,8 @@ if __name__ == "__main__":
             iu_aluno[item.inep]['iu'] = 0
 
     
-    hoje = '2020-11-16'
+    hoje = datetime.datetime.today() # - datetime.timedelta(days=1)
+    hoje = hoje.strftime('%Y-%m-%d')
     dados = NovaConsolidacaoGeralProfessor.objects.filter(data=hoje)
     muni_distintos = {}
 

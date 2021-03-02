@@ -51,7 +51,7 @@ if __name__ == "__main__":
     localizacao = PyCsv('listas/localescolas').get_content()
     for local in localizacao:
         try:
-            infor = UltimoStatusProfessor.objects.get(inep__exact=local[1])
+            infor = UltimoStatusAlunos.objects.get(inep__exact=local[1])
             lat = local[8].replace(".","")
             lon = local[9].replace(".","")
 

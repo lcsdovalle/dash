@@ -610,6 +610,8 @@ class UltimoStatusAlunos(models.Model):
     total_logaram = models.IntegerField('Aluno dois dias',blank=True,null=True)
     lat_lon = models.CharField(verbose_name="Lat Lon",max_length=255, default="-00000000",blank=True,null=True)
 
+    total_turmas = models.IntegerField('Total turmas',blank=True,null=True, default=0)
+
 class UltimoStatusProfessor(models.Model):
     nome = models.CharField('Nome', max_length=255,blank=True,null=True)
     inep = models.CharField('INEP', max_length=50,blank=True,null=True,unique=True)

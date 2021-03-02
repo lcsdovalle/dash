@@ -65,11 +65,11 @@ if __name__ == "__main__":
     ########################
     # CONSTRÓI OS INTERVALOS 
     ########################
-    hoje = datetime.datetime.today()   - datetime.timedelta(days=21)
-    # hoje = datetime.datetime.today()   - datetime.timedelta(days=1)
+    hoje = datetime.datetime.today() - datetime.timedelta(days=1)
+    inicio = datetime.datetime.today() - datetime.timedelta(days=1)
     intervalo_menor_sete_dias = {
-        "inicio": datetime.datetime.strptime("2020-06-01",'%Y-%m-%d'),
-        "fim": hoje ,
+        "inicio":inicio,
+        "fim":hoje
         # "inicio": datetime.date.today() - datetime.timedelta(days=7),
         # "fim": datetime.date.today() - datetime.timedelta(days=1),
     }
@@ -86,8 +86,9 @@ if __name__ == "__main__":
     ########################
     trava = {} 
     quants = {}
-    print(intervalos)
+    # print(intervalos)
     print("Começou a carregar reports do gsuite ")
+    cont = 0  
     for label in intervalos: #por intervalo
         pageToken = True
         intervalo = intervalos[label]
@@ -97,16 +98,14 @@ if __name__ == "__main__":
             fim = ""
             
             if 'ultimo' not in intervalo:
-                inicio = "{}T00:00:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
+                inicio = "{}T00:01:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
                 fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
-            else:
-                inicio = "2020-06-01T00:00:00Z"
-                fim = "{}T23:59:00Z".format(intervalo['ultimo'].strftime('%Y-%m-%d'))
+                # inicio = "{}T00:01:00Z".format('2021-01-13')
+                # fim = "{}T23:59:00Z".format('2021-01-26')
  
-
             if not started:
                 try:
-                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',startTime=inicio,endTime=fim).execute()
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',eventName='login_success',startTime=inicio,endTime=fim).execute()
                     pageToken = report.get("nextPageToken",None)
                     reports += report.get("items")
                     started = True
@@ -114,7 +113,7 @@ if __name__ == "__main__":
                     continue  
             else:
                 try:
-                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
+                    report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',eventName='login_success', maxResults=1000,startTime=inicio,endTime=fim,pageToken=pageToken).execute()
                     pageToken = report.get("nextPageToken",None)
                     reports += report.get("items")  
                 except Exception as e:
@@ -126,8 +125,11 @@ if __name__ == "__main__":
             ########################
             print("{} carregados do gsuite".format(len(reports)))
             reports
-            contabilizador = {}  
+            contabilizador = {}
+           
             for r in reports:
+                cont += len(reports)
+                # print(f"{cont} items baixados")
                 user = False
                 identificacao_unica_usuario = r.get('actor').get('email') #pega o email
                 data_acesso_usuario = r.get('id').get('time') # pega o time
@@ -158,8 +160,8 @@ if __name__ == "__main__":
                             email                           = user['email'],
                             municipio                       = user['municipio'],
                             cre                             = user['cre']
-
                     )
 
                     acesso.save()
+         
             reports = []

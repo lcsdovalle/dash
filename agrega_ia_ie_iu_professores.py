@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # CONSTRÓI OS INTERVALOS 
     ########################
 
-    hoje = datetime.datetime.today() - datetime.timedelta(days=8)
+    hoje = datetime.datetime.today() - datetime.timedelta(days=1)
 
     interval = [
         hoje - datetime.timedelta(days=6),
@@ -188,11 +188,8 @@ if __name__ == "__main__":
             for inep in dados['inep'].split(','):
                 if inep not in quants:
                     quants[inep] = {}
-                    if label not in quants[inep]:
-                        quants[inep][label] = 0
-                        quants[inep][label] += 1
-                    else:
-                        quants[inep][label] += 1
+                    quants[inep][label] = 0
+                    quants[inep][label] += 1
                     quants[inep]['cre'] = dados['cre']
                     quants[inep]['municipio'] = dados['municipio']
                     quants[inep]['total'] = 0
@@ -211,10 +208,7 @@ if __name__ == "__main__":
                 else:
                     if label not in quants[inep]:
                         quants[inep][label] = 0 
-                        quants[inep][label] += 1
-                    else:  
-                        quants[inep][label] += 1
-                        
+                    quants[inep][label] += 1
                     quants[inep]['total'] += 1
 
                     if label == 'menor_sete':
@@ -234,9 +228,8 @@ if __name__ == "__main__":
     ########################
     # GRAVA NO BANCO DE DADOS
     ########################
-    hoje = datetime.date.today() 
+    hoje = datetime.date.today() #- datetime.timedelta(days=1)
     hoje = hoje.strftime('%Y-%m-%d')
-    hoje = '2020-11-17'
     for inep in quants:
         data = quants[inep]
         escola = escolas.get(inep=inep)

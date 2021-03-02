@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     relatorio = PyCsv('lista_consolidada_novembro_alunos')
     escolas = PyCsv("escolas_ensino_medio").get_content()
-    consolidado = NovaConsolidacaoGeralAluno.objects.all()
+    consolidado = NovaConsolidacaoGeralAluno.objects.filter()
     ineps_ok = {}
     for e in escolas:
         if e[0] not in ineps_ok:
