@@ -9,8 +9,14 @@ from pylib.MyBigQuery import Stream
 
 
 from processos.botCarregarEscolas import carregarEscolas
+from processos.botAgregacaoProfessores import botAgregacaoProfessores
+from processos.botCarregarProfessores import botCarregarProfessores
+from processos.botCarregarAlunos import botCarregarAlunos 
 
 try:
-    carregarEscolas()
+    # carregarEscolas()
+    # botCarregarProfessores()
+    # botCarregarAlunos()
+    botAgregacaoProfessores()
 except Exception as e:
     print(e)

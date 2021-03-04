@@ -9,9 +9,9 @@ from pylib.pycsv import PyCsv
 def limpar(valor):    
     valor = valor.strip()
     return valor
-if carregarEscolas:
+def carregarEscolas():
     
-    escolas = PyCsv('logs/escolas').get_content()
+    escolas = PyCsv('csvs/escolas').get_content()
 
     for escola in escolas:
         try:
@@ -19,10 +19,10 @@ if carregarEscolas:
             escola
             e = Escola.objects.create(
                 cre= escola[0],
-                municipio= escola[1],
-                inep= escola[2],
-                email= "escola.{}@educar.rs.gov.br".format(escola[2]),
-                nome= "{} {}".format(escola[3],escola[4])
+                municipio= escola[2],
+                inep= escola[1],
+                email= "escola.{}@educar.rs.gov.br".format(escola[1]),
+                nome= "{} {}".format(escola[6],escola[7])
             )
             print(e)
         except Exception as e:

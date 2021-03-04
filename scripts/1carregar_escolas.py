@@ -11,12 +11,11 @@ def limpar(valor):
     return valor
 if __name__ == "__main__":
     
-    escolas = PyCsv('logs/escolas').get_content()
+    escolas = PyCsv('logs/csvs/escolas').get_content()
 
     for escola in escolas:
         try:
             escola = list(map(limpar,escola))
-            escola
             e = Escola.objects.create(
                 cre= escola[0],
                 municipio= escola[1],

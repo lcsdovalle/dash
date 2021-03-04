@@ -64,23 +64,23 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
-    'default':{
-        'ENGINE':'django.db.backends.mysql',
-        # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
-        'HOST':'localhost',
-        'USER':'getedu',
-        'PASSWORD':'getedu00',
-        'NAME':'novodash',
-        'PORT':3306
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# DATABASES = {
+#     'default':{
+#         'ENGINE':'django.db.backends.mysql',
+#         # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
+#         'HOST':'localhost',
+#         'USER':'getedu',
+#         'PASSWORD':'getedu00',
+#         'NAME':'novodash',
+#         'PORT':3306
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

@@ -12,6 +12,7 @@ class authService():
             self.userEmail = email
             self.SERVICE_ACCOUNT_FILE = jsonfile
             self.SCOPES = scopes
+            
     def getService(self,*args,**kwargs):
             credentials = service_account.Credentials.from_service_account_file(
                     self.SERVICE_ACCOUNT_FILE, scopes=self.SCOPES)
