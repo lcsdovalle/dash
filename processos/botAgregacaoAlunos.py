@@ -1,4 +1,8 @@
 #pylint: disable=no-member
+from pylib.MyBigQuery import Stream
+from google.cloud import bigquery
+stream = Stream('getedu-api-293018')
+stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidados_alunos')
 
 import os
 import django
@@ -26,13 +30,13 @@ report_service = authService(escopos,'jsons/cred_rs2.json',email='getedu@educar.
 def toStr(valor):
     return valor.strftime('%Y-%m-%d')
 
-if __name__ == "__main__":
+def botAgregacaoAlunos():
 
     # CARREGA NA MEMÓRIA O CADASTRO DOS ALUNOS PROFESSORES E ESCOLAS PARA AGILIZAR
     alunos = Aluno.objects.all()
     escolas = Escola.objects.all()
-    escolastodas = {}
 
+    escolastodas = {}
     for es in escolas:
         if es.inep not in escolastodas:
             escolastodas[es.inep] = {}
@@ -41,7 +45,6 @@ if __name__ == "__main__":
 
     todos_alunos = {}
     todos_alunos_por_inep = {}
-    
     for aluno in alunos:
         if aluno.inep not in todos_alunos_por_inep:
             todos_alunos_por_inep[aluno.inep] = 1
@@ -87,7 +90,7 @@ if __name__ == "__main__":
     ########################
     # CONTABILIZA OS DADOS POR USUÁRIOS
     ########################
-    reports = AcessosAlunos.objects.all().order_by('-data')
+    reports = AcessosAlunos.objects.all().order_by('-data')[:100]
     contabilizador = {}  
     trava = {}
     print(len(reports))
@@ -199,7 +202,10 @@ if __name__ == "__main__":
     ########################
     # GRAVA NO BANCO DE DADOS
     ########################
-    print("Agora vai gravar no banco")
+    print("Gravar no BigQuery")
+    c = 0
+    linhas_stream_big_query = {}
+    linhas_stream_big_query[c] = []
     quants
     hoje = datetime.date.today() 
     hoje = hoje.strftime('%Y-%m-%d')
@@ -209,6 +215,9 @@ if __name__ == "__main__":
         cre = escolastodas[inep]["cre"]
         escola = escolas.get(inep=inep)
 
+        ################################
+        ######## BALANCEAMENTO  ########
+        ################################
         soma_iu = (
             data['a_um_dia'] +
             data['a_dois_dia'] +
@@ -220,7 +229,6 @@ if __name__ == "__main__":
             )
         quatorze_dias = data['maior_sete_menor_quatorze']
         sete_dias = data['menor_sete']
-
         if soma_iu != sete_dias:
             if soma_iu > sete_dias:
                 resto = soma_iu - sete_dias
@@ -230,145 +238,55 @@ if __name__ == "__main__":
                 resto = sete_dias - soma_iu
                 data['menor_sete'] = data['menor_sete'] - resto
                 data['maior_sete_menor_quatorze'] += resto
-
-        try:
-            Gravar = NovaConsolidacaoGeralAluno()
-            Gravar.data = hoje
-            Gravar.nome = escola.nome
-            Gravar.nome_cre = escola.nome_cre
-            Gravar.inep = escola.inep
-            Gravar.cre = escola.cre
-            Gravar.municipio = escola.municipio
-
-            # ia = models.BigIntegerField('Ia',default=0,null=True,blank=True)
-            # ie = models.BigIntegerField('Ie',default=0,null=True,blank=True)
-            # iu = models.BigIntegerField('Iu',default=0,null=True,blank=True)
-            #IE
-
-
-            Gravar.menor_sete = data.get('menor_sete',0)
-            Gravar.maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0)
-            Gravar.maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0)
-            Gravar.maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0)
-            Gravar.maior_sessenta = data.get('maior_sessenta',0)
-
-            #IU
-            Gravar.a_um_dia = data.get('a_um_dia',0)
-            Gravar.a_dois_dias = data.get('a_dois_dia',0)
-            Gravar.a_tres_dias = data.get('a_tres_dia',0)
-            Gravar.a_quatro_dias = data.get('a_quatro_dia',0)
-            Gravar.a_cinco_dias = data.get('a_cinco_dia',0)
-            Gravar.a_seis_dias = data.get('a_seis_dia',0)
-            Gravar.a_sete_dias = data.get('a_sete_dia',0)
-            Gravar.a_nenhum_dia = data.get('a_sete_dia',0)
-            
-            
-            #IA
-            Gravar.total_alunos = data['total_geral']
-            Gravar.total_logaram =data['total_logaram']
-            Gravar.save()
-
-
-        except Exception as e:
-            print(e) 
-
-        try:
-            Gravar = ""
-            Gravar = UltimoStatusAlunos.objects.get_or_create(inep=escola.inep)[0]
-            Gravar.nome = escola.nome
-            Gravar.nome_cre = escola.nome_cre
-            Gravar.inep = escola.inep
-            Gravar.cre = escola.cre
-            Gravar.municipio = escola.municipio
-
-            Gravar.menor_sete = data.get('menor_sete',0)
-            Gravar.maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0)
-            Gravar.maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0)
-            Gravar.maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0)
-            Gravar.maior_sessenta = data.get('maior_sessenta',0)
-
-            #IU
-            Gravar.a_um_dia = data.get('a_um_dia',0)
-            Gravar.a_dois_dias = data.get('a_dois_dia',0)
-            Gravar.a_tres_dias = data.get('a_tres_dia',0)
-            Gravar.a_quatro_dias = data.get('a_quatro_dia',0)
-            Gravar.a_cinco_dias = data.get('a_cinco_dia',0)
-            Gravar.a_seis_dias = data.get('a_seis_dia',0)
-            Gravar.a_sete_dias = data.get('a_sete_dia',0)
-            Gravar.a_nenhum_dia = data.get('a_sete_dia',0)
-            
-            
-            #IA
-            Gravar.total_alunos = data['total_geral']
-            Gravar.total_logaram =data['total_logaram']
-            Gravar.save()
-
-        except Exception as e:
-            print(e) 
-
-        try:
-            iu =  NovoIuAluno(
-                data = hoje, #'2020-11-01', #datetime.datetime.today().strftime('%Y-%m-%d'),
-                inep = inep,
-                # escola = escola.nome,
-                municipio = escola.municipio,
-                cre = escola.cre,
-                a_um_dia = data.get('a_um_dia',0),
-                a_dois_dias = data.get('a_dois_dia',0),
-                a_tres_dias = data.get('a_tres_dia',0),
-                a_quatro_dias = data.get('a_quatro_dia',0),
-                a_cinco_dias = data.get('a_cinco_dia',0),
-                a_seis_dias = data.get('a_seis_dia',0),
-                a_sete_dias = data.get('a_sete_dia',0),
-                a_nenhum_dia = data.get('a_nenhum_dia',0)
-            )
-            iu
-            iu.save()
-        except Exception as e:
-            print(e)
-
-
-        try:
-            # hoje = datetime.datetime.today()
-            # hoje = hoje.strftime('%Y-%m-%d')
-            # escola = escolastodas.get(inep=inep)
-            NovoDispersaoAluno.objects.create(
-                data = hoje,
-                menor_sete = data.get('menor_sete',0),
-                maior_sete_menor_quatorze = data.get('maior_sete_menor_quatorze',0),
-                maior_quatorze_menor_trinta = data.get('maior_quatorze_menor_trinta',0),
-                maior_trinta_menor_sessenta = data.get('maior_trinta_menor_sessenta',0),
-                maior_sessenta = data.get('maior_sessenta',0),
-
-                inep = inep ,
-                cre = cre ,
-                municipio = data['municipio'] 
-            )
-        except Exception as e:
-            print(e)
+      
+        ######## FIM BALANCEAMENTO  ########
         
-        try:            
-            novo_ia = NovoIaAluno(
-                data = hoje,
-                inep = inep,
-                cre = cre,
-                municipio = data['municipio'],
-                total_alunos = data['total_geral'],
-                total_logaram = data['total_logaram']
-            )
-            novo_ia.save()
-        except Exception as e:
-            print(e)
-                    
-        try:   
-            status = NovoStatusAluno.objects.get_or_create(
-                inep = inep ,
-                cre = cre ,
-                municipio = data['municipio']
-            )[0]
-            status.total_alunos = data['total_geral']
-            status.total_logaram = data['total_logaram']
-            status.save()
+        try:
+            if len(linhas_stream_big_query[c]) > 500:
+                c +=1
+                linhas_stream_big_query[c] = []    
+            
+            linhas_stream_big_query[c].append({
+
+                "data" : hoje,
+                "nome" : escola.nome,
+                "nome_cre" : escola.nome_cre,
+                "inep" : escola.inep,
+                "cre" : escola.cre,
+                "municipio" : escola.municipio,
+
+                "menor_sete" : data.get('menor_sete',0),
+                "maior_sete_menor_quatorze" : data.get('maior_sete_menor_quatorze',0),
+                "maior_quatorze_menor_trinta" : data.get('maior_quatorze_menor_trinta',0),
+                "maior_trinta_menor_sessenta" : data.get('maior_trinta_menor_sessenta',0),
+                "maior_sessenta" : data.get('maior_sessenta',0),
+
+                #IU
+                "a_um_dia" : data.get('a_um_dia',0),
+                "a_dois_dias" : data.get('a_dois_dia',0),
+                "a_tres_dias" : data.get('a_tres_dia',0),
+                "a_quatro_dias" : data.get('a_quatro_dia',0),
+                "a_cinco_dias" : data.get('a_cinco_dia',0),
+                "a_seis_dias" : data.get('a_seis_dia',0),
+                "a_sete_dias" : data.get('a_sete_dia',0),
+                "a_nenhum_dia" : data.get('a_sete_dia',0),
+                
+                #TOTAL IA
+                "total_alunos" : data['total_geral'],
+                "total_logaram" :data['total_logaram']
+            })
+
 
         except Exception as e:
-            print(e)
+            print(e) 
+
+        
+
+    for item in linhas_stream_big_query:
+        info = linhas_stream_big_query[item]
+
+        stream.inserir(info)
+        if not stream.errors:
+            print("Inserido com sucesso")
+        else:
+            print(stream.errors)

@@ -39,6 +39,7 @@ def botCarregarAcessosAlunos():
         if es.inep not in escolastodas:
             escolastodas[es.inep] = {}
             escolastodas[es.inep]['cre'] = es.cre
+            escolastodas[es.inep]['municipio'] = es.municipio
 
 
     todos_alunos = {}
@@ -98,10 +99,10 @@ def botCarregarAcessosAlunos():
             fim = ""
             
             if 'ultimo' not in intervalo:
-                inicio = "{}T00:01:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
-                fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
-                # inicio = "{}T00:01:00Z".format('2021-01-13')
-                # fim = "{}T23:59:00Z".format('2021-01-26')
+                # inicio = "{}T00:01:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
+                # fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
+                inicio = "{}T00:01:00Z".format('2021-02-15')
+                fim = "{}T23:59:00Z".format('2021-03-04')
  
             if not started:
                 try:
@@ -153,15 +154,20 @@ def botCarregarAcessosAlunos():
                             'municipio':user['municipio']
                         }
                     # trava[user['email']] = 'processado'
+                    
+                    try:
 
-                    acesso = AcessosAlunos(
-                            data                            = adata_acesso,
-                            inep                            = user['inep'],
-                            email                           = user['email'],
-                            municipio                       = user['municipio'],
-                            cre                             = user['cre']
-                    )
+                        acesso = AcessosAlunos(
+                                data                            = adata_acesso,
+                                inep                            = user['inep'],
+                                email                           = user['email'],
+                                municipio                       = escolastodas[user['inep']]['municipio'],
+                                cre                             = escolastodas[user['inep']]['cre']
+                        )
+                        acesso.save()
+                    except Exception as e:
+                        print(e)
 
-                    acesso.save()
-         
+
+            #Reseta variável 
             reports = []

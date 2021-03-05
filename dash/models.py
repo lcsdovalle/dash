@@ -655,7 +655,7 @@ class UltimoStatusProfessor(models.Model):
 
 class AcessosAlunos(models.Model):
     data                            = models.DateTimeField("Data",default=timezone.now)
-    inep                            = models.CharField('INEP', max_length=50,blank=True,null=True)
+    inep                            = models.CharField('INEP', max_length=250,blank=True,null=True)
     email                           = models.EmailField('Email', max_length=254,blank=True,null=True)
     regiao                          = models.CharField('Região', max_length=200,blank=True,null=True)
     municipio                       = models.CharField('Município', max_length=50,blank=True,null=True)
@@ -663,7 +663,7 @@ class AcessosAlunos(models.Model):
 
 class AcessosProfessor(models.Model):
     data                            = models.DateTimeField("Data",default=timezone.now)
-    inep                            = models.CharField('INEP', max_length=50,blank=True,null=True)
+    inep                            = models.CharField('INEP', max_length=250,blank=True,null=True)
     email                           = models.EmailField('Email', max_length=254,blank=True,null=True)
     regiao                          = models.CharField('Região', max_length=200,blank=True,null=True)
     municipio                       = models.CharField('Município', max_length=50,blank=True,null=True)
