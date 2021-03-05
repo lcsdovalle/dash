@@ -336,7 +336,7 @@ class NovoIuAluno(models.Model):
 
     data = models.DateField('Data')
     inep = models.CharField("Inep",max_length=100)
-    escola = models.CharField("Escola",max_length=100)
+    escola = models.CharField("Escola",max_length=100,null=True,blank=True)
     municipio = models.CharField("Município",max_length=100)
     cre = models.CharField("Cre",max_length=100)    
     a_um_dia = models.IntegerField('Aluno um dia')
@@ -352,7 +352,7 @@ class NovoIuProfessor(models.Model):
 
     data = models.DateField('Data')
     inep = models.CharField("Inep",max_length=100)
-    escola = models.CharField("Escola",max_length=100)
+    escola = models.CharField("Escola",max_length=100,null=True,blank=True)
     municipio = models.CharField("Município",max_length=100)
     cre = models.CharField("Cre",max_length=100)    
     p_um_dia = models.IntegerField('Aluno um dia')
@@ -468,104 +468,104 @@ class NovaAgrecacaoIaAluno(models.Model):
     total_logados = models.BigIntegerField("Total alunos")
 
 class NovoCadastroAtividades(models.Model):
-    data = models.DateField("Data",default=timezone.now)
-    data_publicacao = models.DateField("Data",default=timezone.now)
-    inep = models.CharField('INEP', max_length=50)
+    data = models.DateField("Data",default=timezone.now,blank=True,null=True)
+    data_publicacao = models.DateField("Data",default=timezone.now,blank=True,null=True)
+    inep = models.CharField('INEP', max_length=50,blank=True,null=True)
     regiao = models.CharField('Região', max_length=200,blank=True,null=True)
     cre = models.CharField('CRE', max_length=100,blank=True,null=True)
-    municipio = models.CharField('Município', max_length=50)
+    municipio = models.CharField('Município', max_length=50,blank=True,null=True)
     componente_curricular = models.CharField('Componente curricular', max_length=50,blank=True,null=True)
-    criador = models.CharField('Criador', max_length=50)
+    criador = models.CharField('Criador', max_length=50,blank=True,null=True)
 
     atividade_id = models.CharField('Atividade Id', max_length=250)
-    turma_id = models.CharField('Turma', max_length=250)
+    turma_id = models.CharField('Turma', max_length=250,blank=True,null=True)
 
-    qtd_corrigida = models.BigIntegerField("Corrigidas")
-    qtd_nao_iniciada = models.BigIntegerField("Não iniciada")
-    qtd_atrasos = models.BigIntegerField("Atrasos")
-    qtd_vinculos = models.BigIntegerField("Vínculos")
-    qtd_iniciada = models.BigIntegerField("Iniciada",default=0)
+    qtd_corrigida = models.BigIntegerField("Corrigidas",blank=True,null=True)
+    qtd_nao_iniciada = models.BigIntegerField("Não iniciada",blank=True,null=True)
+    qtd_atrasos = models.BigIntegerField("Atrasos",blank=True,null=True)
+    qtd_vinculos = models.BigIntegerField("Vínculos",blank=True,null=True)
+    qtd_iniciada = models.BigIntegerField("Iniciada",default=0,blank=True,null=True)
 
 class NovaConsolidacaoGeralAluno(models.Model):
-    nome = models.CharField('Nome', max_length=255)
+    nome = models.CharField('Nome', max_length=255,null=True,blank=True)
     inep = models.CharField('INEP', max_length=50)
     email = models.EmailField('Email', max_length=254,blank=True,null=True,unique=True)
-    regiao = models.CharField('Região', max_length=200,blank=True,null=True)
-    municipio = models.CharField('Município', max_length=50)
-    cre = models.CharField('CRE', max_length=100,blank=True,null=True)
-    nome_cre = models.CharField('Nome Cre', max_length=100,blank=True,null=True)   
+    regiao = models.CharField('Região', max_length=200,null=True,blank=True)
+    municipio = models.CharField('Município', max_length=50,null=True,blank=True)
+    cre = models.CharField('CRE', max_length=100,null=True,blank=True)
+    nome_cre = models.CharField('Nome Cre', max_length=100,null=True,blank=True)   
     
-    ia = models.BigIntegerField('Ia',default=0)
-    ie = models.BigIntegerField('Ie',default=0)
-    iu = models.BigIntegerField('Iu',default=0)
+    ia = models.BigIntegerField('Ia',default=0,null=True,blank=True)
+    ie = models.BigIntegerField('Ie',default=0,null=True,blank=True)
+    iu = models.BigIntegerField('Iu',default=0,null=True,blank=True)
     data = models.DateField("Data",default=timezone.now)
     status_aluno = models.CharField("Cor",        max_length=50,
         choices=(
                 ('Desenpenho ruim','Desenpenho ruim'),
                 ('Desenpenho aceitável','Desenpenho aceitável'),
                 ('Desenpenho ideal','Desenpenho ideal')
-            ))
+            ),null=True,blank=True)
     #IE
-    menor_sete = models.BigIntegerField("Sete dias")
-    maior_sete_menor_quatorze = models.BigIntegerField("Maior sete")
-    maior_quatorze_menor_trinta = models.BigIntegerField("Maior quatorzer")
-    maior_trinta_menor_sessenta = models.BigIntegerField("Maior trinta")
-    maior_sessenta = models.BigIntegerField("Maior sessenta")
+    menor_sete = models.BigIntegerField("Sete dias",null=True,blank=True)
+    maior_sete_menor_quatorze = models.BigIntegerField("Maior sete",null=True,blank=True)
+    maior_quatorze_menor_trinta = models.BigIntegerField("Maior quatorzer",null=True,blank=True)
+    maior_trinta_menor_sessenta = models.BigIntegerField("Maior trinta",null=True,blank=True)
+    maior_sessenta = models.BigIntegerField("Maior sessenta",null=True,blank=True)
     
     
     #IU
-    a_um_dia = models.IntegerField('Aluno um dia')
-    a_dois_dias = models.IntegerField('Aluno dois dias')
-    a_tres_dias = models.IntegerField('Aluno tres dias')
-    a_quatro_dias = models.IntegerField('Aluno quatro dias')
-    a_cinco_dias = models.IntegerField('Aluno cinco dias')
-    a_seis_dias = models.IntegerField('Aluno seis dias')
-    a_sete_dias = models.IntegerField('Aluno sete dias')
-    a_nenhum_dia = models.IntegerField('Aluno nenhum dia')
+    a_um_dia = models.IntegerField('Aluno um dia',null=True,blank=True)
+    a_dois_dias = models.IntegerField('Aluno dois dias',null=True,blank=True)
+    a_tres_dias = models.IntegerField('Aluno tres dias',null=True,blank=True)
+    a_quatro_dias = models.IntegerField('Aluno quatro dias',null=True,blank=True)
+    a_cinco_dias = models.IntegerField('Aluno cinco dias',null=True,blank=True)
+    a_seis_dias = models.IntegerField('Aluno seis dias',null=True,blank=True)
+    a_sete_dias = models.IntegerField('Aluno sete dias',null=True,blank=True)
+    a_nenhum_dia = models.IntegerField('Aluno nenhum dia',null=True,blank=True)
 
     #IA
-    total_alunos = models.IntegerField('Aluno um dia')
-    total_logaram = models.IntegerField('Aluno dois dias')
+    total_alunos = models.IntegerField('Aluno um dia',null=True,blank=True)
+    total_logaram = models.IntegerField('Aluno dois dias',null=True,blank=True)
 
 class NovaConsolidacaoGeralProfessor(models.Model):
-    nome = models.CharField('Nome', max_length=255)
+    nome = models.CharField('Nome', max_length=255,null=True,blank=True)
     inep = models.CharField('INEP', max_length=50)
     email = models.EmailField('Email', max_length=254,blank=True,null=True,unique=True)
     regiao = models.CharField('Região', max_length=200,blank=True,null=True)
-    municipio = models.CharField('Município', max_length=50)
+    municipio = models.CharField('Município', max_length=50,null=True,blank=True)
     cre = models.CharField('CRE', max_length=100,blank=True,null=True)
-    nome_cre = models.CharField('Nome Cre', max_length=100,blank=True,null=True)   
+    nome_cre = models.CharField('Nome Cre', max_length=100,null=True,blank=True)   
     
     data = models.DateField("Data",default=timezone.now)
-    ia = models.BigIntegerField('Ia',default=0)
-    ie = models.BigIntegerField('Ie',default=0)
-    iu = models.BigIntegerField('Iu',default=0)
+    ia = models.BigIntegerField('Ia',default=0,null=True,blank=True)
+    ie = models.BigIntegerField('Ie',default=0,null=True,blank=True)
+    iu = models.BigIntegerField('Iu',default=0,null=True,blank=True)
     #IE
-    menor_sete = models.BigIntegerField("Sete dias")
-    maior_sete_menor_quatorze = models.BigIntegerField("Maior sete")
-    maior_quatorze_menor_trinta = models.BigIntegerField("Maior quatorzer")
-    maior_trinta_menor_sessenta = models.BigIntegerField("Maior trinta")
-    maior_sessenta = models.BigIntegerField("Maior sessenta")
+    menor_sete = models.BigIntegerField("Sete dias",null=True,blank=True)
+    maior_sete_menor_quatorze = models.BigIntegerField("Maior sete",null=True,blank=True)
+    maior_quatorze_menor_trinta = models.BigIntegerField("Maior quatorzer",null=True,blank=True)
+    maior_trinta_menor_sessenta = models.BigIntegerField("Maior trinta",null=True,blank=True)
+    maior_sessenta = models.BigIntegerField("Maior sessenta",null=True,blank=True)
     status_professor = models.CharField("Cor", default='3',        max_length=50,
         choices=(
                 ('Desenpenho ruim','Desenpenho ruim'),
                 ('Desenpenho aceitável','Desenpenho aceitável'),
                 ('Desenpenho ideal','Desenpenho ideal')
-            ))
+            ),null=True,blank=True)
     
     #IU
-    p_um_dia = models.IntegerField('Aluno um dia')
-    p_dois_dias = models.IntegerField('Aluno dois dias')
-    p_tres_dias = models.IntegerField('Aluno tres dias')
-    p_quatro_dias = models.IntegerField('Aluno quatro dias')
-    p_cinco_dias = models.IntegerField('Aluno cinco dias')
-    p_seis_dias = models.IntegerField('Aluno seis dias')
-    p_sete_dias = models.IntegerField('Aluno sete dias')
-    p_nenhum_dia = models.IntegerField('Aluno nenhum dia')
+    p_um_dia = models.IntegerField('Aluno um dia',null=True,blank=True)
+    p_dois_dias = models.IntegerField('Aluno dois dias',null=True,blank=True)
+    p_tres_dias = models.IntegerField('Aluno tres dias',null=True,blank=True)
+    p_quatro_dias = models.IntegerField('Aluno quatro dias',null=True,blank=True)
+    p_cinco_dias = models.IntegerField('Aluno cinco dias',null=True,blank=True)
+    p_seis_dias = models.IntegerField('Aluno seis dias',null=True,blank=True)
+    p_sete_dias = models.IntegerField('Aluno sete dias',null=True,blank=True)
+    p_nenhum_dia = models.IntegerField('Aluno nenhum dia',null=True,blank=True)
 
     #IA
-    total_alunos = models.IntegerField('Aluno um dia')
-    total_logaram = models.IntegerField('Aluno dois dias')
+    total_alunos = models.IntegerField('Aluno um dia',null=True,blank=True)
+    total_logaram = models.IntegerField('Aluno dois dias',null=True,blank=True)
 
 class UltimoStatusAlunos(models.Model):
     nome = models.CharField('Nome', max_length=255,blank=True,null=True)
@@ -608,6 +608,9 @@ class UltimoStatusAlunos(models.Model):
     #IA
     total_alunos = models.IntegerField('Aluno um dia',blank=True,null=True)
     total_logaram = models.IntegerField('Aluno dois dias',blank=True,null=True)
+    lat_lon = models.CharField(verbose_name="Lat Lon",max_length=255, default="-00000000",blank=True,null=True)
+
+    total_turmas = models.IntegerField('Total turmas',blank=True,null=True, default=0)
 
 class UltimoStatusProfessor(models.Model):
     nome = models.CharField('Nome', max_length=255,blank=True,null=True)
@@ -651,8 +654,26 @@ class UltimoStatusProfessor(models.Model):
     total_alunos = models.IntegerField('Aluno um dia',blank=True,null=True)
     total_logaram = models.IntegerField('Aluno dois dias',blank=True,null=True)
 
- 
+    lat_lon = models.CharField(verbose_name="Lat Lon",max_length=255, default="-00000000",blank=True,null=True)
 
+class FuncaoDocente(models.Model):
+    cre = models.CharField("Cre",null=True,blank=True,max_length=254)
+    municipio = models.CharField("Município",null=True,blank=True,max_length=254)
+    inep = models.CharField("Inep",max_length=100, null=True, blank=True)
+    nome = models.CharField('Name', max_length=255, null=True, blank=True)
+    email = models.EmailField('Email', max_length=254, null=True, blank=True)
+    professor_id = models.CharField('Id', max_length=200)
+
+    ultimo_acesso = models.DateField("Último acesso",default=timezone.now)
+    primeiro_acesso = models.DateField("Primeiro acesso",default=timezone.now)
+    
+    acessos_ultima_semana = models.BigIntegerField("Acessos na última semana",null=True, blank=True)
+    acessos_desde_inicio = models.BigIntegerField("Acessos desde inicio",null=True, blank=True) 
+    total_atividades = models.BigIntegerField("Total atividades",null=True, blank=True) 
+    atividades_ultima_semana = models.BigIntegerField("Atividades última semana",null=True, blank=True) 
+    meets_totais = models.BigIntegerField("Meets totais",null=True, blank=True) 
+    meets_ultima_semana = models.BigIntegerField("Meets última semana",null=True, blank=True) 
+ 
 class AcessosAlunos(models.Model):
     data                            = models.DateTimeField("Data",default=timezone.now)
     inep                            = models.CharField('INEP', max_length=50,blank=True,null=True)
@@ -661,10 +682,3 @@ class AcessosAlunos(models.Model):
     municipio                       = models.CharField('Município', max_length=50,blank=True,null=True)
     cre                             = models.CharField('CRE', max_length=100,blank=True,null=True)
 
-class AcessosProfessor(models.Model):
-    data                            = models.DateTimeField("Data",default=timezone.now)
-    inep                            = models.CharField('INEP', max_length=50,blank=True,null=True)
-    email                           = models.EmailField('Email', max_length=254,blank=True,null=True)
-    regiao                          = models.CharField('Região', max_length=200,blank=True,null=True)
-    municipio                       = models.CharField('Município', max_length=50,blank=True,null=True)
-    cre                             = models.CharField('CRE', max_length=100,blank=True,null=True)

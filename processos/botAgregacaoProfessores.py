@@ -42,22 +42,21 @@ if __name__ == "__main__":
             escolastodas[es.inep]['cre'] = es.cre
 
 
-    todos_alunos = {}
-    todos_alunos_por_inep = {}
-    
-    for aluno in alunos:
-        if aluno.inep not in todos_alunos_por_inep:
-            todos_alunos_por_inep[aluno.inep] = 1
-        else:
-            todos_alunos_por_inep[aluno.inep] += 1
+    todos_professores = {}
+    todos_professores_inep = {}
 
+    for professor in professores:
+        for inep in professor.inep.split(','):
+            if inep not in todos_professores_inep:
+                todos_professores_inep[inep] = 1
+            else:
+                todos_professores_inep[inep] += 1
 
-        todos_alunos[aluno.email] = {}
-        todos_alunos[aluno.email]['email'] = aluno.email
-        todos_alunos[aluno.email]['inep'] = aluno.inep
-        todos_alunos[aluno.email]['municipio'] = aluno.municipio
-        todos_alunos[aluno.email]['cre'] = aluno.cre
-        todos_alunos[aluno.email]['ultimo_acesso'] = aluno.ultimo_acesso
+        todos_professores[professor.email] = {}
+        todos_professores[professor.email]['email'] = professor.email
+        todos_professores[professor.email]['inep'] = professor.inep
+        todos_professores[professor.email]['municipio'] = professor.municipio
+        todos_professores[professor.email]['cre'] = professor.cre
     
     print("Alunos carregados na memória")
 
@@ -153,16 +152,16 @@ if __name__ == "__main__":
                 quants[dados['inep']]['cre'] = dados['cre']
                 quants[dados['inep']]['municipio'] = dados['municipio']
                 quants[dados['inep']]['total_logaram'] = 1
-                quants[dados['inep']]['total_geral'] = todos_alunos_por_inep[dados['inep']]
+                quants[dados['inep']]['total_geral'] = todos_professores_inep[dados['inep']]
 
-                quants[dados['inep']]['a_um_dia'] = 1 if len(dados['dias']) == 1 else 0
-                quants[dados['inep']]['a_dois_dia'] = 1 if len(dados['dias']) == 2 else 0
-                quants[dados['inep']]['a_tres_dia'] = 1 if len(dados['dias']) == 3 else 0
-                quants[dados['inep']]['a_quatro_dia'] = 1 if len(dados['dias']) == 4 else 0
-                quants[dados['inep']]['a_cinco_dia'] = 1 if len(dados['dias']) == 5 else 0
-                quants[dados['inep']]['a_seis_dia'] = 1 if len(dados['dias']) == 6 else 0
-                quants[dados['inep']]['a_sete_dia'] = 1 if len(dados['dias']) == 7 else 0
-                quants[dados['inep']]['a_nenhum_dia'] = 1 if len(dados['dias']) == 0 else 0
+                quants[dados['inep']]['p_um_dia'] = 1 if len(dados['dias']) == 1 else 0
+                quants[dados['inep']]['p_dois_dia'] = 1 if len(dados['dias']) == 2 else 0
+                quants[dados['inep']]['p_tres_dia'] = 1 if len(dados['dias']) == 3 else 0
+                quants[dados['inep']]['p_quatro_dia'] = 1 if len(dados['dias']) == 4 else 0
+                quants[dados['inep']]['p_cinco_dia'] = 1 if len(dados['dias']) == 5 else 0
+                quants[dados['inep']]['p_seis_dia'] = 1 if len(dados['dias']) == 6 else 0
+                quants[dados['inep']]['p_sete_dia'] = 1 if len(dados['dias']) == 7 else 0
+                quants[dados['inep']]['p_nenhum_dia'] = 1 if len(dados['dias']) == 0 else 0
                 # quants[dados['inep']]['total_logaram'] = 1 if '1970' not in dados['ultimo_acesso'] else 0
 
             else:
@@ -184,19 +183,19 @@ if __name__ == "__main__":
                 quants[dados['inep']]['maior_sessenta'] += 1 if dados['maior_sessenta'] else 0
 
                 quants[dados['inep']]['total_logaram'] += 1
-                quants[dados['inep']]['total_geral'] = todos_alunos_por_inep[dados['inep']]
+                quants[dados['inep']]['total_geral'] = todos_professores_inep[dados['inep']]
                 # quants[dados['inep']]['total_logaram'] = 1 if '1970' not in dados['ultimo_acesso'] else 0
 
                 #BUG 
                 # if label == 'menor_sete':
-                quants[dados['inep']]['a_um_dia'] += 1 if len(dados['dias']) == 1 else 0
-                quants[dados['inep']]['a_dois_dia'] += 1 if len(dados['dias']) == 2 else 0
-                quants[dados['inep']]['a_tres_dia'] += 1 if len(dados['dias']) == 3 else 0
-                quants[dados['inep']]['a_quatro_dia'] += 1 if len(dados['dias']) == 4 else 0
-                quants[dados['inep']]['a_cinco_dia'] += 1 if len(dados['dias']) == 5 else 0
-                quants[dados['inep']]['a_seis_dia'] += 1 if len(dados['dias']) == 6 else 0
-                quants[dados['inep']]['a_sete_dia'] += 1 if len(dados['dias']) == 7 else 0
-                quants[dados['inep']]['a_nenhum_dia'] += 1 if len(dados['dias']) == 0 else 0
+                quants[dados['inep']]['p_um_dia'] += 1 if len(dados['dias']) == 1 else 0
+                quants[dados['inep']]['p_dois_dia'] += 1 if len(dados['dias']) == 2 else 0
+                quants[dados['inep']]['p_tres_dia'] += 1 if len(dados['dias']) == 3 else 0
+                quants[dados['inep']]['p_quatro_dia'] += 1 if len(dados['dias']) == 4 else 0
+                quants[dados['inep']]['p_cinco_dia'] += 1 if len(dados['dias']) == 5 else 0
+                quants[dados['inep']]['p_seis_dia'] += 1 if len(dados['dias']) == 6 else 0
+                quants[dados['inep']]['p_sete_dia'] += 1 if len(dados['dias']) == 7 else 0
+                quants[dados['inep']]['p_nenhum_dia'] += 1 if len(dados['dias']) == 0 else 0
 
 
 
@@ -236,9 +235,11 @@ if __name__ == "__main__":
                     data['menor_sete'] = data['menor_sete'] - resto
                     data['maior_sete_menor_quatorze'] += resto
 
-        
+            if len(linhas_stream_big_query[c]) > 500:
+                c +=1
+                linhas_stream_big_query[c] = []    
             try:
-                linhas_stream_big_query.append({
+                linhas_stream_big_query[c].append({
 
                     "data" : hoje,
                     "nome" : escola.nome,
@@ -272,3 +273,13 @@ if __name__ == "__main__":
 
             except Exception as e:
                 print(e) 
+
+
+    for item in linhas_stream_big_query:
+        info = linhas_stream_big_query[item]
+
+        stream.inserir(info)
+        if not stream.errors:
+            print("Inserido com sucesso")
+        else:
+            print(stream.errors)

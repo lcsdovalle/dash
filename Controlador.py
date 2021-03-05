@@ -12,11 +12,13 @@ from processos.botCarregarEscolas import carregarEscolas
 # from processos.botAgregacaoProfessores import botAgregacaoProfessores
 from processos.botCarregarProfessores import botCarregarProfessores
 from processos.botCarregarAlunos import botCarregarAlunos 
+from processos.botCarregarAcessosProfessores import botCarregarAcessoProfessores 
 
 try:
     # carregarEscolas()
-    botCarregarProfessores()
-    botCarregarAlunos()
+    # botCarregarProfessores()
+    # botCarregarAlunos()
+    botCarregarAcessoProfessores()
     # botAgregacaoProfessores()
 except Exception as e:
     print(e)
