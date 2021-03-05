@@ -3,7 +3,8 @@
 # Follow Up
 - 04/05/2021: reorganização da pasta do projeto, centralização das rotinas em um único arquivo controlador, estruturação dos scripts em conteido de processos/bots.
 - 05/05/2021: conexão com BigQuery para aumentar performance do DataStudio
-    - **As tabelas de acessos não estão atualizadas**
+    - Download dos acessos concluídos
+    - **As tabelas de acessos não estão atualizadas, data de início em 2021**
     - **Precisa verificar a tabela consolidados_professores no BQ, os nomes não batem**
 
 
