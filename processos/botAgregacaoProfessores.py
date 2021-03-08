@@ -2,7 +2,7 @@
 from pylib.MyBigQuery import Stream
 from google.cloud import bigquery
 stream = Stream('getedu-api-293018')
-stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidados_professores')
+stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidacao_professores')
 
 #pylint: disable=no-member
 
