@@ -90,7 +90,7 @@ def botAgregacaoAlunos():
     ########################
     # CONTABILIZA OS DADOS POR USUÁRIOS
     ########################
-    reports = AcessosAlunos.objects.all().order_by('-data')[:100]
+    reports = AcessosAlunos.objects.all().order_by('-data')
     contabilizador = {}  
     trava = {}
     print(len(reports))

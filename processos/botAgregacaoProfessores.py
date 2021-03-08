@@ -81,7 +81,7 @@ def botAgregacaoProfessores():
     # CONTABILIZA OS DADOS POR USUÁRIOS
     ########################
 
-    reports = AcessosProfessor.objects.all().order_by('-data')[:100]
+    reports = AcessosProfessor.objects.all().order_by('-data')
     contabilizador = {}  
     trava = {}
     quants = {}
