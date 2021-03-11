@@ -2,7 +2,7 @@
 from pylib.MyBigQuery import Stream
 from google.cloud import bigquery
 stream = Stream('getedu-api-293018')
-stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidacao_professores')
+stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidado_professores')
 
 #pylint: disable=no-member
 
@@ -81,7 +81,7 @@ def botAgregacaoProfessores():
     # CONTABILIZA OS DADOS POR USUÁRIOS
     ########################
 
-    reports = AcessosProfessor.objects.all().order_by('-data')
+    reports = AcessosProfessor.objects.all().order_by('-data')[:100]
     contabilizador = {}  
     trava = {}
     quants = {}
