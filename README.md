@@ -6,6 +6,10 @@
     - Download dos acessos concluídos
     - **As tabelas de acessos não estão atualizadas, data de início em 2021**
     - **Precisa verificar a tabela consolidados_professores no BQ, os nomes não batem**
+- 16/03/2021:
+    - Instalação de novos códigos na vm realizada
+    - Escolas carregadas na memória, carga de acessos rodando
+    - ***Falta mandar rodar as agregações dos gráficos principais, após conclusão de carga dos acessos***
 
 
 # Tecnologias envolvidas
