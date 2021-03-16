@@ -1,26 +1,4 @@
-{
-  "type": "service_account",
-  "project_id": "getedu-api-293018",
-  "private_key_id": "e1d7e5e6cc51b812dcf536bb2de4eb4215b427eb",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDDfmd1+XMYBvYB\nzYrfVKcSMfnFUi/Q0QS3JYZFHTJ8PpkZzg8wGz1yHT1wy8q4K+btoCdqMg2+kQu7\nLREqYl6RZ7vicHNdTajqUvtkstXybMkERZxeS1iYG1CEKd8Q324hg34EYZvj+qwf\nanV7hfZiSOWBSgkYJgtCzcPFJQeC0NGYc/vRa/NrdW9PpWXih56CKmHSpmdr2wDo\ns947/TaKIIqIJ3uMcJTSA3yR9FskMG0FNUXWN70lWgQXwCGBGsz3/W6gIrAK+/Qx\nrJKy6OLYHUWmzMC9kNQhqSubwln/bsfuD3gKkI4ipv88huTKfXzS5o011ldRwpG3\nqVCLYG2ZAgMBAAECggEABKgQoapUn0wVTaKwwttzYGSwlFNgfLt9NMO9eb4zBte/\nBZojo3lIK0l8Kqr88EVpSAN7nNxybvqkotpN149+WqARbJO0bteg0+J/Rv1DXM4+\nd/p3HDsb6DyIedzQ/9HFsQ3Sagd0tbYd9JucwBS9cylVRTicMdhnrZHe6bSBl7eh\np2IMwERI33jYOFZrZs4FmWohqaSZaWCTqgySXtPpRLk4SULXj3VrCue8hnzGFFzq\nZjNAq3cq0QUvINqkcQCKjUGB3RLFbJ6pGjhl99Cg4idMXrJDX1795lmkH3rTa0Dx\nE8sIhMb4W/c2pjX8MLk5FaW0xAbFDUyoG5Xc2FHFlwKBgQDf/P5TIalsN1Jy091X\ng2JwoTaYS9deFcuxYSMGnCtzvj25hFWWh9SgZJ/ffG30FUDWzOrfbU1CNKrbgwLl\nUS8FEbt0xs++tCeHYW0OlF/4S38BPxDdj9L3xicZi1/8JDkVNv3sYB0mubTAa6X0\neZDOlyyGR7hOPE+URNS5wK1OfwKBgQDfbuOuzaa6LrOqk6hPNpNiyiUER48WyZhV\nPG5D9veb025+O6BCVNZHi02+lyAXXEDVhXGL4MpRBy0rXNYM8i4roMpfqBw1CS8V\nUTqSW6gxnPTLjJxR6+1GBTWVrJI0y2AuYmeSciPLV8jP17gYaOnPhrzN0oKZ3bHv\nP6ge0dbn5wKBgQC5TmntxryOzdoFK6hD/WtUeNtc9emwaeHB1vYOQudj8zDHqWbR\niYBsTbNCRoQE2gxxaMirnZa8PixYPLQJmbeHvxrRyqUWRZ8qTnzWAgS/u13QXyeJ\n1bIY0LOKW5dGV4VuOreqdf3ICv0x8B00+9nEQKdSVEVzXEwOAz/miTQX6wKBgEjU\nKl7mJbx2UJX/P1NipLQE1AALGzcASyktY3u/2oHubwuyf9BfOuFjJNpFBG7Y4UE4\nGATSJuA2iKCjyBm8LxSFerGnaFpZPgGi0oa2XaKeWKSolqOVVWgHdqns8FNJH3a/\nGKeBkO1NFeW5mQZL3DqK3qvwPCXPP5qOk0xIddZtAoGBAJLSreQ+8Ar9a2PBZoPq\nqRzL2rJpxRxwvxLPb4jG+SNT2XSMIRjkA4PcG0ugFzGKS/fS4HnOlvRKKqxoJg80\n+gMEFlt1VTaJ3BhJAB0KdwJCs9STpK8E1ZoiPGy0Zb/RZPnEFjSnYvZIMYCstTzR\nc5GnInvu1HMhf5IkoCMzb8So\n-----END PRIVATE KEY-----\n",
-  "client_email": "363594313345-compute@developer.gserviceaccount.com",
-  "client_id": "102276645570290694924",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/363594313345-compute%40developer.gserviceaccount.com"
-}
 
 
-{
-  "type": "service_account",
-  "project_id": "getedu-api-278803",
-  "private_key_id": "7ca2de5514defc6e68f8d21865abff7ecd119a74",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1A/6b+xRqPVW4\n3pAjCyevxEX4ZVvHNdnlTjR5BVbps7ePt0YUfgbWUBi9O2ardZFHY37avj8H+Muu\nQtf30xz5hJlYGZmR8qE6vvtaMNIHKaTrzibppHbeBYaEVeqIVsZLpynhRhs/i/qr\nYNKIZNkkaZ9Ddwy5HaEg4HCWjNuw1G/lzIqF0vIa0BT2PXOQKdzLDdm+g6BKbCgN\nNTXUPtElKfVh0gzL/4cJCAXLW0nHgeb8bOqBNFQjOhryxYNJoxLmw/myvhZcp/5M\nqaN5EFKFig+doM3ARx3uJCAKQTnYi48IkeBkBAN5nBzmeWBcIJPGuUa+mPw12Mxf\nKBoLPB/LAgMBAAECggEAAzFi2FWBcq5KSMyENloIBS2tHkiLaeQlR8otWsUhV1X4\nMuzEq6/dZwJarVvS38tfGKdEoY8hhX55+UTskk6DAFO6cLdi4hQpi+O6g0jBK6cs\nZYxpW02vWxM14Dezv1voe4UjU/nsmR5a+ZLno8hDnETQrlv3OXywTugmlEE/zsqo\n3UBj6q20x1hfjWqEhHDpNp4PnbQ/Zpxs7sivL5JF1TvuZOjzeeOrji2MYf0nscF3\nobZXlzv+JtakdWojLjvBLx1aHTXkoUR2Tnsajf7YkTGaXi6lvnpAbmVVp2Zjskqk\ngSBuqyFoEFKpwJr9CuoXk5rQzr/IxpSQtfHbs7rdwQKBgQDtTu6h6m09vPhBy/F4\nndHB+JOn38smuids4bBcXw82LJJ36V4+vLHUhT1M7I4f/AN6oaYSr2BsYVAktK99\nJmOcPStYN4CYco+o7A1XCNJXtdODZTcnFN49efGoiK4hxBAsGTTJ1jQC7RRrAP0o\nbcADF+5I9Fwc2vykV3yiJHhpIwKBgQDDRfrhugqWBB7vHW/e1MvHqQE6x7g67G53\nIzBC0BoI68y4ojsHAjSTGiK8hBugvC2By7lEbO/xwp+1kMcOByM/G03zS2eackS3\n78zJ+wEtSz8PXkce5BpH81z5jtoowngcHv13NFQqr1vUmumxwIGspy05rcK8SNjF\nJhq3VAldOQKBgQCQTpiEs9bcXUamVEux6l680tmPk2KpWThSWOfzNAc/DVnAO5SJ\nGBwXvTJqzcsbnhfLgfNIl4dOQNsIhyvUMf0O7I+oJJA5pCjCM1FlZMLsfXBzDaC9\nTk5bGgWfVAZ4GA8xkd5tAqo8QUlSTJal+B90gh/wE1DUZ0KM+Xqb6wuh+wKBgQCS\ntL+w2MndPQlUkiQbIHpc7a8bzzKtKjYv0cMPXzNAIo+y40c/k7uWDNuuD/6Fuvrh\negId005Nru+4RCYYdupXHhdpQux6T4ErQ8Dyul5+/fpJfIYoQi0wgzkF0Po8Byaf\n0fSRm0Hks8xlJWGPhtaltQ+4NsCIHp6lN2R4+WzzmQKBgDwHay0/JqW5j37C690m\nmv7MELxnEiEI5VSERR3Icc3xaAeOcLjkIvqCpCVyjh7n4QAP7TyRUl9JB8+X3qRI\np5HHXpAu5Ov9QQo2aPudkHEUZzqVGtmaCKFga3OL8ZC+VVdrVQv2sIlznecgKvGF\nbNlQlook8ho4SgoAcEJhLdiM\n-----END PRIVATE KEY-----\n",
-  "client_email": "getedu-api@getedu-api-278803.iam.gserviceaccount.com",
-  "client_id": "115110695986577868736",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/getedu-api%40getedu-api-278803.iam.gserviceaccount.com"
-}
+
+

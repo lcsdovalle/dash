@@ -1,11 +1,9 @@
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="json\cred_api.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="jsons\cred_api.json"
 PROJECT_ID = "getedu-api-293018"
 DB = 'chromedash'
 from google.cloud import bigquery
-from flask.pylib.MyBigQuery import Stream, Reader, Update
-from flask.pylib.pycsv import PyCsv
-from flask.pylib.googleadmin import authService, ChromeBooks, User
+from pylib.MyBigQuery import Stream, Reader
 import datetime
 
 ## PARA USO MANUAL
@@ -17,3 +15,10 @@ timestamp_datacorte
 # # PARA USO AUTOMÁTICO, BUSCA SEMPRE A ÚLTIMA DATA
 # datacorte = datetime.datetime.today() - datetime.timedelta(days=1)
 # timestamp_datacorte = datacorte.timestamp()
+
+# inicio = "{}T00:01:00Z".format('2021-03-08')
+# fim = "{}T23:59:00Z".format('2021-03-15')
+
+ontem = datetime.datetime.today() - datetime.timedelta(days=1)
+inicio = "{}T00:01:00Z".format(ontem.strftime('%Y-%m-%d'))
+fim = "{}T23:59:00Z".format(ontem.strftime('%Y-%m-%d'))

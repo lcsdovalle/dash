@@ -7,8 +7,6 @@ __pycache__/
 *.so
 /logs
 logs/*
-*.csv
-jsons/*
 dashboard/*
 # Distribution / packaging
 .Python

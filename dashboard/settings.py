@@ -75,9 +75,9 @@ DATABASES = {
         'ENGINE':'django.db.backends.mysql',
         # 'HOST':'/cloudsql/{}'.format(os.environ.get('DB_CONN_NAME')),
         'HOST':'localhost',
-        'USER':'root',
-        'PASSWORD':'zxzx1212',
-        'NAME':'novodashrs',
+        'USER':'getedu',
+        'PASSWORD':'getedu00',
+        'NAME':'novors',
         'PORT':3306
     }
 }

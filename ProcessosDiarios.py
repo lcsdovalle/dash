@@ -16,12 +16,9 @@ from processos.botCarregarAlunos import botCarregarAlunos
 from processos.botCarregarAcessosProfessores import botCarregarAcessoProfessores 
 from processos.botCarregarAcessosAlunos import botCarregarAcessosAlunos
 try:
-    # carregarEscolas()
-    # botCarregarProfessores()
-    # botCarregarAlunos()
+    botCarregarProfessores()
+    botCarregarAlunos()
     botCarregarAcessoProfessores()
-    # botCarregarAcessosAlunos()
-    # botAgregacaoAlunos() #pronto pra rodar
-    # botAgregacaoProfessores()
+    botCarregarAcessosAlunos()
 except Exception as e:
     print(e)

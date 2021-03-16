@@ -12,6 +12,7 @@ from multiprocessing import Pool
 from pylib.pycsv import PyCsv
 from pylib.removeBarraN import removeBarraN
 import datetime
+import config
 
 escopos = [
         'https://www.googleapis.com/auth/admin.directory.user',
@@ -101,8 +102,10 @@ def botCarregarAcessoProfessores():
             if 'ultimo' not in intervalo:
                 # inicio = "{}T00:01:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
                 # fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
-                inicio = "{}T00:01:00Z".format('2020-06-01')
-                fim = "{}T23:59:00Z".format('2021-03-04')
+                # inicio = "{}T00:01:00Z".format('2020-06-01')
+                # fim = "{}T23:59:00Z".format('2021-03-04')
+                inicio = config.inicio
+                fim = config.fim
  
             if not started:
                 try:

@@ -102,9 +102,9 @@ def botCarregarAcessosAlunos():
             if 'ultimo' not in intervalo:
                 # inicio = "{}T00:01:00Z".format(intervalo['inicio'].strftime('%Y-%m-%d'))
                 # fim = "{}T23:59:00Z".format(intervalo['fim'].strftime('%Y-%m-%d'))
-                inicio = "{}T00:01:00Z".format('2021-02-15')
-                fim = "{}T23:59:00Z".format('2021-03-04')
- 
+                inicio = config.inicio
+                fim = config.fim
+                 
             if not started:
                 try:
                     report = report_service.activities().list(userKey='all',orgUnitID='id:02zfhnk71mbipbf',applicationName='login',eventName='login_success',startTime=inicio,endTime=fim).execute()

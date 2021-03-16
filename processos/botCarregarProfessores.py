@@ -57,14 +57,8 @@ def botCarregarProfessores():
                             p.inep = ",".join(ineps)
                             p.status = 1 if "1970" not in usuario.get("lastLoginTime") else 0
                             p.save()
+
                             
-                            # a = Acessos.objects.create(
-                            #     usuario=usuario.get('id'),
-                            #     acesso= (1 if odia in usuario['lastLoginTime'] else 0),
-                            #     data=odia,
-                            #     papel='Professor',
-                            #     inep= ",".join(ineps)
-                            # )
                         except Exception as e:
                             print(f"Falhou: {e}")
 
