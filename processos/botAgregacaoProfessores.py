@@ -1,8 +1,7 @@
 #pylint: disable=no-member
-from pylib.MyBigQuery import Stream
-from google.cloud import bigquery
-stream = Stream('getedu-api-293018')
-stream.set_client(bigquery.Client()).set_dataset('riograndedosul').set_table('consolidado_professores')
+import config
+stream = config.Stream(config.PROJECT_ID)
+stream.set_client(config.bigquery.Client()).set_dataset('riograndedosul').set_table('consolidado_professores')
 
 #pylint: disable=no-member
 

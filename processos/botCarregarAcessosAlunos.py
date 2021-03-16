@@ -12,6 +12,7 @@ from multiprocessing import Pool
 from pylib.pycsv import PyCsv
 from pylib.removeBarraN import removeBarraN
 import datetime
+import config
 
 escopos = [
         'https://www.googleapis.com/auth/admin.directory.user',

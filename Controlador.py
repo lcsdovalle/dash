@@ -19,9 +19,9 @@ try:
     # carregarEscolas()
     # botCarregarProfessores()
     # botCarregarAlunos()
-    # botCarregarAcessoProfessores()
+    botCarregarAcessoProfessores()
     # botCarregarAcessosAlunos()
     # botAgregacaoAlunos() #pronto pra rodar
-    botAgregacaoProfessores()
+    # botAgregacaoProfessores()
 except Exception as e:
     print(e)
